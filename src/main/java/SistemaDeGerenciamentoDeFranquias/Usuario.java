@@ -15,15 +15,15 @@ public abstract class Usuario {
     }
 
     /// Getters e Setters gerais
-    protected String getNome() { return nome;}
+    public String getNome() { return nome;}
     protected void setNome(String nome) { this.nome = nome;}
 
-    protected String getCpf() {return cpf;}
+    public String getCpf() {return cpf;}
     protected void setCpf(String cpf) {this.cpf = cpf;}
 
-    protected String getEmail() {return email;}
+    public String getEmail() {return email;}
     protected void setEmail(String email) {this.email = email;}
 
-    protected String getSenha() {return senha;}
+    public String getSenha() {return senha;}
     protected void setSenha(String senha) {this.senha = senha;}
 }

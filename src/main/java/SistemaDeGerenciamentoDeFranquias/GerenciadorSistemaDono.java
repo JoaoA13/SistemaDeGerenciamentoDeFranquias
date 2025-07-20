@@ -1,21 +1,23 @@
 package SistemaDeGerenciamentoDeFranquias;
 
+import SistemaDeGerenciamentoDeFranquias.Exceptions.LoginException;
+import SistemaDeGerenciamentoDeFranquias.Validadores.ValidadorLogin;
+
 public class GerenciadorSistemaDono extends GerenciadorSistema{
     public GerenciadorSistemaDono(){
     }
     @Override
-    void login(String nome,String senha) {
+    boolean login(String nome,String senha) {
         super.login(nome,senha);
 
-        if (dono.getNome().equals(nome))
-            System.out.println("nome certo");
-        else
-            System.out.println("nome errado");
-
-        if (dono.getSenha().equals(senha))
-            System.out.println("senha certo");
-        else
-            System.out.println("senha errado");
-
+        try {
+            ValidadorLogin.validarLogin(dono,nome,senha);
+            return true;
+        }catch (LoginException e){
+            System.out.println("Erro: LoginException: " + e.getMessage());
+            return false;
+        }
     }
+
+
 }
