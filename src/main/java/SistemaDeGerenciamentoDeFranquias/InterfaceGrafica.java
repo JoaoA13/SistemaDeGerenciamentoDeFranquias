@@ -105,7 +105,7 @@ public class InterfaceGrafica {
                         validaLog = gerenciaVendedor.login(cpf,senha);
 
                     if(validaLog) {
-                        exibeSucesso("CPF e senha corretos", "Login feito com sucesso");
+                        exibeInformacao("CPF e senha corretos", "Login feito com sucesso");
                         menuLogin.setVisible(false);
                         sistemaDono();
                     }else
@@ -117,6 +117,10 @@ public class InterfaceGrafica {
         frame.setContentPane(menuLogin); //função que elimina painel anterior e adiciona outro
         frame.revalidate();
         frame.repaint();
+    }
+
+    void confereLogin(){
+
     }
 
     void sistemaDono(){
@@ -261,7 +265,7 @@ public class InterfaceGrafica {
                 menssagem,
                 titulo,JOptionPane.ERROR_MESSAGE);
     }
-    public void exibeSucesso(String menssagem, String titulo){
+    public void exibeInformacao(String menssagem, String titulo){
         JOptionPane.showMessageDialog(frame,
                 menssagem,
                 titulo,JOptionPane.INFORMATION_MESSAGE);
