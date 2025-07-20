@@ -7,11 +7,11 @@ public class GerenciadorSistemaDono extends GerenciadorSistema{
     public GerenciadorSistemaDono(){
     }
     @Override
-    boolean login(String nome,String senha) {
-        super.login(nome,senha);
+    boolean login(String cpf,String senha) {
+        super.login(cpf,senha);
 
         try {
-            ValidadorLogin.validarLogin(dono,nome,senha);
+            ValidadorLogin.validarLogin(dono,cpf,senha);
             return true;
         }catch (LoginException e){
             System.out.println("Erro: LoginException: " + e.getMessage());
