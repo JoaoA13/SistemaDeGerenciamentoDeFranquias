@@ -4,6 +4,7 @@ import SistemaDeGerenciamentoDeFranquias.Exceptions.CpfInvalidoException;
 import SistemaDeGerenciamentoDeFranquias.Exceptions.LoginException;
 import SistemaDeGerenciamentoDeFranquias.Validadores.ValidadorCpf;
 import SistemaDeGerenciamentoDeFranquias.Validadores.ValidadorLogin;
+import SistemaDeGerenciamentoDeFranquias.Validadores.ValidadorSenha;
 
 public class GerenciadorSistemaDono extends GerenciadorSistema{
     private GerenciadorDeLojas gerenciadorDeLojas = new GerenciadorDeLojas();
@@ -12,18 +13,17 @@ public class GerenciadorSistemaDono extends GerenciadorSistema{
     public GerenciadorSistemaDono(){
     }
     @Override
-    boolean login(String cpf,String senha) {
+    String login(String cpf,String senha) throws  LoginException{
         super.login(cpf,senha);
 
-        if(!confereCpf(cpf))
-            return false;
-
         try {
+            ValidadorCpf.validarCpf(cpf);
+            ValidadorSenha.valida(senha);
             ValidadorLogin.valida(dono,cpf,senha);
-            return true;
+                    return "CPF e senha corretos";
         }catch (LoginException e){
             System.out.println("Erro: LoginException: " + e.getMessage());
-            return false;
+            throw new LoginException(e.getMessage());
         }
     }
 
@@ -31,26 +31,5 @@ public class GerenciadorSistemaDono extends GerenciadorSistema{
 
         Gerente gerente = new Gerente(nomeGerente,cpfGerente,emailGerente,senhaGerentePadrão);
         gerenciadorDeLojas.cadastraLoja(endereco,gerente);
-    }
-
-    boolean confereCpf(String cpf){
-        try {
-            ValidadorCpf.validarCpf(cpf);
-            System.out.println("Cpf válido");
-            return true;
-        }catch (CpfInvalidoException e){
-            System.out.println(e);
-            return false;
-        }
-    }
-    boolean confereSenha(String senha){
-        try {
-            ValidadorCpf.validarCpf(senha);
-            System.out.println("Senha válido");
-            return true;
-        }catch (CpfInvalidoException e){
-            System.out.println(e);
-            return false;
-        }
     }
 }
