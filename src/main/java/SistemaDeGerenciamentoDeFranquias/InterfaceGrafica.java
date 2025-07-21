@@ -16,8 +16,9 @@ public class InterfaceGrafica {
         menuLogin();
         //sistemaDono();
 
-        frame.setSize(600, 200);
+        frame.setSize(250, 200);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        frame.setLocationRelativeTo(null);
         frame.setVisible(true);
 
     }
@@ -57,6 +58,7 @@ public class InterfaceGrafica {
 
     void menuLogin(){
         JPanel menuLogin = new JPanel();
+        menuLogin.setLayout(new BoxLayout(menuLogin, BoxLayout.Y_AXIS));
 
         JRadioButton Dono = new JRadioButton("Dono");
         JRadioButton Gerente = new JRadioButton("Gerente");

@@ -10,7 +10,7 @@ public class GerenciadorDeLojas {
     protected GerenciadorDeLojas(){
     }
 
-    protected Map<String, Loja> getLojas() { return armazenaLojas;}
+    protected Map<String, Loja> getLojas() {return armazenaLojas;}
 
     protected void addLoja(String codigo,Loja loja){
         armazenaLojas.put(codigo,loja);
