@@ -1,5 +1,7 @@
 package SistemaDeGerenciamentoDeFranquias;
 
+import SistemaDeGerenciamentoDeFranquias.Exceptions.LoginException;
+
 import javax.swing.*;
 import javax.swing.event.*;
 import java.awt.event.*;
@@ -20,18 +22,12 @@ public class InterfaceGrafica {
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setLocationRelativeTo(null);
         frame.setVisible(true);
-
     }
 
     void menu1SelecionaCargo(){
         JPanel selecionaCargo = new JPanel();
 
         //selecionaCargo.setLayout (new BorderLayout ());
-
-
-
-
-
 
         JButton Dono = new JButton("Dono");
         JButton Gerente = new JButton("Gerente");
@@ -72,7 +68,6 @@ public class InterfaceGrafica {
         menuLogin.add(Gerente);
         menuLogin.add(Vendedor);
 
-
         JTextField escreveCpf = new JTextField(20); // Campo de entrada de 20 colunas
         menuLogin.add(new JLabel("Cpf:"));
         menuLogin.add(escreveCpf);
@@ -80,7 +75,6 @@ public class InterfaceGrafica {
         JTextField escreveSenha = new JTextField(20); // Campo de entrada de 20 colunas
         menuLogin.add(new JLabel("Senha:"));
         menuLogin.add(escreveSenha);
-
 
         escreveCpf.addKeyListener(new KeyAdapter() {
             public void keyPressed(KeyEvent e) {
@@ -98,20 +92,28 @@ public class InterfaceGrafica {
                     String cpf = escreveCpf.getText();
                     String senha = escreveSenha.getText();
 
-                    boolean validaLog = false;
-                    if(Dono.isSelected())
-                        validaLog = gerenciaDono.login(cpf,senha);
-                    if(Gerente.isSelected())
-                        validaLog = gerenciaGerente.login(cpf,senha);
-                    if(Vendedor.isSelected())
-                        validaLog = gerenciaVendedor.login(cpf,senha);
-
-                    if(validaLog) {
-                        exibeInformacao("CPF e senha corretos", "Login feito com sucesso");
-                        menuLogin.setVisible(false);
-                        sistemaDono();
-                    }else
-                        exibeException("CPF ou senha incorretos, digite novamente!", "Erro: LoginException: ");
+                    try{
+                        String validaLog = null;
+                        if(Dono.isSelected()) {
+                            validaLog = gerenciaDono.login(cpf,senha);
+                            exibeInformacao(validaLog, "Login feito com sucesso");
+                            menuLogin.setVisible(false);
+                            sistemaDono();
+                        } else if (Gerente.isSelected()) {
+                            validaLog = gerenciaGerente.login(cpf,senha);
+                            exibeInformacao(validaLog, "Login feito com sucesso");
+                            menuLogin.setVisible(false);
+                            sistemaDono();
+                        } else if (Vendedor.isSelected()) {
+                            validaLog = gerenciaGerente.login(cpf,senha);
+                            exibeInformacao(validaLog, "Login feito com sucesso");
+                            menuLogin.setVisible(false);
+                            sistemaDono();
+                        }else
+                            exibeException("Deve selecionar seu cargo!", "Login falhou");
+                    }catch (LoginException mes) {
+                        exibeException(mes.getMessage(),"Login falhou");
+                    }
                 }
             }
         });
@@ -121,16 +123,11 @@ public class InterfaceGrafica {
         frame.repaint();
     }
 
-    void confereLogin(){
-
-    }
-
     void sistemaDono(){
         JPanel sistemaDono = new JPanel();
 
         JButton Voltar = new JButton("Voltar");
         sistemaDono.add(Voltar);
-
 
         JMenuBar menuBar = new JMenuBar();
         frame.setJMenuBar(menuBar);
@@ -148,7 +145,6 @@ public class InterfaceGrafica {
         menu1Item1.addActionListener(e -> trocarTela(criarTela1()));
         menu2Item2.addActionListener(e -> trocarTela(cadastraLojas()));
 
-
         frame.setContentPane(sistemaDono); //função que elimina painel anterior e adiciona outro
         frame.revalidate();
         frame.repaint();
@@ -162,7 +158,6 @@ public class InterfaceGrafica {
             }
         });
     }
-
 
     // Metodo que troca paineis
     private void trocarTela(JPanel novaTela) {
@@ -216,7 +211,6 @@ public class InterfaceGrafica {
 
         painelCadastroLoja.add(subPainel, BorderLayout.CENTER);
 
-
         escreveEndereco.addKeyListener(new KeyAdapter() {
             public void keyPressed(KeyEvent e) {
                 if (e.getKeyCode() == KeyEvent.VK_ENTER) {
@@ -249,18 +243,12 @@ public class InterfaceGrafica {
                     String nome = escreveNome.getText();
                     String senha = escreveEmail.getText();
 
-                    boolean validaLog = false;
+                    boolean validaCadastro = false;
                 }
             }
         });
-
         return painelCadastroLoja;
     }
-
-
-
-
-
 
     public void exibeException(String menssagem, String titulo){
         JOptionPane.showMessageDialog(frame,
