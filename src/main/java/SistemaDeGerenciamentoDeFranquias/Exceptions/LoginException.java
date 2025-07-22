@@ -1,6 +1,6 @@
 package SistemaDeGerenciamentoDeFranquias.Exceptions;
 
-public class LoginException extends Exception {
+public class LoginException extends CadastroException {
     public LoginException(String message) {
         super(message);
     }

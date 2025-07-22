@@ -90,7 +90,7 @@ public class InterfaceGrafica {
                     System.out.println("Tecla Enter pressionada");
                     String cpf = escreveCpf.getText();
                     String senha = escreveSenha.getText();
-
+                    System.out.println(cpf + " " + senha);
                     try{
                         String validaLog = null;
                         if(Dono.isSelected()) {
