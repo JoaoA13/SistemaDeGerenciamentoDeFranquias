@@ -1,5 +1,6 @@
 package SistemaDeGerenciamentoDeFranquias;
 
+import SistemaDeGerenciamentoDeFranquias.Exceptions.CadastroException;
 import SistemaDeGerenciamentoDeFranquias.Exceptions.LoginException;
 
 import javax.swing.*;
@@ -285,8 +286,24 @@ public class InterfaceGrafica {
             public void keyPressed(KeyEvent e) {
                 if (e.getKeyCode() == KeyEvent.VK_ENTER) {
                     System.out.println("Tecla Enter pressionada");
+                    String endereco = escreveEndereco.getText();
                     String nome = escreveNome.getText();
-                    String senha = escreveEmail.getText();
+                    String cpf = escreveCpf.getText();
+                    String email = escreveEmail.getText();
+
+
+                    try{
+                        gerenciaDono.cadastroLoja(endereco,nome,cpf,email);
+                        exibeInformacao("Cadastro de Loja e gerente feitos corretamente","Cadastro de Loja e gerente feito com sucesso");
+                        escreveEndereco.setText("");
+                        escreveNome.setText("");
+                        escreveCpf.setText("");
+                        escreveEmail.setText("");
+                    }catch (CadastroException mes) {
+                        exibeException(mes.getMessage(),"Cadastro falhou");
+                    }
+
+
 
                     boolean validaCadastro = false;
                 }
