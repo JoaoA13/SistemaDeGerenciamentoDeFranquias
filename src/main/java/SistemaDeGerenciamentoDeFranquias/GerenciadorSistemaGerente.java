@@ -9,13 +9,15 @@ import SistemaDeGerenciamentoDeFranquias.Validadores.ValidadorLogin;
 import SistemaDeGerenciamentoDeFranquias.Validadores.ValidadorSenha;
 
 public class GerenciadorSistemaGerente extends GerenciadorSistema{
+    Loja loja;
+
     String login(String cpf,String senha) throws LoginException {
-        super.login(cpf,senha);
+        super.login(cpf, senha);
 
         try {
             ValidadorCampoVazio.valida(cpf);
             ValidadorCampoVazio.valida(senha);
-        }catch (EntradaException e){
+        } catch (EntradaException e) {
             System.out.println("Erro: LoginException: " + e.getMessage());
             throw new LoginException(e.getMessage());
         }
@@ -23,11 +25,12 @@ public class GerenciadorSistemaGerente extends GerenciadorSistema{
         try {
             ValidadorCpf.validarCpf(cpf);
             ValidadorSenha.valida(senha);
-            ValidadorLogin.valida(dono,cpf,senha);
+            ValidadorLogin.valida(dono, cpf, senha);
             return "CPF e senha corretos";
-        }catch (LoginException e){
+        } catch (LoginException e) {
             System.out.println("Erro: LoginException: " + e.getMessage());
             throw new LoginException(e.getMessage());
         }
     }
+
 }

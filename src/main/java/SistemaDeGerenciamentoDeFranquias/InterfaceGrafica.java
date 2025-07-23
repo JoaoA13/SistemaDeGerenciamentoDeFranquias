@@ -12,6 +12,7 @@ public class InterfaceGrafica {
     protected GerenciadorSistemaDono gerenciaDono = new GerenciadorSistemaDono();
     protected GerenciadorSistemaGerente gerenciaGerente = new GerenciadorSistemaGerente();
     protected GerenciadorSistemaVendedor gerenciaVendedor = new GerenciadorSistemaVendedor();
+    String cpf = "";
 
     public InterfaceGrafica(){
         //menu1SelecionaCargo();
@@ -91,7 +92,7 @@ public class InterfaceGrafica {
             public void keyPressed(KeyEvent e) {
                 if (e.getKeyCode() == KeyEvent.VK_ENTER) {
                     System.out.println("Tecla Enter pressionada");
-                    String cpf = escreveCpf.getText();
+                    cpf = escreveCpf.getText();
                     String senha = escreveSenha.getText();
                     System.out.println(cpf + " " + senha);
                     try{
@@ -107,7 +108,7 @@ public class InterfaceGrafica {
                             menuLogin.setVisible(false);
                             sistemaGerente();
                         } else if (Vendedor.isSelected()) {
-                            validaLog = gerenciaGerente.login(cpf,senha);
+                            validaLog = gerenciaVendedor.login(cpf,senha);
                             exibeInformacao(validaLog, "Login feito com sucesso");
                             menuLogin.setVisible(false);
                             sistemaDono();
@@ -164,6 +165,7 @@ public class InterfaceGrafica {
     void sistemaGerente()
     {
         JPanel sistemaGerente = new JPanel();
+        IGAcoesGerente acoes = new IGAcoesGerente(cpf);
 
         JButton Voltar = new JButton("Voltar");
         sistemaGerente.add(Voltar);
@@ -188,7 +190,7 @@ public class InterfaceGrafica {
         menu2.add(menu2Item4);
 
         menu1Item1.addActionListener(e -> trocarTela(criarTela1()));
-        menu2Item1.addActionListener(e -> trocarTela(cadastraLojas()));
+        menu2Item1.addActionListener(e -> trocarTela(acoes.cadastrar()));
 
         frame.setContentPane(sistemaGerente); //função que elimina painel anterior e adiciona outro
         frame.revalidate();
@@ -222,6 +224,8 @@ public class InterfaceGrafica {
     // Tela cadastro de loja
     private JPanel cadastraLojas() {
         JPanel painelCadastroLoja = new JPanel(new BorderLayout());
+        frame.setSize(500, 500);
+        frame.setLocationRelativeTo(null);
 
         JLabel titulo = new JLabel("Cadastro de loja", SwingConstants.CENTER);
         painelCadastroLoja.add(titulo, BorderLayout.NORTH);
@@ -287,6 +291,8 @@ public class InterfaceGrafica {
                     System.out.println("Tecla Enter pressionada");
                     String nome = escreveNome.getText();
                     String senha = escreveEmail.getText();
+
+                    //gerenciaDono.cadastroLoja(nome,senha);
 
                     boolean validaCadastro = false;
                 }
