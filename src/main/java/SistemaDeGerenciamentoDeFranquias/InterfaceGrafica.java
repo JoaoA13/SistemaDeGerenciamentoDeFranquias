@@ -18,7 +18,7 @@ public class InterfaceGrafica {
         menuLogin();
         //sistemaDono();
 
-        frame.setSize(250, 200);
+        frame.setSize(200, 200);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setLocationRelativeTo(null);
         frame.setVisible(true);
@@ -68,11 +68,13 @@ public class InterfaceGrafica {
         menuLogin.add(Gerente);
         menuLogin.add(Vendedor);
 
-        JTextField escreveCpf = new JTextField(20); // Campo de entrada de 20 colunas
+        JTextField escreveCpf = new JTextField(20);// Campo de entrada de 20 colunas
+        escreveCpf.setMaximumSize(new Dimension(400, 25));
         menuLogin.add(new JLabel("Cpf:"));
         menuLogin.add(escreveCpf);
 
         JTextField escreveSenha = new JTextField(20); // Campo de entrada de 20 colunas
+        escreveSenha.setMaximumSize(new Dimension(400, 25));
         menuLogin.add(new JLabel("Senha:"));
         menuLogin.add(escreveSenha);
 
