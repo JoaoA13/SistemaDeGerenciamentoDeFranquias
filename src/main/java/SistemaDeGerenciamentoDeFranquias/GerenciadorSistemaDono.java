@@ -1,15 +1,9 @@
 package SistemaDeGerenciamentoDeFranquias;
 
-import SistemaDeGerenciamentoDeFranquias.Exceptions.CpfInvalidoException;
-import SistemaDeGerenciamentoDeFranquias.Exceptions.EntradaException;
-import SistemaDeGerenciamentoDeFranquias.Exceptions.LoginException;
-import SistemaDeGerenciamentoDeFranquias.Validadores.ValidadorCampoVazio;
-import SistemaDeGerenciamentoDeFranquias.Validadores.ValidadorCpf;
-import SistemaDeGerenciamentoDeFranquias.Validadores.ValidadorLogin;
-import SistemaDeGerenciamentoDeFranquias.Validadores.ValidadorSenha;
+import SistemaDeGerenciamentoDeFranquias.Exceptions.*;
+import SistemaDeGerenciamentoDeFranquias.Validadores.*;
 
 public class GerenciadorSistemaDono extends GerenciadorSistema{
-    private GerenciadorDeLojas gerenciadorDeLojas = new GerenciadorDeLojas();
     private String senhaGerentePadrão = "12345678";
 
     public GerenciadorSistemaDono(){
@@ -37,11 +31,24 @@ public class GerenciadorSistemaDono extends GerenciadorSistema{
         }
     }
 
-    void cadastroLoja(String endereco,String nomeGerente, String cpfGerente, String emailGerente){
+    void cadastroLoja(String endereco,String nomeGerente, String cpfGerente, String emailGerente) throws CadastroException {
+        //validação cpf
+        try {
+            ValidadorCampoVazio.valida(cpfGerente);
+        }catch (EntradaException e){
+            System.out.println("Erro: EntradaException: " + e.getMessage());
+            throw new LoginException(e.getMessage());
+        }
 
-
+        try {
+            ValidadorCpfGerenteBancoDeDadosFalse.valida(cpfGerente);
+        }catch (BancoDeDadosException e){
+            System.out.println("Erro: EntradaException: " + e.getMessage());
+            throw new CadastroException(e.getMessage());
+        }
 
         Gerente gerente = new Gerente(nomeGerente,cpfGerente,emailGerente,senhaGerentePadrão);
-        gerenciadorDeLojas.cadastraLoja(endereco,gerente);
+        GerenciadorDeLojas.cadastraLoja(endereco,gerente);
+        GerenciadorDeLojas.cadastraGerente(cpfGerente,gerente);
     }
 }

@@ -7,6 +7,7 @@ import SistemaDeGerenciamentoDeFranquias.Validadores.ValidadorCpf;
 public abstract class GerenciadorSistema {
 
     protected Dono dono = new Dono("João","141279456-05","joao@gmail","12345678");
+    //protected GerenciadorDeLojas gerenciadorDeLojas = new GerenciadorDeLojas();
 
     public GerenciadorSistema(){
     }
