@@ -105,7 +105,7 @@ public class InterfaceGrafica {
                             validaLog = gerenciaGerente.login(cpf,senha);
                             exibeInformacao(validaLog, "Login feito com sucesso");
                             menuLogin.setVisible(false);
-                            sistemaDono();
+                            sistemaGerente();
                         } else if (Vendedor.isSelected()) {
                             validaLog = gerenciaGerente.login(cpf,senha);
                             exibeInformacao(validaLog, "Login feito com sucesso");
@@ -156,6 +156,49 @@ public class InterfaceGrafica {
                 System.out.println("Botão 'Voltar' clicado");
                 menuBar.removeAll();
                 sistemaDono.setVisible(false);
+                menuLogin();
+            }
+        });
+    }
+
+    void sistemaGerente()
+    {
+        JPanel sistemaGerente = new JPanel();
+
+        JButton Voltar = new JButton("Voltar");
+        sistemaGerente.add(Voltar);
+
+        JMenuBar menuBar = new JMenuBar();
+        frame.setJMenuBar(menuBar);
+
+        JMenu menu1 = new JMenu ("Inico");
+        menuBar.add (menu1);
+        JMenuItem  menu1Item1 = new JMenuItem ("Item de Menu", KeyEvent.VK_T);
+        menu1.add(menu1Item1);
+
+        JMenu menu2 = new JMenu ("Vendedores");
+        menuBar.add(menu2);
+        JMenuItem  menu2Item1 = new JMenuItem ("Cadastrar", KeyEvent.VK_T);
+        menu2.add(menu2Item1);
+        JMenuItem  menu2Item2 = new JMenuItem ("Excluir", KeyEvent.VK_T);
+        menu2.add(menu2Item2);
+        JMenuItem  menu2Item3 = new JMenuItem ("Editar", KeyEvent.VK_T);
+        menu2.add(menu2Item3);
+        JMenuItem  menu2Item4 = new JMenuItem ("Lista de Vendedores", KeyEvent.VK_T);
+        menu2.add(menu2Item4);
+
+        menu1Item1.addActionListener(e -> trocarTela(criarTela1()));
+        menu2Item1.addActionListener(e -> trocarTela(cadastraLojas()));
+
+        frame.setContentPane(sistemaGerente); //função que elimina painel anterior e adiciona outro
+        frame.revalidate();
+        frame.repaint();
+
+        Voltar.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                System.out.println("Botão 'Voltar' clicado");
+                menuBar.removeAll();
+                sistemaGerente.setVisible(false);
                 menuLogin();
             }
         });
