@@ -23,7 +23,7 @@ public class GerenciadorSistemaDono extends GerenciadorSistema{
         try {
             ValidadorCpf.validarCpf(cpf);
             ValidadorSenha.valida(senha);
-            ValidadorLogin.valida(dono,cpf,senha);
+            ValidadorLogin.valida(getDono(),cpf,senha);
                     return "CPF e senha corretos";
         }catch (LoginException e){
             System.out.println("Erro: LoginException: " + e.getMessage());
@@ -48,6 +48,7 @@ public class GerenciadorSistemaDono extends GerenciadorSistema{
         }
 
         Gerente gerente = new Gerente(nomeGerente,cpfGerente,emailGerente,senhaGerentePadrão);
+
         GerenciadorDeLojas.cadastraLoja(endereco,gerente);
         GerenciadorDeLojas.cadastraGerente(cpfGerente,gerente);
     }
