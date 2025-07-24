@@ -13,14 +13,13 @@ public class IGAcoesGerente {
     private InterfaceGrafica interfaceGrafica;
     private String cpf;
 
+    GerenciadorSistemaGerente gerenciaGerente = new GerenciadorSistemaGerente();
+
     public IGAcoesGerente(InterfaceGrafica interfaceGrafica, String cpf) {
         this.interfaceGrafica = interfaceGrafica;
         this.cpf = cpf;
-    GerenciadorSistemaGerente gerenciaGerente = new GerenciadorSistemaGerente();
-
-    IGAcoesGerente(String cpf){
-        //Loja loja = retornaLoja(cpf);
     }
+
 
     JPanel cadastrar(){
         JPanel cadastro = new JPanel();
