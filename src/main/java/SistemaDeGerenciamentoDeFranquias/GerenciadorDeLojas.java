@@ -14,13 +14,13 @@ public class GerenciadorDeLojas {
         armazenaGerentes.put(gerente.getCpf(),gerente);
     }
 
-    protected Map<String, Loja> getLojas() {return armazenaLojas;}
+    static public Map<String, Loja> getLojas() {return armazenaLojas;}
 
     static protected void addLoja(String cpfGerente,Loja loja){
         armazenaLojas.put(cpfGerente,loja);
     }
 
-    protected Loja getLoja(String cpfGerente){return armazenaLojas.get(cpfGerente);}
+    protected Loja getLoja(String cpfGerente){return armazenaLojas.getOrDefault(cpfGerente,null);}
 
     protected static void cadastraLoja(String endereco, Gerente gerente){
         Loja loja = new Loja(endereco,gerente);

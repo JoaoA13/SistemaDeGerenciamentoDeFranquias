@@ -14,17 +14,15 @@ public class InterfaceGrafica {
     protected GerenciadorSistemaGerente gerenciaGerente = new GerenciadorSistemaGerente();
     protected GerenciadorSistemaVendedor gerenciaVendedor = new GerenciadorSistemaVendedor();
     protected GerenciadorDeLojas gerenciador = new GerenciadorDeLojas();
-    String cpf = "";
+   String cpf = "";
 
-    public InterfaceGrafica(){
-        //menu1SelecionaCargo();
-        menuLogin();
-        //sistemaDono();
+   public InterfaceGrafica(){
+       menuLogin();
 
-        frame.setSize(200, 200);
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        frame.setLocationRelativeTo(null);
-        frame.setVisible(true);
+       frame.setSize(200, 200);
+       frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+       frame.setLocationRelativeTo(null);
+       frame.setVisible(true);
     }
 
     void menu1SelecionaCargo(){
@@ -55,7 +53,7 @@ public class InterfaceGrafica {
         });
     }
 
-    void menuLogin(){
+    public void menuLogin(){
         JPanel menuLogin = new JPanel();
         menuLogin.setLayout(new BoxLayout(menuLogin, BoxLayout.Y_AXIS));
 
@@ -131,8 +129,8 @@ public class InterfaceGrafica {
     void sistemaDono(){
         JPanel sistemaDono = new JPanel();
 
-        JButton Voltar = new JButton("Voltar");
-        sistemaDono.add(Voltar);
+        JButton Sair = new JButton("Sair");
+        sistemaDono.add(Sair);
 
         JMenuBar menuBar = new JMenuBar();
         frame.setJMenuBar(menuBar);
@@ -154,9 +152,9 @@ public class InterfaceGrafica {
         frame.revalidate();
         frame.repaint();
 
-        Voltar.addActionListener(new ActionListener() {
+        Sair.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                System.out.println("Botão 'Voltar' clicado");
+                System.out.println("Botão 'Sair' clicado");
                 menuBar.removeAll();
                 sistemaDono.setVisible(false);
                 menuLogin();
@@ -167,10 +165,10 @@ public class InterfaceGrafica {
     void sistemaGerente()
     {
         JPanel sistemaGerente = new JPanel();
-        IGAcoesGerente acoes = new IGAcoesGerente(cpf);
+        IGAcoesGerente acoes = new IGAcoesGerente(this,cpf);
 
-        JButton Voltar = new JButton("Voltar");
-        sistemaGerente.add(Voltar);
+        JButton Sair = new JButton("Sair");
+        sistemaGerente.add(Sair);
 
         JMenuBar menuBar = new JMenuBar();
         frame.setJMenuBar(menuBar);
@@ -228,9 +226,9 @@ public class InterfaceGrafica {
         frame.revalidate();
         frame.repaint();
 
-        Voltar.addActionListener(new ActionListener() {
+        Sair.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                System.out.println("Botão 'Voltar' clicado");
+                System.out.println("Botão 'Sair' clicado");
                 menuBar.removeAll();
                 sistemaGerente.setVisible(false);
                 menuLogin();
@@ -291,6 +289,9 @@ public class InterfaceGrafica {
         linhaEmail.add(escreveEmail);
         subPainel.add(linhaEmail);
 
+        JButton Sair = new JButton("Sair");
+        subPainel.add(Sair);
+
         painelCadastroLoja.add(subPainel, BorderLayout.CENTER);
 
         escreveEndereco.addKeyListener(new KeyAdapter() {
@@ -345,6 +346,15 @@ public class InterfaceGrafica {
 
                     boolean validaCadastro = false;
                 }
+            }
+        });
+
+        Sair.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                System.out.println("Botão 'Sair' clicado");
+                //menuBar.removeAll();
+                painelCadastroLoja.setVisible(false);
+                menuLogin();
             }
         });
         return painelCadastroLoja;

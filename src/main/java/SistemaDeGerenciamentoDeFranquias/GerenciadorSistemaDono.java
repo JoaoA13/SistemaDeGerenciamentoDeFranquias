@@ -32,16 +32,17 @@ public class GerenciadorSistemaDono extends GerenciadorSistema{
     }
 
     void cadastroLoja(String endereco,String nomeGerente, String cpfGerente, String emailGerente) throws CadastroException {
-        //validação cpf
         try {
             ValidadorCampoVazio.valida(cpfGerente);
+            ValidadorCpf.validarCpf(cpfGerente);
+            ValidadorEmail.valida(emailGerente);
         }catch (EntradaException e){
             System.out.println("Erro: EntradaException: " + e.getMessage());
             throw new LoginException(e.getMessage());
         }
 
         try {
-            ValidadorCpfGerenteBancoDeDadosFalse.valida(cpfGerente);
+            ValidadorCpfBancoDeDadosFalse.valida(cpfGerente);
         }catch (BancoDeDadosException e){
             System.out.println("Erro: EntradaException: " + e.getMessage());
             throw new CadastroException(e.getMessage());

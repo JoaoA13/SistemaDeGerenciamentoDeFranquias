@@ -33,7 +33,7 @@ public class GerenciadorSistemaGerente extends GerenciadorSistema{
     static public void buscaGerente(String cpf) throws LoginException{
 
         try {
-            ValidadorCpfGerenteBancoDeDadosTrue.valida(cpf);
+            ValidadorCpfBancoDeDadosTrue.valida(cpf);
         }catch (BancoDeDadosException e){
             throw new LoginException(e.getMessage());
         }

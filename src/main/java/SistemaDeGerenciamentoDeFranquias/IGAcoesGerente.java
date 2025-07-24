@@ -2,14 +2,20 @@ package SistemaDeGerenciamentoDeFranquias;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 
 public class IGAcoesGerente {
+    private InterfaceGrafica interfaceGrafica;
+    private String cpf;
 
-    IGAcoesGerente(String cpf){
-        //Loja loja = retornaLoja(cpf);
+    public IGAcoesGerente(InterfaceGrafica interfaceGrafica, String cpf) {
+        this.interfaceGrafica = interfaceGrafica;
+        this.cpf = cpf;
     }
+
     JPanel cadastrar(){
         JPanel cadastro = new JPanel();
         cadastro.setLayout(new BoxLayout(cadastro, BoxLayout.Y_AXIS));
@@ -42,7 +48,7 @@ public class IGAcoesGerente {
         escreveSenha.setAlignmentX(Component.LEFT_ALIGNMENT);
         cadastro.add(escreveSenha);
 
-        JButton voltar = new JButton("Voltar");
+        JButton Sair = new JButton("Sair");
         JButton confirmar = new JButton("Confirmar");
 
         JPanel botoesPanel = new JPanel();
@@ -50,7 +56,7 @@ public class IGAcoesGerente {
         botoesPanel.setAlignmentX(Component.LEFT_ALIGNMENT);
         botoesPanel.setMaximumSize(new Dimension(250, 30));
 
-        botoesPanel.add(voltar);
+        botoesPanel.add(Sair);
         botoesPanel.add(Box.createHorizontalGlue());
         botoesPanel.add(confirmar);
         cadastro.add(botoesPanel);
@@ -58,6 +64,14 @@ public class IGAcoesGerente {
         escreveNome.addActionListener(e -> escreveCpf.requestFocusInWindow());
         escreveCpf.addActionListener(e -> escreveSenha.requestFocusInWindow());
         escreveSenha.addActionListener(e -> confirmar.requestFocusInWindow());
+
+        Sair.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                System.out.println("Botão 'Sair' clicado");
+                cadastro.setVisible(false);
+                interfaceGrafica.menuLogin();
+            }
+        });
 
         return cadastro;
     }
@@ -76,7 +90,7 @@ public class IGAcoesGerente {
         escreveCpf.setAlignmentX(Component.LEFT_ALIGNMENT);
         exclusao.add(escreveCpf);
 
-        JButton voltar = new JButton("Voltar");
+        JButton Sair = new JButton("Sair");
         JButton confirmar = new JButton("Confirmar");
 
         JPanel botoesPanel = new JPanel();
@@ -84,7 +98,7 @@ public class IGAcoesGerente {
         botoesPanel.setAlignmentX(Component.LEFT_ALIGNMENT);
         botoesPanel.setMaximumSize(new Dimension(400, 30));
 
-        botoesPanel.add(voltar);
+        botoesPanel.add(Sair);
         botoesPanel.add(Box.createHorizontalGlue());
         botoesPanel.add(confirmar);
         exclusao.add(botoesPanel);
@@ -107,7 +121,7 @@ public class IGAcoesGerente {
         escreveCpf.setAlignmentX(Component.LEFT_ALIGNMENT);
         edicao.add(escreveCpf);
 
-        JButton voltar = new JButton("Voltar");
+        JButton Sair = new JButton("Sair");
         JButton confirmar = new JButton("Confirmar");
 
         JPanel botoesPanel = new JPanel();
@@ -115,7 +129,7 @@ public class IGAcoesGerente {
         botoesPanel.setAlignmentX(Component.LEFT_ALIGNMENT);
         botoesPanel.setMaximumSize(new Dimension(400, 30));
 
-        botoesPanel.add(voltar);
+        botoesPanel.add(Sair);
         botoesPanel.add(Box.createHorizontalGlue());
         botoesPanel.add(confirmar);
         edicao.add(botoesPanel);
