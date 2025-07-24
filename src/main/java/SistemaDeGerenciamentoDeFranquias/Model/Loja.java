@@ -28,4 +28,8 @@ public class Loja {
         Vendedor vendedor = new Vendedor(nome, cpf,"@gmail.com", senha);
         armazenaVendedores.put(cpf,vendedor);
     }
+
+    static public Vendedor getVendedor(String cpf){
+        return armazenaVendedores.getOrDefault(cpf,null);
+    }
 }

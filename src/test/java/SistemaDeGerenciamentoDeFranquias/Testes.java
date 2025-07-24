@@ -15,6 +15,6 @@ public class Testes {
         assertNotNull(g.confereCpf("141.279.    456-05"), "Cpf válido");
         assertNotNull(g.confereCpf("141279"), "Cpf inválido");
         assertNotNull(g.confereCpf("141279456056"), "Cpf inválido");
-        assertNotNull(g.confereCpf("14127945asd"), "Cpf inválido");
+        assertNotNull(g.Valida("14127945asd"), "Cpf inválido");
     }
 }

@@ -5,7 +5,7 @@ import SistemaDeGerenciamentoDeFranquias.Model.Dono;
 
 public abstract class GerenciadorSistema {
 
-    static private Dono dono = new Dono("João","141279456-05","joao@gmail","12345678");
+    static private Dono dono = new Dono("João","14127945605","joao@gmail","12345678");
     //protected GerenciadorDeLojas gerenciadorDeLojas = new GerenciadorDeLojas();
 
     public GerenciadorSistema(){

@@ -20,8 +20,8 @@ public class InterfaceGrafica {
    String cpf = "";
 
    public InterfaceGrafica(){
-       menuLogin();
-
+       //menuLogin();
+       sistemaDono();
        frame.setSize(200, 200);
        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
        frame.setLocationRelativeTo(null);
@@ -131,6 +131,7 @@ public class InterfaceGrafica {
 
     void sistemaDono(){
         JPanel sistemaDono = new JPanel();
+        IGAcoesDono acoes = new IGAcoesDono(this);
 
         JButton Sair = new JButton("Sair");
         sistemaDono.add(Sair);
@@ -149,7 +150,7 @@ public class InterfaceGrafica {
         menu2.add(menu2Item2);
 
         menu1Item1.addActionListener(e -> trocarTela(criarTela1(), 200, 200));
-        menu2Item2.addActionListener(e -> trocarTela(cadastraLojas(), 500, 500));
+        menu2Item2.addActionListener(e -> trocarTela(acoes.cadastraLojas(), 500, 500));
 
         frame.setContentPane(sistemaDono); //função que elimina painel anterior e adiciona outro
         frame.revalidate();
@@ -268,111 +269,7 @@ public class InterfaceGrafica {
         return painel;
     }
 
-    // Tela cadastro de loja
-    private JPanel cadastraLojas() {
-        JPanel painelCadastroLoja = new JPanel(new BorderLayout());
 
-        JLabel titulo = new JLabel("Cadastro de loja", SwingConstants.CENTER);
-        painelCadastroLoja.add(titulo, BorderLayout.NORTH);
-
-        JPanel subPainel = new JPanel();
-        subPainel.setLayout(new BoxLayout(subPainel, BoxLayout.Y_AXIS));
-        subPainel.setAlignmentX(Component.CENTER_ALIGNMENT);
-
-        JPanel linhaEndereco = new JPanel(new FlowLayout(FlowLayout.CENTER));
-        linhaEndereco.add(new JLabel("Endereço da loja:"));
-        JTextField escreveEndereco = new JTextField(15);
-        linhaEndereco.add(escreveEndereco);
-        subPainel.add(linhaEndereco);
-
-        JPanel linhaNome = new JPanel(new FlowLayout(FlowLayout.CENTER));
-        linhaNome.add(new JLabel("Nome do gerente responsável:"));
-        JTextField escreveNome = new JTextField(15);
-        linhaNome.add(escreveNome);
-        subPainel.add(linhaNome);
-
-        JPanel linhaCpf = new JPanel(new FlowLayout(FlowLayout.CENTER));
-        linhaCpf.add(new JLabel("Cpf do gerente responsável:"));
-        JTextField escreveCpf = new JTextField(15);
-        linhaCpf.add(escreveCpf);
-        subPainel.add(linhaCpf);
-
-        JPanel linhaEmail = new JPanel(new FlowLayout(FlowLayout.CENTER));
-        linhaEmail.add(new JLabel("E-mail do gerente responsável:"));
-        JTextField escreveEmail = new JTextField(15);
-        linhaEmail.add(escreveEmail);
-        subPainel.add(linhaEmail);
-
-        JButton Sair = new JButton("Sair");
-        subPainel.add(Sair);
-
-        painelCadastroLoja.add(subPainel, BorderLayout.CENTER);
-
-        escreveEndereco.addKeyListener(new KeyAdapter() {
-            public void keyPressed(KeyEvent e) {
-                if (e.getKeyCode() == KeyEvent.VK_ENTER) {
-                    System.out.println("Tecla Enter pressionada");
-                    escreveNome.requestFocusInWindow();
-                }
-            }
-        });
-        escreveNome.addKeyListener(new KeyAdapter() {
-            public void keyPressed(KeyEvent e) {
-                if (e.getKeyCode() == KeyEvent.VK_ENTER) {
-                    System.out.println("Tecla Enter pressionada");
-                    escreveCpf.requestFocusInWindow();
-                }
-            }
-        });
-        escreveCpf.addKeyListener(new KeyAdapter() {
-            public void keyPressed(KeyEvent e) {
-                if (e.getKeyCode() == KeyEvent.VK_ENTER) {
-                    System.out.println("Tecla Enter pressionada");
-                    escreveEmail.requestFocusInWindow();
-                }
-            }
-        });
-
-        escreveEmail.addKeyListener(new KeyAdapter() {
-            public void keyPressed(KeyEvent e) {
-                if (e.getKeyCode() == KeyEvent.VK_ENTER) {
-                    System.out.println("Tecla Enter pressionada");
-                    String endereco = escreveEndereco.getText();
-                    String nome = escreveNome.getText();
-                    String cpf = escreveCpf.getText();
-                    String email = escreveEmail.getText();
-
-
-                    try{
-                        gerenciaDono.cadastroLoja(endereco,nome,cpf,email);
-                        exibeInformacao("Cadastro de Loja e gerente feitos corretamente","Cadastro de Loja e gerente feito com sucesso");
-                        escreveEndereco.setText("");
-                        escreveNome.setText("");
-                        escreveCpf.setText("");
-                        escreveEmail.setText("");
-                    }catch (CadastroException mes) {
-                        exibeException(mes.getMessage(),"Cadastro falhou");
-                    }
-
-
-
-                    //gerenciaDono.cadastroLoja(nome,senha);
-
-                    boolean validaCadastro = false;
-                }
-            }
-        });
-
-        Sair.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                System.out.println("Botão 'Sair' clicado");
-                //menuBar.removeAll();
-                painelCadastroLoja.setVisible(false);
-                menuLogin();
-            }
-        });
-        return painelCadastroLoja;
-    }
 
     public void exibeException(String menssagem, String titulo){
         JOptionPane.showMessageDialog(frame,

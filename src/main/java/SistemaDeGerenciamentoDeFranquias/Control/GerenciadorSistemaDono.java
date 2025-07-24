@@ -34,9 +34,15 @@ public class GerenciadorSistemaDono extends GerenciadorSistema{
 
     public void cadastroLoja(String endereco, String nomeGerente, String cpfGerente, String emailGerente) throws CadastroException {
         try {
+            ValidadorCampoVazio.valida(endereco);
+            ValidadorCampoVazio.valida(nomeGerente);
             ValidadorCampoVazio.valida(cpfGerente);
+            ValidadorCampoVazio.valida(emailGerente);
+
+            ValidadorNome.validarNome(nomeGerente);
             ValidadorCpf.validarCpf(cpfGerente);
             ValidadorEmail.valida(emailGerente);
+
         }catch (EntradaException e){
             System.out.println("Erro: EntradaException: " + e.getMessage());
             throw new LoginException(e.getMessage());
