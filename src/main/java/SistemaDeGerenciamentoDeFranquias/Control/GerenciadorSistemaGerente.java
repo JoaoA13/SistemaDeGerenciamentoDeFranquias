@@ -1,9 +1,10 @@
-package SistemaDeGerenciamentoDeFranquias;
+package SistemaDeGerenciamentoDeFranquias.Control;
 
 import SistemaDeGerenciamentoDeFranquias.Exceptions.BancoDeDadosException;
 import SistemaDeGerenciamentoDeFranquias.Exceptions.CadastroException;
 import SistemaDeGerenciamentoDeFranquias.Exceptions.EntradaException;
 import SistemaDeGerenciamentoDeFranquias.Exceptions.LoginException;
+import SistemaDeGerenciamentoDeFranquias.Model.Loja;
 import SistemaDeGerenciamentoDeFranquias.Validadores.*;
 import SistemaDeGerenciamentoDeFranquias.Validadores.ValidadorCpfBancoDeDadosTrue;
 
@@ -11,7 +12,7 @@ public class GerenciadorSistemaGerente extends GerenciadorSistema{
 
     GerenciadorDeLojas listaLojas = new GerenciadorDeLojas();
 
-    String login(String cpf,String senha) throws LoginException {
+    public String login(String cpf, String senha) throws LoginException {
         super.login(cpf, senha);
 
         try {
@@ -34,7 +35,7 @@ public class GerenciadorSistemaGerente extends GerenciadorSistema{
         }
     }
 
-    String lancarCadastro (String nome,String cpf,String senha, String cpfGerente) throws CadastroException {
+    public String lancarCadastro(String nome, String cpf, String senha, String cpfGerente) throws CadastroException {
         try {
             ValidadorCampoVazio.valida(nome);
             ValidadorCampoVazio.valida(cpf);

@@ -1,4 +1,4 @@
-package SistemaDeGerenciamentoDeFranquias;
+package SistemaDeGerenciamentoDeFranquias.Model;
 
 public abstract class Usuario {
     private String nome;

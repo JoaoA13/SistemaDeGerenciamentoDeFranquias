@@ -1,9 +1,9 @@
 package SistemaDeGerenciamentoDeFranquias.Validadores;
 
 import SistemaDeGerenciamentoDeFranquias.Exceptions.BancoDeDadosException;
-import SistemaDeGerenciamentoDeFranquias.GerenciadorDeLojas;
-import SistemaDeGerenciamentoDeFranquias.GerenciadorSistema;
-import SistemaDeGerenciamentoDeFranquias.Loja;
+import SistemaDeGerenciamentoDeFranquias.Control.GerenciadorDeLojas;
+import SistemaDeGerenciamentoDeFranquias.Control.GerenciadorSistema;
+import SistemaDeGerenciamentoDeFranquias.Model.Loja;
 
 public class ValidadorCpfBancoDeDadosFalse implements ValidadorBancoDeDados{
 

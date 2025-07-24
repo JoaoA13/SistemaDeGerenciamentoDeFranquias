@@ -1,6 +1,6 @@
-package SistemaDeGerenciamentoDeFranquias;
+package SistemaDeGerenciamentoDeFranquias.Model;
 
-public class Vendedor extends Usuario{
+public class Vendedor extends Usuario {
     protected Vendedor(String nome,String cpf, String email, String senha){
         super(nome,cpf,email,senha);
     }

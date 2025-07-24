@@ -1,8 +1,7 @@
-package SistemaDeGerenciamentoDeFranquias;
+package SistemaDeGerenciamentoDeFranquias.Control;
 
-import SistemaDeGerenciamentoDeFranquias.Exceptions.CpfInvalidoException;
 import SistemaDeGerenciamentoDeFranquias.Exceptions.LoginException;
-import SistemaDeGerenciamentoDeFranquias.Validadores.ValidadorCpf;
+import SistemaDeGerenciamentoDeFranquias.Model.Dono;
 
 public abstract class GerenciadorSistema {
 

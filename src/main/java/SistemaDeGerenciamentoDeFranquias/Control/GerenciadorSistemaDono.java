@@ -1,6 +1,7 @@
-package SistemaDeGerenciamentoDeFranquias;
+package SistemaDeGerenciamentoDeFranquias.Control;
 
 import SistemaDeGerenciamentoDeFranquias.Exceptions.*;
+import SistemaDeGerenciamentoDeFranquias.Model.Gerente;
 import SistemaDeGerenciamentoDeFranquias.Validadores.*;
 
 public class GerenciadorSistemaDono extends GerenciadorSistema{
@@ -9,7 +10,7 @@ public class GerenciadorSistemaDono extends GerenciadorSistema{
     public GerenciadorSistemaDono(){
     }
     @Override
-    String login(String cpf,String senha) throws LoginException{
+    public String login(String cpf, String senha) throws LoginException{
         super.login(cpf,senha);
 
         try {
@@ -31,7 +32,7 @@ public class GerenciadorSistemaDono extends GerenciadorSistema{
         }
     }
 
-    void cadastroLoja(String endereco,String nomeGerente, String cpfGerente, String emailGerente) throws CadastroException {
+    public void cadastroLoja(String endereco, String nomeGerente, String cpfGerente, String emailGerente) throws CadastroException {
         try {
             ValidadorCampoVazio.valida(cpfGerente);
             ValidadorCpf.validarCpf(cpfGerente);

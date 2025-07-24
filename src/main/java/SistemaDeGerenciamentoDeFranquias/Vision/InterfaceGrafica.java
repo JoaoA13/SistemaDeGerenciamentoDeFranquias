@@ -1,10 +1,13 @@
-package SistemaDeGerenciamentoDeFranquias;
+package SistemaDeGerenciamentoDeFranquias.Vision;
 
 import SistemaDeGerenciamentoDeFranquias.Exceptions.CadastroException;
 import SistemaDeGerenciamentoDeFranquias.Exceptions.LoginException;
+import SistemaDeGerenciamentoDeFranquias.Control.GerenciadorDeLojas;
+import SistemaDeGerenciamentoDeFranquias.Control.GerenciadorSistemaDono;
+import SistemaDeGerenciamentoDeFranquias.Control.GerenciadorSistemaGerente;
+import SistemaDeGerenciamentoDeFranquias.Control.GerenciadorSistemaVendedor;
 
 import javax.swing.*;
-import javax.swing.event.*;
 import java.awt.event.*;
 import java.awt.*;
 

@@ -1,6 +1,5 @@
-package SistemaDeGerenciamentoDeFranquias;
+package SistemaDeGerenciamentoDeFranquias.Control;
 
-import SistemaDeGerenciamentoDeFranquias.Exceptions.CpfInvalidoException;
 import SistemaDeGerenciamentoDeFranquias.Exceptions.EntradaException;
 import SistemaDeGerenciamentoDeFranquias.Exceptions.LoginException;
 import SistemaDeGerenciamentoDeFranquias.Validadores.ValidadorCampoVazio;
@@ -10,7 +9,7 @@ import SistemaDeGerenciamentoDeFranquias.Validadores.ValidadorSenha;
 
 public class GerenciadorSistemaVendedor extends GerenciadorSistema{
 
-    String login(String cpf,String senha) throws LoginException {
+    public String login(String cpf, String senha) throws LoginException {
         super.login(cpf,senha);
 
         try {

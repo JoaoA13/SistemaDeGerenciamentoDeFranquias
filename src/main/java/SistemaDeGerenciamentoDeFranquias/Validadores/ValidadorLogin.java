@@ -1,7 +1,7 @@
 package SistemaDeGerenciamentoDeFranquias.Validadores;
 
 import SistemaDeGerenciamentoDeFranquias.Exceptions.LoginException;
-import SistemaDeGerenciamentoDeFranquias.Usuario;
+import SistemaDeGerenciamentoDeFranquias.Model.Usuario;
 
 public interface ValidadorLogin {
     static public boolean valida(Usuario usuario, String cpfDigitado, String senhaDigitada)  throws LoginException {
