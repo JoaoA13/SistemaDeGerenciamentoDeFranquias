@@ -194,7 +194,7 @@ public class InterfaceGrafica {
         JMenuItem  menu2Item4 = new JMenuItem ("Lista de Vendedores", KeyEvent.VK_T);
         menu2.add(menu2Item4);
 
-        menu2Item1.addActionListener(e -> trocarTela(acoes.cadastrar(), 400, 300));
+        menu2Item1.addActionListener(e -> trocarTela(acoes.cadastrar(cpf), 400, 300));
         menu2Item2.addActionListener(e -> trocarTela(acoes.excluir(), 400, 200));
         menu2Item3.addActionListener(e -> trocarTela(acoes.editar(), 400, 200));
         menu2Item4.addActionListener(e -> trocarTela(acoes.listaDeVendedores(), 400, 300));
