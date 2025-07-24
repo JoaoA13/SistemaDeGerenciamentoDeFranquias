@@ -1,11 +1,15 @@
 package SistemaDeGerenciamentoDeFranquias;
 
+import SistemaDeGerenciamentoDeFranquias.Exceptions.CadastroException;
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 
 public class IGAcoesGerente {
+
+    GerenciadorSistemaGerente gerenciaGerente = new GerenciadorSistemaGerente();
 
     IGAcoesGerente(String cpf){
         //Loja loja = retornaLoja(cpf);
@@ -48,7 +52,7 @@ public class IGAcoesGerente {
         JPanel botoesPanel = new JPanel();
         botoesPanel.setLayout(new BoxLayout(botoesPanel, BoxLayout.X_AXIS));
         botoesPanel.setAlignmentX(Component.LEFT_ALIGNMENT);
-        botoesPanel.setMaximumSize(new Dimension(250, 30));
+        botoesPanel.setMaximumSize(new Dimension(400, 30));
 
         botoesPanel.add(voltar);
         botoesPanel.add(Box.createHorizontalGlue());
@@ -58,6 +62,19 @@ public class IGAcoesGerente {
         escreveNome.addActionListener(e -> escreveCpf.requestFocusInWindow());
         escreveCpf.addActionListener(e -> escreveSenha.requestFocusInWindow());
         escreveSenha.addActionListener(e -> confirmar.requestFocusInWindow());
+
+        confirmar.addActionListener(e -> {
+            System.out.println("Botão Confirmar clicado");
+            String nome = escreveNome.getText().trim();
+            String cpf = escreveCpf.getText().trim();
+            String senha = escreveSenha.getText().trim();
+            try {
+                String msg = gerenciaGerente.lancarCadastro(nome, cpf, senha);
+                JOptionPane.showMessageDialog(null, msg, "Sucesso", JOptionPane.INFORMATION_MESSAGE);
+            } catch (CadastroException ex) {
+                JOptionPane.showMessageDialog(null, "Erro ao cadastrar: " + ex.getMessage(), "Erro", JOptionPane.ERROR_MESSAGE);
+            }
+        });
 
         return cadastro;
     }
@@ -122,5 +139,175 @@ public class IGAcoesGerente {
 
         escreveCpf.addActionListener(e -> confirmar.requestFocusInWindow());
         return edicao;
+    }
+
+    JPanel listaDeVendedores(){
+        JPanel lista = new JPanel();
+        lista.setLayout(new BoxLayout(lista, BoxLayout.Y_AXIS));
+        lista.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
+
+        JButton voltar = new JButton("Voltar");
+
+        JPanel botoesPanel = new JPanel();
+        botoesPanel.setLayout(new BoxLayout(botoesPanel, BoxLayout.X_AXIS));
+        botoesPanel.setAlignmentX(Component.LEFT_ALIGNMENT);
+
+        botoesPanel.add(voltar);
+        botoesPanel.add(Box.createHorizontalGlue());
+        lista.add(botoesPanel);
+
+        return lista;
+    }
+
+    JPanel visualizarPedidos(){
+        JPanel visualizacao = new JPanel();
+        visualizacao.setLayout(new BoxLayout(visualizacao, BoxLayout.Y_AXIS));
+        visualizacao.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
+
+        JButton voltar = new JButton("Voltar");
+
+        JPanel botoesPanel = new JPanel();
+        botoesPanel.setLayout(new BoxLayout(botoesPanel, BoxLayout.X_AXIS));
+        botoesPanel.setAlignmentX(Component.LEFT_ALIGNMENT);
+
+        botoesPanel.add(voltar);
+        botoesPanel.add(Box.createHorizontalGlue());
+        visualizacao.add(botoesPanel);
+
+        return visualizacao;
+    }
+
+    JPanel solicitacoesDeAlteracao(){
+        JPanel solicitacoes = new JPanel();
+        solicitacoes.setLayout(new BoxLayout(solicitacoes, BoxLayout.Y_AXIS));
+        solicitacoes.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
+
+        JButton voltar = new JButton("Voltar");
+
+        JPanel botoesPanel = new JPanel();
+        botoesPanel.setLayout(new BoxLayout(botoesPanel, BoxLayout.X_AXIS));
+        botoesPanel.setAlignmentX(Component.LEFT_ALIGNMENT);
+
+        botoesPanel.add(voltar);
+        botoesPanel.add(Box.createHorizontalGlue());
+        solicitacoes.add(botoesPanel);
+
+        return solicitacoes;
+    }
+
+    JPanel cadastrarProduto(){
+        JPanel cadastro = new JPanel();
+        cadastro.setLayout(new BoxLayout(cadastro, BoxLayout.Y_AXIS));
+        cadastro.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
+
+        JLabel labelNome = new JLabel("Digite o nome do produto:");
+        labelNome.setAlignmentX(Component.LEFT_ALIGNMENT);
+        cadastro.add(labelNome);
+
+        JTextField escreveNome = new JTextField(20);
+        escreveNome.setMaximumSize(new Dimension(Integer.MAX_VALUE, 25));
+        escreveNome.setAlignmentX(Component.LEFT_ALIGNMENT);
+        cadastro.add(escreveNome);
+
+        JLabel labelPreco = new JLabel("Digite o preço do produto:");
+        labelPreco.setAlignmentX(Component.LEFT_ALIGNMENT);
+        cadastro.add(labelPreco);
+
+        JTextField escrevePreco = new JTextField(20);
+        escrevePreco.setMaximumSize(new Dimension(Integer.MAX_VALUE, 25));
+        escrevePreco.setAlignmentX(Component.LEFT_ALIGNMENT);
+        cadastro.add(escrevePreco);
+
+        JLabel labelCaracteristicas = new JLabel("Digite as características do produto:");
+        labelCaracteristicas.setAlignmentX(Component.LEFT_ALIGNMENT);
+        cadastro.add(labelCaracteristicas);
+
+        JTextField escreveCaracteristicas = new JTextField(20);
+        escreveCaracteristicas.setMaximumSize(new Dimension(Integer.MAX_VALUE, 25));
+        escreveCaracteristicas.setAlignmentX(Component.LEFT_ALIGNMENT);
+        cadastro.add(escreveCaracteristicas);
+
+        JLabel labelQuantidade = new JLabel("Digite a quantidade em estoque:");
+        labelQuantidade.setAlignmentX(Component.LEFT_ALIGNMENT);
+        cadastro.add(labelQuantidade);
+
+        JTextField escreveQuantidade = new JTextField(20);
+        escreveQuantidade.setMaximumSize(new Dimension(Integer.MAX_VALUE, 25));
+        escreveQuantidade.setAlignmentX(Component.LEFT_ALIGNMENT);
+        cadastro.add(escreveQuantidade);
+
+        JButton voltar = new JButton("Voltar");
+        JButton confirmar = new JButton("Confirmar");
+
+        JPanel botoesPanel = new JPanel();
+        botoesPanel.setLayout(new BoxLayout(botoesPanel, BoxLayout.X_AXIS));
+        botoesPanel.setAlignmentX(Component.LEFT_ALIGNMENT);
+        botoesPanel.setMaximumSize(new Dimension(400, 30));
+
+        botoesPanel.add(voltar);
+        botoesPanel.add(Box.createHorizontalGlue());
+        botoesPanel.add(confirmar);
+        cadastro.add(botoesPanel);
+
+        escreveNome.addActionListener(e -> escrevePreco.requestFocusInWindow());
+        escrevePreco.addActionListener(e -> escreveCaracteristicas.requestFocusInWindow());
+        escreveCaracteristicas.addActionListener(e -> escreveQuantidade.requestFocusInWindow());
+        escreveQuantidade.addActionListener(e -> confirmar.requestFocusInWindow());
+
+        return cadastro;
+    }
+
+    JPanel visualizarListaDeProdutos(){
+        JPanel listaDeProd = new JPanel();
+        listaDeProd.setLayout(new BoxLayout(listaDeProd, BoxLayout.Y_AXIS));
+        listaDeProd.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
+
+        JButton voltar = new JButton("Voltar");
+
+        JPanel botoesPanel = new JPanel();
+        botoesPanel.setLayout(new BoxLayout(botoesPanel, BoxLayout.X_AXIS));
+        botoesPanel.setAlignmentX(Component.LEFT_ALIGNMENT);
+
+        botoesPanel.add(voltar);
+        botoesPanel.add(Box.createHorizontalGlue());
+        listaDeProd.add(botoesPanel);
+
+        return listaDeProd;
+    }
+
+    JPanel historicoDeVendas(){
+        JPanel historico = new JPanel();
+        historico.setLayout(new BoxLayout(historico, BoxLayout.Y_AXIS));
+        historico.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
+
+        JButton voltar = new JButton("Voltar");
+
+        JPanel botoesPanel = new JPanel();
+        botoesPanel.setLayout(new BoxLayout(botoesPanel, BoxLayout.X_AXIS));
+        botoesPanel.setAlignmentX(Component.LEFT_ALIGNMENT);
+
+        botoesPanel.add(voltar);
+        botoesPanel.add(Box.createHorizontalGlue());
+        historico.add(botoesPanel);
+
+        return historico;
+    }
+
+    JPanel listaDeClientesRecorrentes(){
+        JPanel listaClientes = new JPanel();
+        listaClientes.setLayout(new BoxLayout(listaClientes, BoxLayout.Y_AXIS));
+        listaClientes.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
+
+        JButton voltar = new JButton("Voltar");
+
+        JPanel botoesPanel = new JPanel();
+        botoesPanel.setLayout(new BoxLayout(botoesPanel, BoxLayout.X_AXIS));
+        botoesPanel.setAlignmentX(Component.LEFT_ALIGNMENT);
+
+        botoesPanel.add(voltar);
+        botoesPanel.add(Box.createHorizontalGlue());
+        listaClientes.add(botoesPanel);
+
+        return listaClientes;
     }
 }

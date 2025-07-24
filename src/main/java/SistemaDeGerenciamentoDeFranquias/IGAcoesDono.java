@@ -1,7 +1,7 @@
 package SistemaDeGerenciamentoDeFranquias;
 
-public class AcoesVendedor {
-    AcoesVendedor(){
+public class IGAcoesDono {
+    IGAcoesDono(){
 
     }
 }

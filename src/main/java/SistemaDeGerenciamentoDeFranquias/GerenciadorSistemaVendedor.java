@@ -24,6 +24,7 @@ public class GerenciadorSistemaVendedor extends GerenciadorSistema{
         try {
             ValidadorCpf.validarCpf(cpf);
             ValidadorSenha.valida(senha);
+            Usuario dono = null;
             ValidadorLogin.valida(dono,cpf,senha);
             return "CPF e senha corretos";
         }catch (LoginException e){
