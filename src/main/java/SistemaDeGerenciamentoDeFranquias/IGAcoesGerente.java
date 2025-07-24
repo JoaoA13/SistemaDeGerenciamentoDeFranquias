@@ -21,7 +21,7 @@ public class IGAcoesGerente {
     }
 
 
-    JPanel cadastrar(){
+    JPanel cadastrar(String cpfGerente){
         JPanel cadastro = new JPanel();
         cadastro.setLayout(new BoxLayout(cadastro, BoxLayout.Y_AXIS));
         cadastro.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
@@ -68,7 +68,7 @@ public class IGAcoesGerente {
 
         escreveNome.addActionListener(e -> escreveCpf.requestFocusInWindow());
         escreveCpf.addActionListener(e -> escreveSenha.requestFocusInWindow());
-        escreveSenha.addActionListener(e -> confirmar.requestFocusInWindow());
+        escreveSenha.addActionListener(e -> confirmar.doClick());
 
         confirmar.addActionListener(e -> {
             System.out.println("Botão Confirmar clicado");
@@ -76,7 +76,7 @@ public class IGAcoesGerente {
             String cpf = escreveCpf.getText().trim();
             String senha = escreveSenha.getText().trim();
             try {
-                String msg = gerenciaGerente.lancarCadastro(nome, cpf, senha);
+                String msg = gerenciaGerente.lancarCadastro(nome, cpf, senha, cpfGerente);
                 JOptionPane.showMessageDialog(null, msg, "Sucesso", JOptionPane.INFORMATION_MESSAGE);
             } catch (CadastroException ex) {
                 JOptionPane.showMessageDialog(null, "Erro ao cadastrar: " + ex.getMessage(), "Erro", JOptionPane.ERROR_MESSAGE);

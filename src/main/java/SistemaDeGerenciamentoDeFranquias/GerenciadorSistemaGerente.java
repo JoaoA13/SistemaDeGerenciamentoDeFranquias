@@ -9,6 +9,8 @@ import SistemaDeGerenciamentoDeFranquias.Validadores.ValidadorCpfBancoDeDadosTru
 
 public class GerenciadorSistemaGerente extends GerenciadorSistema{
 
+    GerenciadorDeLojas listaLojas = new GerenciadorDeLojas();
+
     String login(String cpf,String senha) throws LoginException {
         super.login(cpf, senha);
 
@@ -32,7 +34,7 @@ public class GerenciadorSistemaGerente extends GerenciadorSistema{
         }
     }
 
-    String lancarCadastro (String nome,String cpf,String senha) throws CadastroException {
+    String lancarCadastro (String nome,String cpf,String senha, String cpfGerente) throws CadastroException {
         try {
             ValidadorCampoVazio.valida(nome);
             ValidadorCampoVazio.valida(cpf);
@@ -46,11 +48,14 @@ public class GerenciadorSistemaGerente extends GerenciadorSistema{
             ValidadorCpf.validarCpf(cpf);
             ValidadorSenha.valida(senha);
             ValidadorNome.validarNome(nome);
-            return "Vendedor Cadastrado";
         }catch (LoginException e){
             System.out.println("Erro: LoginException: " + e.getMessage());
             throw new CadastroException(e.getMessage());
         }
+
+        Loja loja = listaLojas.getLoja(cpfGerente);
+
+        return "Vendedor Cadastrado";
     }
 
     static public void buscaGerente(String cpf) throws LoginException{
