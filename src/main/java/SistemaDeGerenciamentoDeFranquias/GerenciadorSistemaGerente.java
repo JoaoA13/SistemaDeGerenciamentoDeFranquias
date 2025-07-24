@@ -6,7 +6,6 @@ import SistemaDeGerenciamentoDeFranquias.Exceptions.LoginException;
 import SistemaDeGerenciamentoDeFranquias.Validadores.*;
 
 public class GerenciadorSistemaGerente extends GerenciadorSistema{
-    Loja loja;
 
     String login(String cpf,String senha) throws LoginException {
         super.login(cpf, senha);

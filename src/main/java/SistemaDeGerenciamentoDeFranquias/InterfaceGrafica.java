@@ -13,6 +13,7 @@ public class InterfaceGrafica {
     protected GerenciadorSistemaDono gerenciaDono = new GerenciadorSistemaDono();
     protected GerenciadorSistemaGerente gerenciaGerente = new GerenciadorSistemaGerente();
     protected GerenciadorSistemaVendedor gerenciaVendedor = new GerenciadorSistemaVendedor();
+    protected GerenciadorDeLojas gerenciador = new GerenciadorDeLojas();
     String cpf = "";
 
     public InterfaceGrafica(){
@@ -146,8 +147,8 @@ public class InterfaceGrafica {
         JMenuItem  menu2Item2 = new JMenuItem ("Cadastrar loja", KeyEvent.VK_T);
         menu2.add(menu2Item2);
 
-        menu1Item1.addActionListener(e -> trocarTela(criarTela1()));
-        menu2Item2.addActionListener(e -> trocarTela(cadastraLojas()));
+        menu1Item1.addActionListener(e -> trocarTela(criarTela1(), 200, 200));
+        menu2Item2.addActionListener(e -> trocarTela(cadastraLojas(), 500, 500));
 
         frame.setContentPane(sistemaDono); //função que elimina painel anterior e adiciona outro
         frame.revalidate();
@@ -179,6 +180,9 @@ public class InterfaceGrafica {
         JMenuItem  menu1Item1 = new JMenuItem ("Item de Menu", KeyEvent.VK_T);
         menu1.add(menu1Item1);
 
+        menu1Item1.addActionListener(e -> trocarTela(criarTela1(), 200, 200));
+
+
         JMenu menu2 = new JMenu ("Vendedores");
         menuBar.add(menu2);
         JMenuItem  menu2Item1 = new JMenuItem ("Cadastrar", KeyEvent.VK_T);
@@ -190,10 +194,37 @@ public class InterfaceGrafica {
         JMenuItem  menu2Item4 = new JMenuItem ("Lista de Vendedores", KeyEvent.VK_T);
         menu2.add(menu2Item4);
 
-        menu1Item1.addActionListener(e -> trocarTela(criarTela1()));
-        menu2Item1.addActionListener(e -> trocarTela(acoes.cadastrar()));
+        menu2Item1.addActionListener(e -> trocarTela(acoes.cadastrar(), 400, 300));
+        menu2Item2.addActionListener(e -> trocarTela(acoes.excluir(), 400, 200));
+        menu2Item3.addActionListener(e -> trocarTela(acoes.editar(), 400, 200));
 
-        frame.setContentPane(sistemaGerente); //função que elimina painel anterior e adiciona outro
+        JMenu menu3 = new JMenu ("Pedidos");
+        menuBar.add(menu3);
+        JMenuItem  menu3Item1 = new JMenuItem ("Visualisar Pedidos", KeyEvent.VK_T);
+        menu3.add(menu3Item1);
+        JMenuItem  menu3Item2 = new JMenuItem ("Solicitações de Alteração", KeyEvent.VK_T);
+        menu3.add(menu3Item2);
+
+
+        JMenu menu4 = new JMenu ("Estoque");
+        menuBar.add(menu4);
+        JMenuItem  menu4Item1 = new JMenuItem ("Cadastrar Produtos", KeyEvent.VK_T);
+        menu4.add(menu4Item1);
+        JMenuItem  menu4Item2 = new JMenuItem ("Visualizar Lista de Produtos", KeyEvent.VK_T);
+        menu4.add(menu4Item2);
+
+
+        JMenu menu5 = new JMenu ("Relatórios");
+        menuBar.add(menu5);
+        JMenuItem  menu5Item1 = new JMenuItem ("Histórico de Vendas", KeyEvent.VK_T);
+        menu5.add(menu5Item1);
+        JMenuItem  menu5Item2 = new JMenuItem ("Lista de Clientes Recorrentes", KeyEvent.VK_T);
+        menu5.add(menu5Item2);
+
+        frame.pack();
+        frame.setSize(400, 300);
+        frame.setLocationRelativeTo(null);
+        frame.setContentPane(sistemaGerente);
         frame.revalidate();
         frame.repaint();
 
@@ -208,7 +239,10 @@ public class InterfaceGrafica {
     }
 
     // Metodo que troca paineis
-    private void trocarTela(JPanel novaTela) {
+    private void trocarTela(JPanel novaTela, int tam1, int tam2) {
+        frame.pack();
+        frame.setSize(tam1, tam2);
+        frame.setLocationRelativeTo(null);
         frame.setContentPane(novaTela);
         frame.revalidate(); // atualiza o layout
         frame.repaint();    // repinta a janela
@@ -225,8 +259,6 @@ public class InterfaceGrafica {
     // Tela cadastro de loja
     private JPanel cadastraLojas() {
         JPanel painelCadastroLoja = new JPanel(new BorderLayout());
-        frame.setSize(500, 500);
-        frame.setLocationRelativeTo(null);
 
         JLabel titulo = new JLabel("Cadastro de loja", SwingConstants.CENTER);
         painelCadastroLoja.add(titulo, BorderLayout.NORTH);

@@ -8,6 +8,10 @@ public class GerenciadorDeLojas {
     static private Map<String, Gerente > armazenaGerentes = new HashMap<>();
 
     protected GerenciadorDeLojas(){
+        Gerente gerente = new Gerente("Pedroca", "12345678900", "pedrogameplay@gmail.com", "12345688");
+        Loja lojinha = new Loja("Rua da resenha",gerente);
+        armazenaLojas.put(gerente.getCpf(),lojinha);
+        armazenaGerentes.put(gerente.getCpf(),gerente);
     }
 
     protected Map<String, Loja> getLojas() {return armazenaLojas;}
