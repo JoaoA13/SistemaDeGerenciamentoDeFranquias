@@ -195,6 +195,8 @@ public class InterfaceGrafica {
         menu2Item1.addActionListener(e -> trocarTela(acoes.cadastrar(), 400, 300));
         menu2Item2.addActionListener(e -> trocarTela(acoes.excluir(), 400, 200));
         menu2Item3.addActionListener(e -> trocarTela(acoes.editar(), 400, 200));
+        menu2Item4.addActionListener(e -> trocarTela(acoes.listaDeVendedores(), 400, 300));
+
 
         JMenu menu3 = new JMenu ("Pedidos");
         menuBar.add(menu3);
@@ -202,6 +204,9 @@ public class InterfaceGrafica {
         menu3.add(menu3Item1);
         JMenuItem  menu3Item2 = new JMenuItem ("Solicitações de Alteração", KeyEvent.VK_T);
         menu3.add(menu3Item2);
+
+        menu3Item1.addActionListener(e -> trocarTela(acoes.visualizarPedidos(), 400, 300));
+        menu3Item2.addActionListener(e -> trocarTela(acoes.solicitacoesDeAlteracao(), 400, 300));
 
 
         JMenu menu4 = new JMenu ("Estoque");
@@ -211,6 +216,9 @@ public class InterfaceGrafica {
         JMenuItem  menu4Item2 = new JMenuItem ("Visualizar Lista de Produtos", KeyEvent.VK_T);
         menu4.add(menu4Item2);
 
+        menu4Item1.addActionListener(e -> trocarTela(acoes.cadastrarProduto(), 400, 300));
+        menu4Item2.addActionListener(e -> trocarTela(acoes.visualizarListaDeProdutos(), 400, 300));
+
 
         JMenu menu5 = new JMenu ("Relatórios");
         menuBar.add(menu5);
@@ -218,6 +226,10 @@ public class InterfaceGrafica {
         menu5.add(menu5Item1);
         JMenuItem  menu5Item2 = new JMenuItem ("Lista de Clientes Recorrentes", KeyEvent.VK_T);
         menu5.add(menu5Item2);
+
+        menu5Item1.addActionListener(e -> trocarTela(acoes.historicoDeVendas(), 400, 300));
+        menu5Item2.addActionListener(e -> trocarTela(acoes.listaDeClientesRecorrentes(), 400, 300));
+
 
         frame.pack();
         frame.setSize(400, 300);
@@ -238,7 +250,6 @@ public class InterfaceGrafica {
 
     // Metodo que troca paineis
     private void trocarTela(JPanel novaTela, int tam1, int tam2) {
-        frame.pack();
         frame.setSize(tam1, tam2);
         frame.setLocationRelativeTo(null);
         frame.setContentPane(novaTela);
