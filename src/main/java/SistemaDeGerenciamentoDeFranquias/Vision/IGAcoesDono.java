@@ -145,7 +145,7 @@ public class IGAcoesDono {
 
         Excluir.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                System.out.println("Botão 'Cadastrar' clicado");
+                System.out.println("Botão 'Excluir' clicado");
 //                if(botaoCadastrar(escreveEndereco.getText(), escreveNome.getText(), escreveCpf.getText(), escreveEmail.getText())) {
 //
 //                    escreveEndereco.setText("");
@@ -169,7 +169,7 @@ public class IGAcoesDono {
     }
 
     void exibeInformacaoLoja(){
-        JPanel painelExcluirLoja = new JPanel(new BorderLayout());
+        JPanel exibeInformacaoLoja = new JPanel(new BorderLayout());
 
 
     }
