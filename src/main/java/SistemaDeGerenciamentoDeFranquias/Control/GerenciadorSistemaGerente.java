@@ -5,12 +5,13 @@ import SistemaDeGerenciamentoDeFranquias.Exceptions.CadastroException;
 import SistemaDeGerenciamentoDeFranquias.Exceptions.EntradaException;
 import SistemaDeGerenciamentoDeFranquias.Exceptions.LoginException;
 import SistemaDeGerenciamentoDeFranquias.Model.Loja;
+import SistemaDeGerenciamentoDeFranquias.Model.Vendedor;
 import SistemaDeGerenciamentoDeFranquias.Validadores.*;
 import SistemaDeGerenciamentoDeFranquias.Validadores.ValidadorCpfBancoDeDadosTrue;
 
 public class GerenciadorSistemaGerente extends GerenciadorSistema{
 
-    GerenciadorDeLojas listaLojas = new GerenciadorDeLojas();
+    static GerenciadorDeLojas listaLojas = new GerenciadorDeLojas();
 
     public String login(String cpf, String senha) throws LoginException {
         super.login(cpf, senha);
@@ -50,16 +51,19 @@ public class GerenciadorSistemaGerente extends GerenciadorSistema{
         }
 
         try {
-              buscaCpfNAOExiste(cpf);
-        }catch (LoginException e){
-            System.out.println("Erro: LoginException: " + e.getMessage());
+            ValidadorCpfBancoDeDadosFalse.valida(cpf);
+            ValidadorCpfVendedorBancoDeDadosFalse.valida(cpf, listaLojas.getArmazenaLojas());
+        }catch (BancoDeDadosException e){
+            System.out.println("Erro: EntradaException: " + e.getMessage());
             throw new CadastroException(e.getMessage());
         }
 
         Loja loja = listaLojas.getLoja(cpfGerente);
-
+        loja.addVendedor(nome, cpf, senha);
         return "Vendedor Cadastrado";
     }
+
+
     static void cadastrarVendedor(String nome, String cpf, String senha){
 
     }

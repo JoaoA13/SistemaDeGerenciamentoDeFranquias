@@ -26,7 +26,7 @@ public class Loja {
     protected Gerente getGerenteDaUnidade() {return gerenteDaUnidade;}
     protected void setGerenteDaUnidade(Gerente gerenteDaUnidade) {this.gerenteDaUnidade = gerenteDaUnidade;}
 
-    void addVendedor(String nome,String cpf,String senha, String cpfGerente){
+    public void addVendedor(String nome, String cpf, String senha){
         Vendedor vendedor = new Vendedor(nome, cpf,"@gmail.com", senha);
         armazenaVendedores.put(cpf,vendedor);
     }

@@ -27,6 +27,8 @@ public class GerenciadorDeLojas {
 
     protected Loja getLoja(String cpfGerente){return armazenaLojas.getOrDefault(cpfGerente,null);}
 
+    protected Map<String, Loja> getArmazenaLojas() { return armazenaLojas; }
+
     protected static void cadastraLoja(String endereco, Gerente gerente){
         String codigo = geraCodigoLoja();
         Loja loja = new Loja(codigo,endereco,gerente);

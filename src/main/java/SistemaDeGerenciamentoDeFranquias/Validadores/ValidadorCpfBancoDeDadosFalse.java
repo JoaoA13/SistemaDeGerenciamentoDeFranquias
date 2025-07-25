@@ -5,6 +5,9 @@ import SistemaDeGerenciamentoDeFranquias.Control.GerenciadorDeLojas;
 import SistemaDeGerenciamentoDeFranquias.Control.GerenciadorSistema;
 import SistemaDeGerenciamentoDeFranquias.Model.Loja;
 
+import java.util.Map;
+
+
 public class ValidadorCpfBancoDeDadosFalse implements ValidadorBancoDeDados{
 
     /// Retorna exceção(false) caso JÁ EXITA no banco de dados
@@ -19,4 +22,5 @@ public class ValidadorCpfBancoDeDadosFalse implements ValidadorBancoDeDados{
         else
             return true;
     }
+
 }
