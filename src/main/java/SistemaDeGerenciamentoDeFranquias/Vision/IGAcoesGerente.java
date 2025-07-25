@@ -1,18 +1,26 @@
 package SistemaDeGerenciamentoDeFranquias.Vision;
 
+import SistemaDeGerenciamentoDeFranquias.Control.GerenciadorDeLojas;
+import SistemaDeGerenciamentoDeFranquias.Control.GerenciadorSistema;
 import SistemaDeGerenciamentoDeFranquias.Exceptions.CadastroException;
 import SistemaDeGerenciamentoDeFranquias.Control.GerenciadorSistemaGerente;
 import SistemaDeGerenciamentoDeFranquias.Exceptions.EntradaException;
+import SistemaDeGerenciamentoDeFranquias.Model.Loja;
+import SistemaDeGerenciamentoDeFranquias.Model.Vendedor;
 
 import javax.swing.*;
+import javax.swing.table.DefaultTableModel;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 
 public class IGAcoesGerente {
     private InterfaceGrafica interfaceGrafica;
     private String cpf;
 
+    GerenciadorDeLojas gerenciaDeLojas = new GerenciadorDeLojas();
     GerenciadorSistemaGerente gerenciaGerente = new GerenciadorSistemaGerente();
 
     public IGAcoesGerente(InterfaceGrafica interfaceGrafica, String cpf) {
@@ -181,7 +189,69 @@ public class IGAcoesGerente {
         botoesPanel.setLayout(new BoxLayout(botoesPanel, BoxLayout.X_AXIS));
         botoesPanel.setAlignmentX(Component.LEFT_ALIGNMENT);
 
-        lista.add(gerenciaGerente.listaDeVendedores(cpfGerente), BorderLayout.CENTER);
+        String[] colunas = {"Nome", "CPF"};
+        Loja loja = gerenciaDeLojas.getLoja(cpfGerente);
+
+        String[][] dados = new String[loja.getArmazenaVendedores().size()][2];
+        int i = 0;
+        for (Vendedor v : loja.getArmazenaVendedores().values()) {
+            dados[i][0] = v.getNome();
+            dados[i][1] = v.getCpf();
+            i++;
+        }
+
+        DefaultTableModel modelo = new DefaultTableModel(dados, colunas) {
+            public boolean isCellEditable(int row, int column) {
+                return false;
+            }
+        };
+
+        JTable tabela = new JTable(dados, colunas);
+        JScrollPane scroll = new JScrollPane(tabela);
+        lista.add(scroll, BorderLayout.CENTER);
+
+        JPopupMenu menuPopup = new JPopupMenu();
+        JMenuItem editarItem = new JMenuItem("Editar");
+        JMenuItem excluirItem = new JMenuItem("Excluir");
+        menuPopup.add(editarItem);
+        menuPopup.add(excluirItem);
+
+        tabela.addMouseListener(new MouseAdapter() {
+            public void mousePressed(MouseEvent e) {
+                if (e.isPopupTrigger() || SwingUtilities.isRightMouseButton(e)) {
+                    int linha = tabela.rowAtPoint(e.getPoint());
+                    if (linha >= 0 && linha < tabela.getRowCount()) {
+                        tabela.setRowSelectionInterval(linha, linha);
+                        String cpfSelecionado = (String) tabela.getValueAt(linha, 1);
+
+                        /*editarItem.addActionListener(ae -> {
+                            Vendedor v = armazenaVendedores.get(cpfSelecionado);
+                            JOptionPane.showMessageDialog(painel,
+                                    "Abrir tela de edição para:\n" +
+                                            "Nome: " + v.getNome() + "\nCPF: " + v.getCpf());
+                        });*/
+
+                        excluirItem.addActionListener(ae -> {
+                            int confirm = JOptionPane.showConfirmDialog(lista,
+                                    "Tem certeza que deseja excluir o vendedor com CPF " + cpfSelecionado + "?",
+                                    "Confirmar exclusão",
+                                    JOptionPane.YES_NO_OPTION);
+                            if (confirm == JOptionPane.YES_OPTION) {
+                                try {
+                                    gerenciaGerente.excluirVendedor(cpfSelecionado, cpfGerente);
+                                } catch (EntradaException ex) {
+                                    throw new RuntimeException(ex);
+                                }
+                                ((DefaultTableModel) tabela.getModel()).removeRow(linha);
+                            }
+                        });
+
+                        menuPopup.show(tabela, e.getX(), e.getY());
+                    }
+                }
+            }
+        });
+
         botoesPanel.add(voltar);
         botoesPanel.add(Box.createHorizontalGlue());
         lista.add(botoesPanel);

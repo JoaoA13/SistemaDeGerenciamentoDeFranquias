@@ -9,8 +9,6 @@ import SistemaDeGerenciamentoDeFranquias.Model.Vendedor;
 import SistemaDeGerenciamentoDeFranquias.Validadores.*;
 import SistemaDeGerenciamentoDeFranquias.Validadores.ValidadorCpfBancoDeDadosTrue;
 
-import javax.swing.*;
-
 public class GerenciadorSistemaGerente extends GerenciadorSistema{
 
     static GerenciadorDeLojas listaLojas = new GerenciadorDeLojas();
@@ -87,22 +85,8 @@ public class GerenciadorSistemaGerente extends GerenciadorSistema{
         return "Vendedor Excluído com Sucesso";
     }
 
-    public JScrollPane listaDeVendedores(String cpfGerente){
-        String[] colunas = {"Nome", "CPF"};
-        Loja loja = listaLojas.getLoja(cpfGerente);
+    public void listaDeVendedores(String cpfGerente){
 
-        String[][] dados = new String[loja.getArmazenaVendedores().size()][2];
-        int i = 0;
-        for (Vendedor v : loja.getArmazenaVendedores().values()) {
-            dados[i][0] = v.getNome();
-            dados[i][1] = v.getCpf();
-            i++;
-        }
-
-        JTable tabela = new JTable(dados, colunas);
-        JScrollPane scroll = new JScrollPane(tabela);
-
-        return scroll;
     }
 
 

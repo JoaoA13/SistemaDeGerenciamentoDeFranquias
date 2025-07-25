@@ -23,7 +23,7 @@ public class GerenciadorDeLojas {
         quantidadeDeLojas++;
     }
 
-    protected Loja getLoja(String cpfGerente){return armazenaLojas.getOrDefault(cpfGerente,null);}
+    public Loja getLoja(String cpfGerente){return armazenaLojas.getOrDefault(cpfGerente,null);}
 
     protected Map<String, Loja> getArmazenaLojas() { return armazenaLojas; }
 
