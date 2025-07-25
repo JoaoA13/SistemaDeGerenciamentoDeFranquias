@@ -103,10 +103,7 @@ public class IGAcoesDono {
                 System.out.println("Botão 'Cadastrar' clicado");
                 if(botaoCadastrar(escreveEndereco.getText(), escreveNome.getText(), escreveCpf.getText(), escreveEmail.getText())) {
 
-                    escreveEndereco.setText("");
-                    escreveNome.setText("");
-                    escreveCpf.setText("");
-                    escreveEmail.setText("");
+                    escreveEndereco.setText("");escreveNome.setText("");escreveCpf.setText("");escreveEmail.setText("");
                 }
             }
         });

@@ -12,14 +12,14 @@ public class GerenciadorSistemaVendedor extends GerenciadorSistema{
         try {
             ValidadorCampoVazio.valida(cpf);
             ValidadorCampoVazio.valida(senha);
+            ValidadorCpf.validarCpf(cpf);
+            ValidadorSenha.valida(senha);
         }catch (EntradaException e){
             System.out.println("Erro: LoginException: " + e.getMessage());
             throw new LoginException(e.getMessage());
         }
 
         try {
-            ValidadorCpf.validarCpf(cpf);
-            ValidadorSenha.valida(senha);
             ValidadorCpfBancoDeDadosTrue.valida(cpf);
             ValidadorLogin.valida(getDono(),cpf,senha);
             return "CPF e senha corretos";

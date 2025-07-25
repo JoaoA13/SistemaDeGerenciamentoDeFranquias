@@ -26,7 +26,7 @@ public class GerenciadorSistemaGerente extends GerenciadorSistema{
         }
 
         try {
-            buscaGerente(cpf);
+            buscaCpfExiste(cpf);
             ValidadorLogin.valida(GerenciadorDeLojas.getGerente(cpf),cpf,senha);
             return "CPF e senha corretos";
         }catch (LoginException e){
@@ -40,15 +40,17 @@ public class GerenciadorSistemaGerente extends GerenciadorSistema{
             ValidadorCampoVazio.valida(nome);
             ValidadorCampoVazio.valida(cpf);
             ValidadorCampoVazio.valida(senha);
+
+            ValidadorNome.validarNome(nome);
+            ValidadorCpf.validarCpf(cpf);
+            ValidadorSenha.valida(senha);
         } catch (EntradaException e) {
             System.out.println("Erro: LoginException: " + e.getMessage());
             throw new CadastroException(e.getMessage());
         }
 
         try {
-            ValidadorCpf.validarCpf(cpf);
-            ValidadorSenha.valida(senha);
-            ValidadorNome.validarNome(nome);
+              buscaCpfNAOExiste(cpf);
         }catch (LoginException e){
             System.out.println("Erro: LoginException: " + e.getMessage());
             throw new CadastroException(e.getMessage());
@@ -58,16 +60,6 @@ public class GerenciadorSistemaGerente extends GerenciadorSistema{
 
         return "Vendedor Cadastrado";
     }
-
-    static public void buscaGerente(String cpf) throws LoginException{
-
-        try {
-            ValidadorCpfBancoDeDadosTrue.valida(cpf);
-        }catch (BancoDeDadosException e){
-            throw new LoginException(e.getMessage());
-        }
-    }
-
     static void cadastrarVendedor(String nome, String cpf, String senha){
 
     }

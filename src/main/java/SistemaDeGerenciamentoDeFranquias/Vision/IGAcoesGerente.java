@@ -77,6 +77,7 @@ public class IGAcoesGerente {
             try {
                 String msg = gerenciaGerente.lancarCadastro(nome, cpf, senha, cpfGerente);
                 JOptionPane.showMessageDialog(null, msg, "Sucesso", JOptionPane.INFORMATION_MESSAGE);
+                escreveNome.setText("");escreveCpf.setText("");escreveSenha.setText("");
             } catch (CadastroException ex) {
                 JOptionPane.showMessageDialog(null, "Erro ao cadastrar: " + ex.getMessage(), "Erro", JOptionPane.ERROR_MESSAGE);
             }
