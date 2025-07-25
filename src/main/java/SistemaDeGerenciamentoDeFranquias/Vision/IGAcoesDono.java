@@ -122,6 +122,62 @@ public class IGAcoesDono {
         return painelCadastroLoja;
     }
 
+    protected JPanel excluirLojas(){
+        JPanel painelExcluirLoja = new JPanel(new BorderLayout());
+
+        JLabel titulo = new JLabel("Exclusão de loja", SwingConstants.CENTER);
+        painelExcluirLoja.add(titulo, BorderLayout.NORTH);
+
+        JPanel subPainel = new JPanel();
+        subPainel.setLayout(new BoxLayout(subPainel, BoxLayout.Y_AXIS));
+        subPainel.setAlignmentX(Component.CENTER_ALIGNMENT);
+
+        JPanel linhaCodigo = new JPanel(new FlowLayout(FlowLayout.CENTER));
+        linhaCodigo.add(new JLabel("Código da loja:"));
+        JTextField escreveEndereco = new JTextField(15);
+        linhaCodigo.add(escreveEndereco);
+        subPainel.add(linhaCodigo);
+
+        JButton Excluir = new JButton("Excluir");
+        subPainel.add(Excluir);
+
+        JButton Sair = new JButton("Sair");
+        subPainel.add(Sair);
+
+        painelExcluirLoja.add(subPainel, BorderLayout.CENTER);
+
+        Excluir.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                System.out.println("Botão 'Cadastrar' clicado");
+//                if(botaoCadastrar(escreveEndereco.getText(), escreveNome.getText(), escreveCpf.getText(), escreveEmail.getText())) {
+//
+//                    escreveEndereco.setText("");
+//                    escreveNome.setText("");
+//                    escreveCpf.setText("");
+//                    escreveEmail.setText("");
+//                }
+            }
+        });
+
+        Sair.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                System.out.println("Botão 'Sair' clicado");
+                //menuBar.removeAll();
+                painelExcluirLoja.setVisible(false);
+                interfaceGrafica.menuLogin();
+            }
+        });
+
+        return painelExcluirLoja;
+    }
+
+    void exibeInformacaoLoja(){
+        JPanel painelExcluirLoja = new JPanel(new BorderLayout());
+
+
+    }
+
+
     boolean botaoCadastrar(String endereco, String nome, String cpf,String email){
             System.out.println("Tecla Enter pressionada");
 

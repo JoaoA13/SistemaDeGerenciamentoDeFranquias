@@ -2,10 +2,7 @@ package SistemaDeGerenciamentoDeFranquias.Control;
 
 import SistemaDeGerenciamentoDeFranquias.Exceptions.EntradaException;
 import SistemaDeGerenciamentoDeFranquias.Exceptions.LoginException;
-import SistemaDeGerenciamentoDeFranquias.Validadores.ValidadorCampoVazio;
-import SistemaDeGerenciamentoDeFranquias.Validadores.ValidadorCpf;
-import SistemaDeGerenciamentoDeFranquias.Validadores.ValidadorLogin;
-import SistemaDeGerenciamentoDeFranquias.Validadores.ValidadorSenha;
+import SistemaDeGerenciamentoDeFranquias.Validadores.*;
 
 public class GerenciadorSistemaVendedor extends GerenciadorSistema{
 
@@ -23,6 +20,7 @@ public class GerenciadorSistemaVendedor extends GerenciadorSistema{
         try {
             ValidadorCpf.validarCpf(cpf);
             ValidadorSenha.valida(senha);
+            ValidadorCpfBancoDeDadosTrue.valida(cpf);
             ValidadorLogin.valida(getDono(),cpf,senha);
             return "CPF e senha corretos";
         }catch (LoginException e){

@@ -5,13 +5,15 @@ import java.util.Map;
 
 public class Loja {
 
+    private String codigo;
     private String endereco;
     private Gerente gerenteDaUnidade;
     static private Map<String, Vendedor> armazenaVendedores = new HashMap<>();
 
-    public Loja(String endereco, Gerente gerenteDaUnidade){
+    public Loja(String codigo, String endereco, Gerente gerenteDaUnidade){
         this.endereco = endereco;
         this.gerenteDaUnidade = gerenteDaUnidade;
+        this.codigo = codigo;
     }
 
     /// Getters e Setters

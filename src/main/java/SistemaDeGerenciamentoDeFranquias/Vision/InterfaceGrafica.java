@@ -20,8 +20,8 @@ public class InterfaceGrafica {
    String cpf = "";
 
    public InterfaceGrafica(){
-       //menuLogin();
-       sistemaDono();
+       menuLogin();
+       //sistemaDono();
        frame.setSize(200, 200);
        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
        frame.setLocationRelativeTo(null);
@@ -144,13 +144,16 @@ public class InterfaceGrafica {
         JMenuItem  menu1Item1 = new JMenuItem ("Item de Menu", KeyEvent.VK_T);
         menu1.add(menu1Item1);
 
-        JMenu menu2 = new JMenu ("Lojas");
-        menuBar.add(menu2);
-        JMenuItem  menu2Item2 = new JMenuItem ("Cadastrar loja", KeyEvent.VK_T);
-        menu2.add(menu2Item2);
+        JMenu lojas = new JMenu ("Lojas");
+        menuBar.add(lojas);
+        JMenuItem  cadastrarLoja = new JMenuItem ("Cadastrar loja", KeyEvent.VK_T);
+        lojas.add(cadastrarLoja);
+        JMenuItem  excluirLoja = new JMenuItem ("Excluir loja", KeyEvent.VK_T);
+        lojas.add(excluirLoja);
 
         menu1Item1.addActionListener(e -> trocarTela(criarTela1(), 200, 200));
-        menu2Item2.addActionListener(e -> trocarTela(acoes.cadastraLojas(), 500, 500));
+        cadastrarLoja.addActionListener(e -> trocarTela(acoes.cadastraLojas(), 500, 500));
+        excluirLoja.addActionListener(e -> trocarTela(acoes.excluirLojas(), 500, 500));
 
         frame.setContentPane(sistemaDono); //função que elimina painel anterior e adiciona outro
         frame.revalidate();
