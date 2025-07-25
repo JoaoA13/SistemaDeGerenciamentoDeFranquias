@@ -200,9 +200,9 @@ public class InterfaceGrafica {
         menu2.add(menu2Item4);
 
         menu2Item1.addActionListener(e -> trocarTela(acoes.cadastrar(cpf), 400, 300));
-        menu2Item2.addActionListener(e -> trocarTela(acoes.excluir(), 400, 200));
+        menu2Item2.addActionListener(e -> trocarTela(acoes.excluir(cpf), 400, 200));
         menu2Item3.addActionListener(e -> trocarTela(acoes.editar(), 400, 200));
-        menu2Item4.addActionListener(e -> trocarTela(acoes.listaDeVendedores(), 400, 300));
+        menu2Item4.addActionListener(e -> trocarTela(acoes.listaDeVendedores(cpf), 400, 300));
 
 
         JMenu menu3 = new JMenu ("Pedidos");

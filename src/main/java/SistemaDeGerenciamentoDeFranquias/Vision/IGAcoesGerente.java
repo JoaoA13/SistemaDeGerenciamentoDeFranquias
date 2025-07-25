@@ -2,6 +2,7 @@ package SistemaDeGerenciamentoDeFranquias.Vision;
 
 import SistemaDeGerenciamentoDeFranquias.Exceptions.CadastroException;
 import SistemaDeGerenciamentoDeFranquias.Control.GerenciadorSistemaGerente;
+import SistemaDeGerenciamentoDeFranquias.Exceptions.EntradaException;
 
 import javax.swing.*;
 import java.awt.*;
@@ -94,7 +95,7 @@ public class IGAcoesGerente {
         return cadastro;
     }
 
-    JPanel excluir(){
+    JPanel excluir(String cpfGerente){
         JPanel exclusao = new JPanel();
         exclusao.setLayout(new BoxLayout(exclusao, BoxLayout.Y_AXIS));
         exclusao.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
@@ -121,7 +122,20 @@ public class IGAcoesGerente {
         botoesPanel.add(confirmar);
         exclusao.add(botoesPanel);
 
-        escreveCpf.addActionListener(e -> confirmar.requestFocusInWindow());
+        escreveCpf.addActionListener(e -> confirmar.doClick());
+
+        confirmar.addActionListener(e -> {
+            System.out.println("Botão Confirmar clicado");
+            String cpf = escreveCpf.getText().trim();
+            try {
+                String msg = gerenciaGerente.excluirVendedor(cpf, cpfGerente);
+                JOptionPane.showMessageDialog(null, msg, "Sucesso", JOptionPane.INFORMATION_MESSAGE);
+                escreveCpf.setText("");
+            } catch (EntradaException ex) {
+                JOptionPane.showMessageDialog(null, "Erro ao cadastrar: " + ex.getMessage(), "Erro", JOptionPane.ERROR_MESSAGE);
+            }
+        });
+
         return exclusao;
     }
 
@@ -152,11 +166,11 @@ public class IGAcoesGerente {
         botoesPanel.add(confirmar);
         edicao.add(botoesPanel);
 
-        escreveCpf.addActionListener(e -> confirmar.requestFocusInWindow());
+        escreveCpf.addActionListener(e -> confirmar.doClick());
         return edicao;
     }
 
-    JPanel listaDeVendedores(){
+    JPanel listaDeVendedores(String cpfGerente){
         JPanel lista = new JPanel();
         lista.setLayout(new BoxLayout(lista, BoxLayout.Y_AXIS));
         lista.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
@@ -167,6 +181,7 @@ public class IGAcoesGerente {
         botoesPanel.setLayout(new BoxLayout(botoesPanel, BoxLayout.X_AXIS));
         botoesPanel.setAlignmentX(Component.LEFT_ALIGNMENT);
 
+        lista.add(gerenciaGerente.listaDeVendedores(cpfGerente), BorderLayout.CENTER);
         botoesPanel.add(voltar);
         botoesPanel.add(Box.createHorizontalGlue());
         lista.add(botoesPanel);

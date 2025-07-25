@@ -9,6 +9,8 @@ import SistemaDeGerenciamentoDeFranquias.Model.Vendedor;
 import SistemaDeGerenciamentoDeFranquias.Validadores.*;
 import SistemaDeGerenciamentoDeFranquias.Validadores.ValidadorCpfBancoDeDadosTrue;
 
+import javax.swing.*;
+
 public class GerenciadorSistemaGerente extends GerenciadorSistema{
 
     static GerenciadorDeLojas listaLojas = new GerenciadorDeLojas();
@@ -52,7 +54,7 @@ public class GerenciadorSistemaGerente extends GerenciadorSistema{
 
         try {
             ValidadorCpfBancoDeDadosFalse.valida(cpf);
-            ValidadorCpfVendedorBancoDeDadosFalse.valida(cpf, listaLojas.getArmazenaLojas());
+            ValidadorCpfBancoDeDadosFalse.valida(cpf);
         }catch (BancoDeDadosException e){
             System.out.println("Erro: EntradaException: " + e.getMessage());
             throw new CadastroException(e.getMessage());
@@ -61,6 +63,46 @@ public class GerenciadorSistemaGerente extends GerenciadorSistema{
         Loja loja = listaLojas.getLoja(cpfGerente);
         loja.addVendedor(nome, cpf, senha);
         return "Vendedor Cadastrado";
+    }
+
+    public String excluirVendedor(String cpf, String cpfGerente) throws EntradaException {
+        try {
+            ValidadorCampoVazio.valida(cpf);
+            ValidadorCpf.validarCpf(cpf);
+        } catch (EntradaException e) {
+            System.out.println("Erro: EntradaException: " + e.getMessage());
+            throw new EntradaException(e.getMessage());
+        }
+
+        try {
+            ValidadorCpfVendedorBancoDeDadosTrue.valida(cpf);
+        }catch (BancoDeDadosException e){
+            System.out.println("Erro: EntradaException: " + e.getMessage());
+            throw new EntradaException(e.getMessage());
+        }
+
+        Loja loja = listaLojas.getLoja(cpfGerente);
+        loja.excluirVendedor(cpf);
+
+        return "Vendedor Excluído com Sucesso";
+    }
+
+    public JScrollPane listaDeVendedores(String cpfGerente){
+        String[] colunas = {"Nome", "CPF"};
+        Loja loja = listaLojas.getLoja(cpfGerente);
+
+        String[][] dados = new String[loja.getArmazenaVendedores().size()][2];
+        int i = 0;
+        for (Vendedor v : loja.getArmazenaVendedores().values()) {
+            dados[i][0] = v.getNome();
+            dados[i][1] = v.getCpf();
+            i++;
+        }
+
+        JTable tabela = new JTable(dados, colunas);
+        JScrollPane scroll = new JScrollPane(tabela);
+
+        return scroll;
     }
 
 

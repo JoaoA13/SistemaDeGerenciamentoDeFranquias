@@ -26,10 +26,13 @@ public class Loja {
     protected Gerente getGerenteDaUnidade() {return gerenteDaUnidade;}
     protected void setGerenteDaUnidade(Gerente gerenteDaUnidade) {this.gerenteDaUnidade = gerenteDaUnidade;}
 
+    public Map<String, Vendedor> getArmazenaVendedores() { return armazenaVendedores; }
+
     public void addVendedor(String nome, String cpf, String senha){
         Vendedor vendedor = new Vendedor(nome, cpf,"@gmail.com", senha);
         armazenaVendedores.put(cpf,vendedor);
     }
+    public void excluirVendedor(String cpf){armazenaVendedores.remove(cpf);}
 
     static public Vendedor getVendedor(String cpf){
         return armazenaVendedores.getOrDefault(cpf,null);

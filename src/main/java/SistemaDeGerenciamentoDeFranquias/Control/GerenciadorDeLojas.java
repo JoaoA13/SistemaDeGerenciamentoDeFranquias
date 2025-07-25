@@ -18,8 +18,6 @@ public class GerenciadorDeLojas {
         armazenaGerentes.put(gerente.getCpf(),gerente);
     }
 
-    static public Map<String, Loja> getLojas() {return armazenaLojas;}
-
     static protected void addLoja(String codigo,Loja loja){
         armazenaLojas.put(codigo,loja);
         quantidadeDeLojas++;
