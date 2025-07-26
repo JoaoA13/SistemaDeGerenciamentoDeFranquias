@@ -158,7 +158,7 @@ public class IGAcoesGerente {
         return exclusao;
     }
 
-    void editar(String cpfGerente){
+    void editar(String cpfGerente, String cfpSelecionado){
         JPanel edicao = new JPanel();
         edicao.setLayout(new BoxLayout(edicao, BoxLayout.Y_AXIS));
         edicao.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
@@ -179,13 +179,53 @@ public class IGAcoesGerente {
 
         switch (escolha) {
             case 0:
-                // Nome
+                JLabel labelNome = new JLabel("Digite o novo Nome do vendedor:");
+                labelNome.setAlignmentX(Component.LEFT_ALIGNMENT);
+                edicao.add(labelNome);
+
+                JTextField escreveNome = new JTextField(20);
+                escreveNome.setMaximumSize(new Dimension(Integer.MAX_VALUE, 25));
+                escreveNome.setAlignmentX(Component.LEFT_ALIGNMENT);
+                edicao.add(escreveNome);
+
+                escreveNome.addActionListener(e -> confirmar.doClick());
+                confirmar.addActionListener(e -> {
+                    System.out.println("Botão Confirmar clicado");
+                    String nome = escreveNome.getText().trim();
+                    try {
+                        String msg = gerenciaGerente.editarVendedor(nome, "", "", "", cpfGerente, cfpSelecionado);
+                        JOptionPane.showMessageDialog(null, msg, "Sucesso", JOptionPane.INFORMATION_MESSAGE);
+                        escreveNome.setText("");
+                    } catch (EntradaException ex) {
+                        JOptionPane.showMessageDialog(null, "Erro ao cadastrar: " + ex.getMessage(), "Erro", JOptionPane.ERROR_MESSAGE);
+                    }
+                });
                 break;
             case 1:
-                // Email
+                JLabel labelEmail = new JLabel("Digite o novo E-mail do vendedor:");
+                labelEmail.setAlignmentX(Component.LEFT_ALIGNMENT);
+                edicao.add(labelEmail);
+
+                JTextField escreveEmail = new JTextField(20);
+                escreveEmail.setMaximumSize(new Dimension(Integer.MAX_VALUE, 25));
+                escreveEmail.setAlignmentX(Component.LEFT_ALIGNMENT);
+                edicao.add(escreveEmail);
+
+                escreveEmail.addActionListener(e -> confirmar.doClick());
+                confirmar.addActionListener(e -> {
+                    System.out.println("Botão Confirmar clicado");
+                    String email = escreveEmail.getText().trim();
+                    try {
+                        String msg = gerenciaGerente.editarVendedor("", "", email, "", cpfGerente, cfpSelecionado);
+                        JOptionPane.showMessageDialog(null, msg, "Sucesso", JOptionPane.INFORMATION_MESSAGE);
+                        escreveEmail.setText("");
+                    } catch (EntradaException ex) {
+                        JOptionPane.showMessageDialog(null, "Erro ao cadastrar: " + ex.getMessage(), "Erro", JOptionPane.ERROR_MESSAGE);
+                    }
+                });
                 break;
             case 2:
-                JLabel labelCpf = new JLabel("Digite o CPF do vendedor que deseja editar as informações:");
+                JLabel labelCpf = new JLabel("Digite o novo CPF do vendedor:");
                 labelCpf.setAlignmentX(Component.LEFT_ALIGNMENT);
                 edicao.add(labelCpf);
 
@@ -199,7 +239,7 @@ public class IGAcoesGerente {
                     System.out.println("Botão Confirmar clicado");
                     String cpf = escreveCpf.getText().trim();
                     try {
-                        String msg = gerenciaGerente.excluirVendedor(cpf, cpfGerente);
+                        String msg = gerenciaGerente.editarVendedor("", cpf, "", "", cpfGerente, cfpSelecionado);
                         JOptionPane.showMessageDialog(null, msg, "Sucesso", JOptionPane.INFORMATION_MESSAGE);
                         escreveCpf.setText("");
                     } catch (EntradaException ex) {
@@ -208,7 +248,27 @@ public class IGAcoesGerente {
                 });
                 break;
             case 3:
-                // Senha
+                JLabel labelSenha = new JLabel("Digite a nova senha do vendedor:");
+                labelSenha.setAlignmentX(Component.LEFT_ALIGNMENT);
+                edicao.add(labelSenha);
+
+                JTextField escreveSenha = new JTextField(20);
+                escreveSenha.setMaximumSize(new Dimension(Integer.MAX_VALUE, 25));
+                escreveSenha.setAlignmentX(Component.LEFT_ALIGNMENT);
+                edicao.add(escreveSenha);
+
+                escreveSenha.addActionListener(e -> confirmar.doClick());
+                confirmar.addActionListener(e -> {
+                    System.out.println("Botão Confirmar clicado");
+                    String senha = escreveSenha.getText().trim();
+                    try {
+                        String msg = gerenciaGerente.editarVendedor("", "", "", senha, cpfGerente, cfpSelecionado);
+                        JOptionPane.showMessageDialog(null, msg, "Sucesso", JOptionPane.INFORMATION_MESSAGE);
+                        escreveSenha.setText("");
+                    } catch (EntradaException ex) {
+                        JOptionPane.showMessageDialog(null, "Erro ao cadastrar: " + ex.getMessage(), "Erro", JOptionPane.ERROR_MESSAGE);
+                    }
+                });
                 break;
             default:}
 
@@ -275,7 +335,7 @@ public class IGAcoesGerente {
                         String cpfSelecionado = (String) tabela.getValueAt(linha, 1);
 
                         editarItem.addActionListener(ae -> {
-                            editar(cpfGerente);
+                            editar(cpfGerente, cpfSelecionado);
                         });
 
                         excluirItem.addActionListener(ae -> {

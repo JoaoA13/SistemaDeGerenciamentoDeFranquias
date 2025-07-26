@@ -196,8 +196,6 @@ public class InterfaceGrafica {
         menu2.add(menu2Item1);
         JMenuItem  menu2Item2 = new JMenuItem ("Excluir", KeyEvent.VK_T);
         menu2.add(menu2Item2);
-        JMenuItem  menu2Item3 = new JMenuItem ("Editar", KeyEvent.VK_T);
-        menu2.add(menu2Item3);
         JMenuItem  menu2Item4 = new JMenuItem ("Lista de Vendedores", KeyEvent.VK_T);
         menu2.add(menu2Item4);
 
