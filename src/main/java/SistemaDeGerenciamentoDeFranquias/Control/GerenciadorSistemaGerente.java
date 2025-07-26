@@ -84,8 +84,8 @@ public class GerenciadorSistemaGerente extends GerenciadorSistema{
                 System.out.println("Erro: EntradaException: " + e.getMessage());
                 throw new EntradaException(e.getMessage());
             }
-            Loja loja = listaLojas.getLoja(cpfGerente);
-            Vendedor vendedor = loja.getVendedor(cpf);
+            Loja loja = GerenciadorDeLojas.getLoja(cpfGerente);
+            Vendedor vendedor = Loja.getVendedor(cpf);
             vendedor.setCpf(cpf);
             return "CPf editado";
         }

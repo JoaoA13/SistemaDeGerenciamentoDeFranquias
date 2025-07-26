@@ -13,8 +13,8 @@ public class GerenciadorDeLojas {
 
     public GerenciadorDeLojas(){
         Gerente gerente = new Gerente("Pedroca", "12345678900", "pedrogameplay@gmail.com", "12345688");
-        Loja lojinha = new Loja("000","Rua da resenha",gerente);
-        armazenaLojas.put("000",lojinha);
+        Loja lojinha = new Loja("12345678900","Rua da resenha",gerente);
+        armazenaLojas.put("12345678900",lojinha);
         armazenaGerentes.put(gerente.getCpf(),gerente);
     }
 
