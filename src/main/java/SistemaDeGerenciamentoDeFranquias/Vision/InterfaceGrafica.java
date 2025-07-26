@@ -12,7 +12,7 @@ import java.awt.event.*;
 import java.awt.*;
 
 public class InterfaceGrafica {
-    private JFrame frame = new JFrame("Sistema da franquia X");
+    private static JFrame frame = new JFrame("Sistema da franquia X");
     protected GerenciadorSistemaDono gerenciaDono = new GerenciadorSistemaDono();
     protected GerenciadorSistemaGerente gerenciaGerente = new GerenciadorSistemaGerente();
     protected GerenciadorSistemaVendedor gerenciaVendedor = new GerenciadorSistemaVendedor();
@@ -201,7 +201,6 @@ public class InterfaceGrafica {
 
         menu2Item1.addActionListener(e -> trocarTela(acoes.cadastrar(cpf), 400, 300));
         menu2Item2.addActionListener(e -> trocarTela(acoes.excluir(cpf), 400, 200));
-        menu2Item3.addActionListener(e -> trocarTela(acoes.editar(), 400, 200));
         menu2Item4.addActionListener(e -> trocarTela(acoes.listaDeVendedores(cpf), 400, 300));
 
 
@@ -256,12 +255,12 @@ public class InterfaceGrafica {
     }
 
     // Metodo que troca paineis
-    private void trocarTela(JPanel novaTela, int tam1, int tam2) {
+    static void trocarTela(JPanel novaTela, int tam1, int tam2) {
         frame.setSize(tam1, tam2);
         frame.setLocationRelativeTo(null);
         frame.setContentPane(novaTela);
-        frame.revalidate(); // atualiza o layout
-        frame.repaint();    // repinta a janela
+        frame.revalidate();
+        frame.repaint();
     }
 
     // Primeira tela

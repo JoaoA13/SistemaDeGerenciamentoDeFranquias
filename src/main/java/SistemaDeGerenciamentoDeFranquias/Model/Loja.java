@@ -28,8 +28,8 @@ public class Loja {
 
     public Map<String, Vendedor> getArmazenaVendedores() { return armazenaVendedores; }
 
-    public void addVendedor(String nome, String cpf, String senha){
-        Vendedor vendedor = new Vendedor(nome, cpf,"@gmail.com", senha);
+    public void addVendedor(String nome, String cpf, String email, String senha){
+        Vendedor vendedor = new Vendedor(nome, cpf, email, senha);
         armazenaVendedores.put(cpf,vendedor);
     }
     public void excluirVendedor(String cpf){armazenaVendedores.remove(cpf);}

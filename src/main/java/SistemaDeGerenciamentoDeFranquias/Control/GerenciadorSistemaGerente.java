@@ -36,14 +36,16 @@ public class GerenciadorSistemaGerente extends GerenciadorSistema{
         }
     }
 
-    public String lancarCadastro(String nome, String cpf, String senha, String cpfGerente) throws CadastroException {
+    public String lancarCadastro(String nome, String cpf,String email, String senha, String cpfGerente) throws CadastroException {
         try {
             ValidadorCampoVazio.valida(nome);
             ValidadorCampoVazio.valida(cpf);
+            ValidadorCampoVazio.valida(email);
             ValidadorCampoVazio.valida(senha);
 
             ValidadorNome.validarNome(nome);
             ValidadorCpf.validarCpf(cpf);
+            ValidadorEmail.valida(email);
             ValidadorSenha.valida(senha);
         } catch (EntradaException e) {
             System.out.println("Erro: LoginException: " + e.getMessage());
@@ -59,8 +61,42 @@ public class GerenciadorSistemaGerente extends GerenciadorSistema{
         }
 
         Loja loja = listaLojas.getLoja(cpfGerente);
-        loja.addVendedor(nome, cpf, senha);
+        loja.addVendedor(nome, cpf, email, senha);
         return "Vendedor Cadastrado";
+    }
+
+    public String editarVendedor(String nome, String cpf, String email, String senha, String cpfGerente) throws EntradaException{
+        if(nome != ""){
+
+        }
+        if(cpf != ""){
+            try {
+                ValidadorCampoVazio.valida(cpf);
+                ValidadorCpf.validarCpf(cpf);
+            } catch (EntradaException e) {
+                System.out.println("Erro: EntradaException: " + e.getMessage());
+                throw new EntradaException(e.getMessage());
+            }
+
+            try {
+                ValidadorCpfBancoDeDadosFalse.valida(cpf);
+            }catch (BancoDeDadosException e){
+                System.out.println("Erro: EntradaException: " + e.getMessage());
+                throw new EntradaException(e.getMessage());
+            }
+            Loja loja = listaLojas.getLoja(cpfGerente);
+            Vendedor vendedor = loja.getVendedor(cpf);
+            vendedor.setCpf(cpf);
+            return "CPf editado";
+        }
+        if(email != ""){
+
+        }
+        if(senha != ""){
+
+        }
+
+        return "CPf editado";
     }
 
     public String excluirVendedor(String cpf, String cpfGerente) throws EntradaException {

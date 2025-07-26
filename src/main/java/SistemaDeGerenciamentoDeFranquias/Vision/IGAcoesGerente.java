@@ -52,6 +52,15 @@ public class IGAcoesGerente {
         escreveCpf.setAlignmentX(Component.LEFT_ALIGNMENT);
         cadastro.add(escreveCpf);
 
+        JLabel labelEmail = new JLabel("Digite o e-mail do vendedor:");
+        labelEmail.setAlignmentX(Component.LEFT_ALIGNMENT);
+        cadastro.add(labelEmail);
+
+        JTextField escreveEmail = new JTextField(20);
+        escreveEmail.setMaximumSize(new Dimension(Integer.MAX_VALUE, 25));
+        escreveEmail.setAlignmentX(Component.LEFT_ALIGNMENT);
+        cadastro.add(escreveEmail);
+
         JLabel labelSenha = new JLabel("Digite a senha do vendedor:");
         labelSenha.setAlignmentX(Component.LEFT_ALIGNMENT);
         cadastro.add(labelSenha);
@@ -75,18 +84,20 @@ public class IGAcoesGerente {
         cadastro.add(botoesPanel);
 
         escreveNome.addActionListener(e -> escreveCpf.requestFocusInWindow());
-        escreveCpf.addActionListener(e -> escreveSenha.requestFocusInWindow());
+        escreveCpf.addActionListener(e -> escreveEmail.requestFocusInWindow());
+        escreveEmail.addActionListener(e -> escreveSenha.requestFocusInWindow());
         escreveSenha.addActionListener(e -> confirmar.doClick());
 
         confirmar.addActionListener(e -> {
             System.out.println("Botão Confirmar clicado");
             String nome = escreveNome.getText().trim();
             String cpf = escreveCpf.getText().trim();
+            String email = escreveEmail.getText().trim();
             String senha = escreveSenha.getText().trim();
             try {
-                String msg = gerenciaGerente.lancarCadastro(nome, cpf, senha, cpfGerente);
+                String msg = gerenciaGerente.lancarCadastro(nome, cpf, email, senha, cpfGerente);
                 JOptionPane.showMessageDialog(null, msg, "Sucesso", JOptionPane.INFORMATION_MESSAGE);
-                escreveNome.setText("");escreveCpf.setText("");escreveSenha.setText("");
+                escreveNome.setText("");escreveCpf.setText("");escreveEmail.setText("");escreveSenha.setText("");
             } catch (CadastroException ex) {
                 JOptionPane.showMessageDialog(null, "Erro ao cadastrar: " + ex.getMessage(), "Erro", JOptionPane.ERROR_MESSAGE);
             }
@@ -147,22 +158,61 @@ public class IGAcoesGerente {
         return exclusao;
     }
 
-    JPanel editar(){
+    void editar(String cpfGerente){
         JPanel edicao = new JPanel();
         edicao.setLayout(new BoxLayout(edicao, BoxLayout.Y_AXIS));
         edicao.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
 
-        JLabel labelCpf = new JLabel("Digite o CPF do vendedor que deseja editar as informações:");
-        labelCpf.setAlignmentX(Component.LEFT_ALIGNMENT);
-        edicao.add(labelCpf);
+        String[] opcoes = {"Nome", "Email", "CPF", "Senha"};
+        int escolha = JOptionPane.showOptionDialog(
+                null,
+                "Qual informação deseja editar?",
+                "Editar Vendedor",
+                JOptionPane.DEFAULT_OPTION,
+                JOptionPane.QUESTION_MESSAGE,
+                null,
+                opcoes,
+                opcoes[0]
+        );
 
-        JTextField escreveCpf = new JTextField(20);
-        escreveCpf.setMaximumSize(new Dimension(Integer.MAX_VALUE, 25));
-        escreveCpf.setAlignmentX(Component.LEFT_ALIGNMENT);
-        edicao.add(escreveCpf);
+        JButton confirmar = new JButton("Confirmar");
+
+        switch (escolha) {
+            case 0:
+                // Nome
+                break;
+            case 1:
+                // Email
+                break;
+            case 2:
+                JLabel labelCpf = new JLabel("Digite o CPF do vendedor que deseja editar as informações:");
+                labelCpf.setAlignmentX(Component.LEFT_ALIGNMENT);
+                edicao.add(labelCpf);
+
+                JTextField escreveCpf = new JTextField(20);
+                escreveCpf.setMaximumSize(new Dimension(Integer.MAX_VALUE, 25));
+                escreveCpf.setAlignmentX(Component.LEFT_ALIGNMENT);
+                edicao.add(escreveCpf);
+
+                escreveCpf.addActionListener(e -> confirmar.doClick());
+                confirmar.addActionListener(e -> {
+                    System.out.println("Botão Confirmar clicado");
+                    String cpf = escreveCpf.getText().trim();
+                    try {
+                        String msg = gerenciaGerente.excluirVendedor(cpf, cpfGerente);
+                        JOptionPane.showMessageDialog(null, msg, "Sucesso", JOptionPane.INFORMATION_MESSAGE);
+                        escreveCpf.setText("");
+                    } catch (EntradaException ex) {
+                        JOptionPane.showMessageDialog(null, "Erro ao cadastrar: " + ex.getMessage(), "Erro", JOptionPane.ERROR_MESSAGE);
+                    }
+                });
+                break;
+            case 3:
+                // Senha
+                break;
+            default:}
 
         JButton Sair = new JButton("Sair");
-        JButton confirmar = new JButton("Confirmar");
 
         JPanel botoesPanel = new JPanel();
         botoesPanel.setLayout(new BoxLayout(botoesPanel, BoxLayout.X_AXIS));
@@ -174,8 +224,7 @@ public class IGAcoesGerente {
         botoesPanel.add(confirmar);
         edicao.add(botoesPanel);
 
-        escreveCpf.addActionListener(e -> confirmar.doClick());
-        return edicao;
+        InterfaceGrafica.trocarTela(edicao, 400, 200);
     }
 
     JPanel listaDeVendedores(String cpfGerente){
@@ -189,14 +238,15 @@ public class IGAcoesGerente {
         botoesPanel.setLayout(new BoxLayout(botoesPanel, BoxLayout.X_AXIS));
         botoesPanel.setAlignmentX(Component.LEFT_ALIGNMENT);
 
-        String[] colunas = {"Nome", "CPF"};
+        String[] colunas = {"Nome", "CPF", "e-mail"};
         Loja loja = gerenciaDeLojas.getLoja(cpfGerente);
 
-        String[][] dados = new String[loja.getArmazenaVendedores().size()][2];
+        String[][] dados = new String[loja.getArmazenaVendedores().size()][3];
         int i = 0;
         for (Vendedor v : loja.getArmazenaVendedores().values()) {
             dados[i][0] = v.getNome();
             dados[i][1] = v.getCpf();
+            dados[i][2] = v.getEmail();
             i++;
         }
 
@@ -224,12 +274,9 @@ public class IGAcoesGerente {
                         tabela.setRowSelectionInterval(linha, linha);
                         String cpfSelecionado = (String) tabela.getValueAt(linha, 1);
 
-                        /*editarItem.addActionListener(ae -> {
-                            Vendedor v = armazenaVendedores.get(cpfSelecionado);
-                            JOptionPane.showMessageDialog(painel,
-                                    "Abrir tela de edição para:\n" +
-                                            "Nome: " + v.getNome() + "\nCPF: " + v.getCpf());
-                        });*/
+                        editarItem.addActionListener(ae -> {
+                            editar(cpfGerente);
+                        });
 
                         excluirItem.addActionListener(ae -> {
                             int confirm = JOptionPane.showConfirmDialog(lista,
