@@ -23,6 +23,9 @@ public class GerenciadorDeLojas {
         quantidadeDeLojas++;
     }
 
+    static public Map<String, Loja> getLojas(){return armazenaLojas;}
+
+
     static public Loja getLoja(String cpfGerente){return armazenaLojas.getOrDefault(cpfGerente,null);}
 
     protected static void cadastraLoja(String endereco, Gerente gerente){
@@ -42,4 +45,9 @@ public class GerenciadorDeLojas {
     public static Gerente getGerente(String cpf){
         return armazenaGerentes.getOrDefault(cpf,null);
     }
+
+    static public void excluirLoja(String cpf){armazenaLojas.remove(cpf);}
+
+    static public void excluirGerente(String cpf){armazenaGerentes.remove(cpf);}
+
 }

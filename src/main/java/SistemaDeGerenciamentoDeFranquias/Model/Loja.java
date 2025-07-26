@@ -19,10 +19,10 @@ public class Loja {
     /// Getters e Setters
     public String getCodigo(){return codigo;}
 
-    protected String getCpfGerente() {return gerenteDaUnidade.getCpf();}
+    public String getCpfGerente() {return gerenteDaUnidade.getCpf();}
     protected void setCpfGerente(String cpf) {gerenteDaUnidade.setCpf(cpf);}
 
-    protected String getEndereco() {return endereco;}
+    public String getEndereco() {return endereco;}
     protected void setEndereco(String endereco) {this.endereco = endereco;}
 
     protected Gerente getGerenteDaUnidade() {return gerenteDaUnidade;}
