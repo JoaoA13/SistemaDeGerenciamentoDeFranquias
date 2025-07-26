@@ -20,13 +20,15 @@ public class InterfaceGrafica {
    String cpf = "";
 
    public InterfaceGrafica(){
-       menuLogin();
-       //sistemaDono();
+       //menuLogin();
+       sistemaDono();
        frame.setSize(200, 200);
        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
        frame.setLocationRelativeTo(null);
        frame.setVisible(true);
     }
+
+    public JFrame getFrame(){return frame;}
 
     void menu1SelecionaCargo(){
         JPanel selecionaCargo = new JPanel();

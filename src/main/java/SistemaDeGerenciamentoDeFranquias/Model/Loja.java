@@ -17,6 +17,8 @@ public class Loja {
     }
 
     /// Getters e Setters
+    public String getCodigo(){return codigo;}
+
     protected String getCpfGerente() {return gerenteDaUnidade.getCpf();}
     protected void setCpfGerente(String cpf) {gerenteDaUnidade.setCpf(cpf);}
 

@@ -14,7 +14,7 @@ public class GerenciadorDeLojas {
     public GerenciadorDeLojas(){
         Gerente gerente = new Gerente("Pedroca", "12345678900", "pedrogameplay@gmail.com", "12345688");
         Loja lojinha = new Loja("000","Rua da resenha",gerente);
-        armazenaLojas.put(gerente.getCpf(),lojinha);
+        armazenaLojas.put("000",lojinha);
         armazenaGerentes.put(gerente.getCpf(),gerente);
     }
 
@@ -23,9 +23,7 @@ public class GerenciadorDeLojas {
         quantidadeDeLojas++;
     }
 
-    public Loja getLoja(String cpfGerente){return armazenaLojas.getOrDefault(cpfGerente,null);}
-
-    protected Map<String, Loja> getArmazenaLojas() { return armazenaLojas; }
+    static public Loja getLoja(String codigo){return armazenaLojas.getOrDefault(codigo,null);}
 
     protected static void cadastraLoja(String endereco, Gerente gerente){
         String codigo = geraCodigoLoja();
