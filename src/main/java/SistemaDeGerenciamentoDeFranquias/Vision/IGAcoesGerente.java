@@ -256,7 +256,7 @@ public class IGAcoesGerente {
             }
         };
 
-        JTable tabela = new JTable(dados, colunas);
+        JTable tabela = new JTable(modelo); // <-- corrigido aqui
         JScrollPane scroll = new JScrollPane(tabela);
         lista.add(scroll, BorderLayout.CENTER);
 
@@ -304,6 +304,7 @@ public class IGAcoesGerente {
         lista.add(botoesPanel);
 
         return lista;
+
     }
 
     JPanel visualizarPedidos(){
