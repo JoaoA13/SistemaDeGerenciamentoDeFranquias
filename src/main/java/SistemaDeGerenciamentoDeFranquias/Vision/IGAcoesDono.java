@@ -1,6 +1,8 @@
 package SistemaDeGerenciamentoDeFranquias.Vision;
 
+import SistemaDeGerenciamentoDeFranquias.Control.GerenciadorDeLojas;
 import SistemaDeGerenciamentoDeFranquias.Exceptions.CadastroException;
+import SistemaDeGerenciamentoDeFranquias.Model.Loja;
 
 import javax.swing.*;
 import java.awt.*;
@@ -120,6 +122,7 @@ public class IGAcoesDono {
     }
 
     protected JPanel excluirLojas(){
+        boolean ex = false;
         JPanel painelExcluirLoja = new JPanel(new BorderLayout());
 
         JLabel titulo = new JLabel("Exclusão de loja", SwingConstants.CENTER);
@@ -131,8 +134,8 @@ public class IGAcoesDono {
 
         JPanel linhaCodigo = new JPanel(new FlowLayout(FlowLayout.CENTER));
         linhaCodigo.add(new JLabel("Código da loja:"));
-        JTextField escreveEndereco = new JTextField(15);
-        linhaCodigo.add(escreveEndereco);
+        JTextField escreveCodigo = new JTextField(15);
+        linhaCodigo.add(escreveCodigo);
         subPainel.add(linhaCodigo);
 
         JButton Excluir = new JButton("Excluir");
@@ -141,18 +144,20 @@ public class IGAcoesDono {
         JButton Sair = new JButton("Sair");
         subPainel.add(Sair);
 
-        painelExcluirLoja.add(subPainel, BorderLayout.CENTER);
+        painelExcluirLoja.add(subPainel,BorderLayout.CENTER);
 
         Excluir.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 System.out.println("Botão 'Excluir' clicado");
-//                if(botaoCadastrar(escreveEndereco.getText(), escreveNome.getText(), escreveCpf.getText(), escreveEmail.getText())) {
-//
-//                    escreveEndereco.setText("");
-//                    escreveNome.setText("");
-//                    escreveCpf.setText("");
-//                    escreveEmail.setText("");
-//                }
+                String codigo = escreveCodigo.getText();
+                if(ex){
+
+                }else {
+                JPanel exibeInfo = exibeLoja(codigo, GerenciadorDeLojas.getLoja(codigo));
+                exibeInfo.add(Excluir);
+                }
+                //interfaceGrafica.trocarTela(informLoja,400,400);
+
             }
         });
 
@@ -168,12 +173,6 @@ public class IGAcoesDono {
         return painelExcluirLoja;
     }
 
-    void exibeInformacaoLoja(){
-        JPanel exibeInformacaoLoja = new JPanel(new BorderLayout());
-
-
-    }
-
 
     boolean botaoCadastrar(String endereco, String nome, String cpf,String email){
             System.out.println("Tecla Enter pressionada");
@@ -187,5 +186,33 @@ public class IGAcoesDono {
             }
             //gerenciaDono.cadastroLoja(nome,senha);
         return false;
+    }
+
+    protected JPanel exibeLoja(String codigo, Loja loja){
+        JPanel exibeInformacaoLoja = new JPanel(new BorderLayout());
+
+        JLabel titulo = new JLabel("Informações de loja", SwingConstants.CENTER);
+        exibeInformacaoLoja.add(titulo, BorderLayout.NORTH);
+
+        JPanel subPainel = new JPanel();
+        subPainel.setLayout(new BoxLayout(subPainel, BoxLayout.Y_AXIS));
+        subPainel.setAlignmentX(Component.CENTER_ALIGNMENT);
+
+        JPanel linhaCodigo = new JPanel(new FlowLayout(FlowLayout.CENTER));
+        linhaCodigo.add(new JLabel("Código da loja:" + loja.getCodigo()));
+        JTextField escreveEndereco = new JTextField(15);
+        linhaCodigo.add(escreveEndereco);
+        subPainel.add(linhaCodigo);
+
+        JButton Sair = new JButton("Sair");
+        subPainel.add(Sair);
+
+        exibeInformacaoLoja.add(subPainel, BorderLayout.CENTER);
+
+        interfaceGrafica.getFrame().setContentPane(exibeInformacaoLoja); //função que elimina painel anterior e adiciona outro
+        interfaceGrafica.getFrame().revalidate();
+        interfaceGrafica.getFrame().repaint();
+
+        return exibeInformacaoLoja;
     }
 }

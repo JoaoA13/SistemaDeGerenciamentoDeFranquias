@@ -1,4 +1,5 @@
 package org.example;
+import SistemaDeGerenciamentoDeFranquias.Control.GerenciadorDeLojas;
 import SistemaDeGerenciamentoDeFranquias.Vision.InterfaceGrafica;
 
 //TIP To <b>Run</b> code, press <shortcut actionId="Run"/> or
