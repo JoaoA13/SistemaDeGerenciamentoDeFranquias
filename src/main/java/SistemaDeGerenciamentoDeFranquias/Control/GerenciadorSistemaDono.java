@@ -58,6 +58,6 @@ public class GerenciadorSistemaDono extends GerenciadorSistema{
         Gerente gerente = new Gerente(nomeGerente,cpfGerente,emailGerente,senhaGerentePadrão);
 
         GerenciadorDeLojas.cadastraLoja(endereco,gerente);
-        GerenciadorDeLojas.cadastraGerente(cpfGerente,gerente);
+        GerenciadorDeLojas.cadastraGerente(gerente.getCpf(),gerente);
     }
 }

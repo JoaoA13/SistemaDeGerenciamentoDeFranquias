@@ -23,12 +23,12 @@ public class GerenciadorDeLojas {
         quantidadeDeLojas++;
     }
 
-    static public Loja getLoja(String codigo){return armazenaLojas.getOrDefault(codigo,null);}
+    static public Loja getLoja(String cpfGerente){return armazenaLojas.getOrDefault(cpfGerente,null);}
 
     protected static void cadastraLoja(String endereco, Gerente gerente){
         String codigo = geraCodigoLoja();
-        Loja loja = new Loja(codigo,endereco,gerente);
-        addLoja(codigo,loja);
+        Loja loja = new Loja(gerente.getCpf(),endereco,gerente);
+        addLoja(gerente.getCpf(),loja);
     }
     static protected String geraCodigoLoja(){
         String codigo = String.format("%03d", quantidadeDeLojas + 1);
