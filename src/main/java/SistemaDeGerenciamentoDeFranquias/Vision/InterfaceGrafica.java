@@ -17,11 +17,12 @@ public class InterfaceGrafica {
     protected GerenciadorSistemaGerente gerenciaGerente = new GerenciadorSistemaGerente();
     protected GerenciadorSistemaVendedor gerenciaVendedor = new GerenciadorSistemaVendedor();
     protected GerenciadorDeLojas gerenciador = new GerenciadorDeLojas();
-   String cpf = "";
+    private GerenciadorDeLojas gerenciaDeLojas = new GerenciadorDeLojas();
+    String cpf = "";
 
    public InterfaceGrafica(){
-       menuLogin();
-       //sistemaDono();
+       //menuLogin();
+       sistemaDono();
        frame.setSize(200, 200);
        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
        frame.setLocationRelativeTo(null);
@@ -133,7 +134,7 @@ public class InterfaceGrafica {
 
     void sistemaDono(){
         JPanel sistemaDono = new JPanel();
-        IGAcoesDono acoes = new IGAcoesDono(this);
+        IGAcoesDono acoes = new IGAcoesDono(this,gerenciaDeLojas);
 
         JButton Sair = new JButton("Sair");
         sistemaDono.add(Sair);
@@ -150,12 +151,12 @@ public class InterfaceGrafica {
         menuBar.add(lojas);
         JMenuItem  cadastrarLoja = new JMenuItem ("Cadastrar loja", KeyEvent.VK_T);
         lojas.add(cadastrarLoja);
-        JMenuItem  excluirLoja = new JMenuItem ("Excluir loja", KeyEvent.VK_T);
-        lojas.add(excluirLoja);
+        JMenuItem  listaLoja = new JMenuItem ("Lista de lojas", KeyEvent.VK_T);
+        lojas.add(listaLoja);
 
         menu1Item1.addActionListener(e -> trocarTela(criarTela1(), 200, 200));
         cadastrarLoja.addActionListener(e -> trocarTela(acoes.cadastraLojas(), 500, 500));
-        excluirLoja.addActionListener(e -> trocarTela(acoes.excluirLojas(), 500, 500));
+        listaLoja.addActionListener(e -> trocarTela(acoes.listaDeLojas(), 500, 500));
 
         frame.setContentPane(sistemaDono); //função que elimina painel anterior e adiciona outro
         frame.revalidate();
@@ -174,7 +175,7 @@ public class InterfaceGrafica {
     void sistemaGerente()
     {
         JPanel sistemaGerente = new JPanel();
-        IGAcoesGerente acoes = new IGAcoesGerente(this,cpf);
+        IGAcoesGerente acoes = new IGAcoesGerente(this,gerenciaDeLojas,cpf);
 
         JButton Sair = new JButton("Sair");
         sistemaGerente.add(Sair);

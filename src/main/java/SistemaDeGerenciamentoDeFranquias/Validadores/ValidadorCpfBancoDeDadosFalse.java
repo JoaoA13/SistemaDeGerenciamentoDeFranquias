@@ -12,9 +12,11 @@ public class ValidadorCpfBancoDeDadosFalse implements ValidadorBancoDeDados{
 
     /// Retorna exceção(false) caso JÁ EXITA no banco de dados
     static public boolean valida(String cpf)  throws BancoDeDadosException {
-        if(Loja.getVendedor(cpf) != null)
-            throw new BancoDeDadosException("Esse Cpf já está cadastrado");
-        else if(GerenciadorDeLojas.getGerente(cpf) != null || cpf.equals(GerenciadorSistema.getDono().getCpf()) )
+        for (Loja loja : GerenciadorDeLojas.getLojas().values()) {
+            if (Loja.getVendedor(cpf) != null)
+                throw new BancoDeDadosException("Esse Cpf já está cadastrado");
+        }
+        if(GerenciadorDeLojas.getGerente(cpf) != null || cpf.equals(GerenciadorSistema.getDono().getCpf()) )
             throw new BancoDeDadosException("Esse Cpf já está cadastrado");
         else
             return true;

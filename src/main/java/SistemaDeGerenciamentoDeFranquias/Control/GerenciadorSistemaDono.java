@@ -2,6 +2,7 @@ package SistemaDeGerenciamentoDeFranquias.Control;
 
 import SistemaDeGerenciamentoDeFranquias.Exceptions.*;
 import SistemaDeGerenciamentoDeFranquias.Model.Gerente;
+import SistemaDeGerenciamentoDeFranquias.Model.Loja;
 import SistemaDeGerenciamentoDeFranquias.Validadores.*;
 
 public class GerenciadorSistemaDono extends GerenciadorSistema{
@@ -58,6 +59,28 @@ public class GerenciadorSistemaDono extends GerenciadorSistema{
         Gerente gerente = new Gerente(nomeGerente,cpfGerente,emailGerente,senhaGerentePadrão);
 
         GerenciadorDeLojas.cadastraLoja(endereco,gerente);
-        GerenciadorDeLojas.cadastraGerente(cpfGerente,gerente);
+        GerenciadorDeLojas.cadastraGerente(gerente.getCpf(),gerente);
+    }
+
+    static public String excluirLoja(String cpfGerente) throws EntradaException{
+        try {
+            ValidadorCampoVazio.valida(cpfGerente);
+            ValidadorCpf.validarCpf(cpfGerente);
+        } catch (EntradaException e) {
+            System.out.println("Erro: EntradaException: " + e.getMessage());
+            throw new EntradaException(e.getMessage());
+        }
+
+        try {
+            ValidadorCpfBancoDeDadosTrue.valida(cpfGerente);
+        }catch (BancoDeDadosException e){
+            System.out.println("Erro: EntradaException: " + e.getMessage());
+            throw new EntradaException(e.getMessage());
+        }
+
+        GerenciadorDeLojas.excluirLoja(cpfGerente);
+        GerenciadorDeLojas.excluirGerente(cpfGerente);
+
+        return "Loja excluída com Sucesso";
     }
 }

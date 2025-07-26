@@ -19,12 +19,13 @@ import java.awt.event.MouseEvent;
 public class IGAcoesGerente {
     private InterfaceGrafica interfaceGrafica;
     private String cpf;
+    private GerenciadorDeLojas gerenciaDeLojas;
 
-    GerenciadorDeLojas gerenciaDeLojas = new GerenciadorDeLojas();
     GerenciadorSistemaGerente gerenciaGerente = new GerenciadorSistemaGerente();
 
-    public IGAcoesGerente(InterfaceGrafica interfaceGrafica, String cpf) {
+    public IGAcoesGerente(InterfaceGrafica interfaceGrafica,GerenciadorDeLojas gerenciaDeLojas, String cpf) {
         this.interfaceGrafica = interfaceGrafica;
+        this.gerenciaDeLojas = gerenciaDeLojas;
         this.cpf = cpf;
     }
 
@@ -347,7 +348,7 @@ public class IGAcoesGerente {
                                 try {
                                     gerenciaGerente.excluirVendedor(cpfSelecionado, cpfGerente);
                                 } catch (EntradaException ex) {
-                                    throw new RuntimeException(ex);
+                                    interfaceGrafica.exibeException(ex.getMessage(),"Exclusão falhou");
                                 }
                                 ((DefaultTableModel) tabela.getModel()).removeRow(linha);
                             }
