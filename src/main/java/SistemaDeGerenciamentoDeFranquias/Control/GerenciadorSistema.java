@@ -3,6 +3,8 @@ package SistemaDeGerenciamentoDeFranquias.Control;
 import SistemaDeGerenciamentoDeFranquias.Exceptions.BancoDeDadosException;
 import SistemaDeGerenciamentoDeFranquias.Exceptions.LoginException;
 import SistemaDeGerenciamentoDeFranquias.Model.Dono;
+import SistemaDeGerenciamentoDeFranquias.Model.Loja;
+import SistemaDeGerenciamentoDeFranquias.Model.Vendedor;
 import SistemaDeGerenciamentoDeFranquias.Validadores.ValidadorCpfBancoDeDadosFalse;
 import SistemaDeGerenciamentoDeFranquias.Validadores.ValidadorCpfBancoDeDadosTrue;
 
@@ -37,4 +39,5 @@ public abstract class GerenciadorSistema {
             throw new LoginException(e.getMessage());
         }
     }
+
 }

@@ -223,7 +223,7 @@ public class IGAcoesDono {
         String[] colunas = {"Nome", "CPF", "e-mail","Valor atual de vendas"};
 
         String[][] dados = new String[loja.getArmazenaVendedores().size()][4];
-        Vendedor[] v = GerenciadorSistemaDono.rankVendedores(loja);
+        Vendedor[] v = loja.rankVendedores();
         int i = 0;
         for (int j = 0; j < loja.getArmazenaVendedores().size();j++ ) {
             dados[i][0] = v[j].getNome();
@@ -276,58 +276,54 @@ public class IGAcoesDono {
         if (escolha < 0 || escolha >= opcoes.length) return;
         if(escolha == 2)
             editarGerente(GerenciadorDeLojas.getLoja(codigo).getCpfGerente());
-        else {
-            String campoSelecionado = opcoes[escolha];
-            String labelTexto = "Digite o novo " + campoSelecionado + " da Loja:";
+        else{
+        String campoSelecionado = opcoes[escolha];
+        String labelTexto = "Digite o novo " + campoSelecionado + " da Loja:";
 
-            JLabel label = new JLabel(labelTexto);
-            label.setAlignmentX(Component.LEFT_ALIGNMENT);
-            edicao.add(label);
+        JLabel label = new JLabel(labelTexto);
+        label.setAlignmentX(Component.LEFT_ALIGNMENT);
+        edicao.add(label);
 
-            JTextField campoTexto = new JTextField(20);
-            campoTexto.setMaximumSize(new Dimension(Integer.MAX_VALUE, 25));
-            campoTexto.setAlignmentX(Component.LEFT_ALIGNMENT);
-            edicao.add(campoTexto);
+        JTextField campoTexto = new JTextField(20);
+        campoTexto.setMaximumSize(new Dimension(Integer.MAX_VALUE, 25));
+        campoTexto.setAlignmentX(Component.LEFT_ALIGNMENT);
+        edicao.add(campoTexto);
 
-            JButton confirmar = new JButton("Confirmar");
+        JButton confirmar = new JButton("Confirmar");
 
-            campoTexto.addActionListener(e -> confirmar.doClick());
-            confirmar.addActionListener(e -> {
-                System.out.println("Botão Confirmar clicado");
-                String valor = campoTexto.getText().trim();
+        campoTexto.addActionListener(e -> confirmar.doClick());
+        confirmar.addActionListener(e -> {
+            System.out.println("Botão Confirmar clicado");
+            String valor = campoTexto.getText().trim();
 
-                try {
-                    String Endereco = "", novoGerente = "";
-                    switch (escolha) {
-                        case 0:
-                            Endereco = valor;
-                            break;
-                        case 1:
-                            novoGerente = valor;
-                            break;
-                    }
-                    String msg = GerenciadorSistemaDono.editarLoja(Endereco, novoGerente, codigo);
-                    JOptionPane.showMessageDialog(null, msg, "Sucesso", JOptionPane.INFORMATION_MESSAGE);
-                    campoTexto.setText("");
-                } catch (EntradaException ex) {
-                    JOptionPane.showMessageDialog(null, "Erro ao editar: " + ex.getMessage(), "Erro", JOptionPane.ERROR_MESSAGE);
+            try {
+                String Endereco = "", novoGerente = "";
+                switch (escolha) {
+                    case 0: Endereco = valor; break;
+                    case 1: novoGerente = valor; break;
                 }
-            });
+                String msg = GerenciadorSistemaDono.editarLoja(Endereco, novoGerente,codigo);
+                JOptionPane.showMessageDialog(null, msg, "Sucesso", JOptionPane.INFORMATION_MESSAGE);
+                campoTexto.setText("");
+            } catch (EntradaException ex) {
+                JOptionPane.showMessageDialog(null, "Erro ao editar: " + ex.getMessage(), "Erro", JOptionPane.ERROR_MESSAGE);
+            }
+        });
 
-            JButton sair = new JButton("Sair");
-            //sair.addActionListener(e -> interfaceGrafica.voltar());
+        JButton sair = new JButton("Sair");
+        //sair.addActionListener(e -> interfaceGrafica.voltar());
 
-            JPanel botoesPanel = new JPanel();
-            botoesPanel.setLayout(new BoxLayout(botoesPanel, BoxLayout.X_AXIS));
-            botoesPanel.setAlignmentX(Component.LEFT_ALIGNMENT);
-            botoesPanel.setMaximumSize(new Dimension(400, 30));
+        JPanel botoesPanel = new JPanel();
+        botoesPanel.setLayout(new BoxLayout(botoesPanel, BoxLayout.X_AXIS));
+        botoesPanel.setAlignmentX(Component.LEFT_ALIGNMENT);
+        botoesPanel.setMaximumSize(new Dimension(400, 30));
 
-            botoesPanel.add(sair);
-            botoesPanel.add(Box.createHorizontalGlue());
-            botoesPanel.add(confirmar);
-            edicao.add(botoesPanel);
+        botoesPanel.add(sair);
+        botoesPanel.add(Box.createHorizontalGlue());
+        botoesPanel.add(confirmar);
+        edicao.add(botoesPanel);
 
-            InterfaceGrafica.trocarTela(edicao, 400, 200);
+        InterfaceGrafica.trocarTela(edicao, 400, 200);
         }
     }
 

@@ -1,15 +1,14 @@
 package SistemaDeGerenciamentoDeFranquias.Model;
 
 import java.math.BigDecimal;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 
 public class Loja {
 
     private String codigo;
     private String endereco;
     private Gerente gerenteDaUnidade;
-    static private Map<String, Vendedor> armazenaVendedores = new HashMap<>();
+    public Map<String, Vendedor> armazenaVendedores = new HashMap<>();
 
     public Loja(String codigo, String endereco, Gerente gerenteDaUnidade){
         this.endereco = endereco;
@@ -46,7 +45,13 @@ public class Loja {
     }
     public void excluirVendedor(String cpf){armazenaVendedores.remove(cpf);}
 
-    static public Vendedor getVendedor(String cpf){
+    public Vendedor getVendedor(String cpf){
         return armazenaVendedores.getOrDefault(cpf,null);
+    }
+
+    public Vendedor[] rankVendedores(){
+        List<Vendedor> lista = new ArrayList<>(getArmazenaVendedores().values());
+        Collections.sort(lista, (v1, v2) -> v2.getValorVenda().compareTo(v1.getValorVenda()));
+        return lista.toArray(new Vendedor[0]);
     }
 }

@@ -148,7 +148,7 @@ public class GerenciadorSistemaGerente extends GerenciadorSistema{
         }
 
         try {
-            ValidadorCpfVendedorBancoDeDadosTrue.valida(cpf);
+            ValidadorCpfBancoDeDadosTrue.valida(cpf);
         }catch (BancoDeDadosException e){
             System.out.println("Erro: EntradaException: " + e.getMessage());
             throw new EntradaException(e.getMessage());

@@ -90,7 +90,7 @@ public class GerenciadorSistemaDono extends GerenciadorSistema {
         }
 
         Gerente gerente = new Gerente(nomeGerente, cpfGerente, emailGerente, senhaGerentePadrão);
-        GerenciadorDeLojas.cadastraGerente(gerente.getCpf(), gerente);
+        GerenciadorDeLojas.cadastraGerente(cpfGerente, gerente);
     }
 
     static public String excluirLoja(String cpfGerente) throws EntradaException {
@@ -245,12 +245,4 @@ public class GerenciadorSistemaDono extends GerenciadorSistema {
         }
         return "";
     }
-
-    static public Vendedor[] rankVendedores(Loja loja){
-        List<Vendedor> lista = new ArrayList<>(loja.getArmazenaVendedores().values());
-        Collections.sort(lista, (v1, v2) -> v2.getValorVenda().compareTo(v1.getValorVenda()));
-        return lista.toArray(new Vendedor[0]);
-    }
-
-
 }
