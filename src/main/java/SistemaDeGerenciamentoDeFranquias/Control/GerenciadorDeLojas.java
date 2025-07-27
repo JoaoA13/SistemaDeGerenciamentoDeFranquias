@@ -21,7 +21,7 @@ public class GerenciadorDeLojas {
     static public Map<String, Loja> getLojas(){return armazenaLojas;}
     static public Loja getLoja(String Codigo){
         if(armazenaLojas.getOrDefault(Codigo,null) != null )//conferindo se é cpf
-            return armazenaLojas.getOrDefault(Codigo,null);
+            return armazenaLojas.get(Codigo);
         else
             return armazenaLojas.getOrDefault(codigoParaCpf.get(Codigo),null);//se nao for cpf vai pelo codigo
     }
@@ -50,7 +50,7 @@ public class GerenciadorDeLojas {
     }
     static public String getCpfPorCodigo(String codigo){
         if(codigoParaCpf.get(codigo) == null)
-            return "Essa loja está sem um gerente associado";
+            return "SEM GERENTE";
         else
             return codigoParaCpf.get(codigo);
     }
