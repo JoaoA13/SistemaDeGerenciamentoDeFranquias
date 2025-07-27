@@ -29,7 +29,13 @@ public class Loja {
     /// Getters e Setters
     public String getCodigo(){return codigo;}
 
-    public String getCpfGerente() {return gerenteDaUnidade.getCpf();}
+    public String getCpfGerente() {
+        if(gerenteDaUnidade == null)
+            return null;
+        if (gerenteDaUnidade.getCpf().isEmpty())
+            return null;
+        else
+        return gerenteDaUnidade.getCpf();}
     protected void setCpfGerente(String cpf) {gerenteDaUnidade.setCpf(cpf);}
 
     public String getEndereco() {return endereco;}

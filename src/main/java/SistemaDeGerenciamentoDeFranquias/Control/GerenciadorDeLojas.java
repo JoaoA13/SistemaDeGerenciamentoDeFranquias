@@ -2,6 +2,7 @@ package SistemaDeGerenciamentoDeFranquias.Control;
 import SistemaDeGerenciamentoDeFranquias.Arquivos.salvaArquivos;
 import SistemaDeGerenciamentoDeFranquias.Model.Gerente;
 import SistemaDeGerenciamentoDeFranquias.Model.Loja;
+import SistemaDeGerenciamentoDeFranquias.Model.Usuario;
 
 import java.util.*;
 
@@ -42,10 +43,10 @@ public class GerenciadorDeLojas {
     }
     static public Map<String, Loja> getLojas(){return armazenaLojas;}
     static public Loja getLoja(String Codigo){
-        if(armazenaLojas.getOrDefault(Codigo,null) != null )//conferindo se é cpf
-            return armazenaLojas.get(Codigo);
+        if(armazenaLojas.getOrDefault(Codigo,null) == null )//conferindo se é cpf
+            return armazenaLojas.get(codigoParaCpf.get(Codigo));
         else
-            return armazenaLojas.getOrDefault(codigoParaCpf.get(Codigo),null);//se nao for cpf vai pelo codigo
+            return armazenaLojas.getOrDefault(Codigo,null);//se nao for cpf vai pelo codigo
     }
     protected static void cadastraLoja(String endereco, Gerente gerente){
         String codigo = geraCodigoLoja();
@@ -53,8 +54,8 @@ public class GerenciadorDeLojas {
     }
     protected static void addLoja(String endereco, Gerente gerente,String codigo){
         Loja loja = new Loja(codigo,endereco,gerente);
-        armazenaLojas.put(gerente.getCpf(),loja);
-        codigoParaCpf.put(codigo, gerente.getCpf());
+        armazenaLojas.put(codigo,loja);
+        codigoParaCpf.put(gerente.getCpf(),codigo);
         salvaArquivos.salvarLojas(armazenaLojas);
         salvaArquivos.salvarCodigos(codigoParaCpf);
         salvaArquivos.salvarGerentes(armazenaGerentes);
@@ -62,14 +63,14 @@ public class GerenciadorDeLojas {
         quantidadeDeLojas++;
         salvaArquivos.salvarQuantidadeDeLojas(quantidadeDeLojas);
     }
-    static public void excluirLoja(String cpf){
-        if(getLoja(cpf) == null)
+    static public void excluirLoja(String codigo){
+        if(getLoja(codigo) == null)
             return;
-        codigoParaCpf.remove(getLoja(cpf).getCodigo());
-        armazenaLojas.remove(cpf);
-//        salvaArquivos.salvarLojas(armazenaLojas);
-//        salvaArquivos.salvarCodigos(codigoParaCpf);
-//        salvaArquivos.salvarGerentes(armazenaGerentes);
+
+        armazenaLojas.remove(codigo);
+        salvaArquivos.salvarLojas(armazenaLojas);
+        salvaArquivos.salvarCodigos(codigoParaCpf);
+        salvaArquivos.salvarGerentes(armazenaGerentes);
     }
 
     static protected String geraCodigoLoja(){
@@ -83,10 +84,11 @@ public class GerenciadorDeLojas {
             return getLoja(cpfGerente).getCodigo();
     }
     static public String getCpfPorCodigo(String codigo){
-        if(codigoParaCpf.get(codigo) == null)
-            return "SEM GERENTE";
+        String cpfGerente = getLoja(codigo).getCpfGerente();
+        if(cpfGerente != null)
+            return cpfGerente;
         else
-            return codigoParaCpf.get(codigo);
+            return "SEM GERENTE";
     }
     static public Map<String,String> getCodigoPraCpf(){return codigoParaCpf;}
 
@@ -101,9 +103,11 @@ public class GerenciadorDeLojas {
         salvaArquivos.salvarGerentes(armazenaGerentes);
     }
     static public void excluirGerente(String cpf){
-        if(getLoja(cpf) != null){
-            getCodigoPraCpf().remove(getLoja(cpf).getCodigo());
-            getLoja(cpf).setGerenteDaUnidade(null);}
+        Loja loja = getLoja(cpf);
+        if(loja != null){
+            getCodigoPraCpf().remove(cpf);
+            loja.setGerenteDaUnidade(null);
+        }
         armazenaGerentes.remove(cpf);
         salvaArquivos.salvarLojas(armazenaLojas);
         salvaArquivos.salvarCodigos(codigoParaCpf);
@@ -116,5 +120,15 @@ public class GerenciadorDeLojas {
         salvaArquivos.salvarLojas(armazenaLojas);
         salvaArquivos.salvarCodigos(codigoParaCpf);
         salvaArquivos.salvarGerentes(armazenaGerentes);
+    }
+
+    static public Usuario getVendedorGeral(String cpf){
+        for (Loja loja : getLojas().values()) {
+            if(loja == null)
+                continue;
+            if (loja.getVendedor(cpf) != null)
+                return loja.getVendedor(cpf);
+        }
+        return null;
     }
 }

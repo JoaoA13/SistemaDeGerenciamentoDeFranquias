@@ -13,6 +13,8 @@ import javax.swing.table.DefaultTableModel;
 import java.awt.*;
 import java.awt.event.*;
 
+import static SistemaDeGerenciamentoDeFranquias.Control.GerenciadorDeLojas.getCpfPorCodigo;
+
 public class IGAcoesDono {
     private InterfaceGrafica interfaceGrafica;
     private GerenciadorDeLojas gerenciaDeLojas;
@@ -125,7 +127,7 @@ public class IGAcoesDono {
             for (Loja loja : GerenciadorDeLojas.getLojas().values()) {
                 if (loja == null) continue;
                 dados[i][0] = loja.getEndereco();
-                dados[i][1] = GerenciadorDeLojas.getCpfPorCodigo(loja.getCodigo());
+                dados[i][1] = getCpfPorCodigo(loja.getCodigo());
                 dados[i][2] = loja.getCodigo();
                 i++;
             }
@@ -168,7 +170,7 @@ public class IGAcoesDono {
                                     JOptionPane.YES_NO_OPTION);
                             if (confirm == JOptionPane.YES_OPTION) {
                                 try {
-                                    GerenciadorSistemaDono.excluirLoja(cpfGerente);
+                                    GerenciadorSistemaDono.excluirLoja(codigo);
                                 } catch (EntradaException ex) {
                                         interfaceGrafica.exibeException(ex.getMessage(),"Exclusão falhou");
                                 }
@@ -588,7 +590,7 @@ public class IGAcoesDono {
         if (escolha < 0 || escolha >= opcoes.length) return;
 
         String campoSelecionado = opcoes[escolha];
-        String labelTexto = "Digite o novo " + campoSelecionado + " do vendedor:";
+        String labelTexto = "Digite o novo " + campoSelecionado + " do gerente:";
 
         JLabel label = new JLabel(labelTexto);
         label.setAlignmentX(Component.LEFT_ALIGNMENT);
