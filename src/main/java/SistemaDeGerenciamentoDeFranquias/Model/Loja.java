@@ -1,5 +1,6 @@
 package SistemaDeGerenciamentoDeFranquias.Model;
 
+import java.math.BigDecimal;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -14,12 +15,15 @@ public class Loja {
         this.endereco = endereco;
         this.gerenteDaUnidade = gerenteDaUnidade;
         this.codigo = codigo;
-        Vendedor vendedor1 = new Vendedor("Gleiph", "14714714714","socorro@gmail.com", "12345677");
+        Vendedor vendedor1 = new Vendedor("Jorge", "14714714714","socorro@gmail.com", "12345677");
         Vendedor vendedor2 = new Vendedor("Carlos", "45645645645","eitanois@gmail.com", "12345677");
         Vendedor vendedor3 = new Vendedor("Ana", "78978978978","Tome-lheForro@gmail.com", "12345677");
         armazenaVendedores.put("14714714714",vendedor1);
         armazenaVendedores.put("45645645645",vendedor2);
         armazenaVendedores.put("78978978978",vendedor3);
+        vendedor1.setValorVenda(BigDecimal.ONE);
+        vendedor2.setValorVenda(BigDecimal.TEN);
+        vendedor3.setValorVenda(BigDecimal.TWO);
     }
 
     /// Getters e Setters
@@ -29,10 +33,10 @@ public class Loja {
     protected void setCpfGerente(String cpf) {gerenteDaUnidade.setCpf(cpf);}
 
     public String getEndereco() {return endereco;}
-    protected void setEndereco(String endereco) {this.endereco = endereco;}
+    public void setEndereco(String endereco) {this.endereco = endereco;}
 
     protected Gerente getGerenteDaUnidade() {return gerenteDaUnidade;}
-    protected void setGerenteDaUnidade(Gerente gerenteDaUnidade) {this.gerenteDaUnidade = gerenteDaUnidade;}
+    public void setGerenteDaUnidade(Gerente gerenteDaUnidade) {this.gerenteDaUnidade = gerenteDaUnidade;}
 
     public Map<String, Vendedor> getArmazenaVendedores() { return armazenaVendedores; }
 
