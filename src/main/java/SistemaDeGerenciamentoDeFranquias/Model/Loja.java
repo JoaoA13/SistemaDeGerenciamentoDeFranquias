@@ -9,7 +9,7 @@ public class Loja {
     private String codigo;
     private String endereco;
     private Gerente gerenteDaUnidade;
-    static private Map<String, Vendedor> armazenaVendedores = new HashMap<>();
+    private static Map<String, Vendedor> armazenaVendedores = new HashMap<>();
 
     public Loja(String codigo, String endereco, Gerente gerenteDaUnidade){
         this.endereco = endereco;
@@ -46,7 +46,7 @@ public class Loja {
     }
     public void excluirVendedor(String cpf){armazenaVendedores.remove(cpf);}
 
-    static public Vendedor getVendedor(String cpf){
+    public static Vendedor getVendedor(String cpf){
         return armazenaVendedores.getOrDefault(cpf,null);
     }
 }

@@ -9,6 +9,8 @@ import SistemaDeGerenciamentoDeFranquias.Model.Vendedor;
 import SistemaDeGerenciamentoDeFranquias.Validadores.*;
 import SistemaDeGerenciamentoDeFranquias.Validadores.ValidadorCpfBancoDeDadosTrue;
 
+import java.math.BigDecimal;
+
 public class GerenciadorSistemaGerente extends GerenciadorSistema{
 
     static GerenciadorDeLojas listaLojas = new GerenciadorDeLojas();
@@ -160,23 +162,28 @@ public class GerenciadorSistemaGerente extends GerenciadorSistema{
         return "Vendedor Excluído com Sucesso";
     }
 
-    /*public String lancarProduto(String nome, String preco, String carac, String quant, String cpfGerente) throws CadastroException{
+    public String lancarProduto(String nome, String precoSTR, String carac, String quantSTR, String codigo, String cpfGerente) throws CadastroException{
         try {
             ValidadorCampoVazio.valida(nome);
-            ValidadorCampoVazio.valida(preco);
+            ValidadorCampoVazio.valida(precoSTR);
             ValidadorCampoVazio.valida(carac);
-            ValidadorCampoVazio.valida(quant);
+            ValidadorCampoVazio.valida(quantSTR);
+            ValidadorCampoVazio.valida(codigo);
+
+            BigDecimal preco = ValidadorBigDecimal.validarBigdecimal(precoSTR, "Preço Inválido");
+            BigDecimal quant = ValidadorBigDecimal.validarBigdecimal(quantSTR, "Quantidade Inválida");
 
             ValidadorNome.validarNome(nome);
-            ValidadorCpf.validarCpf(cpf);
-            ValidadorEmail.valida(email);
-            ValidadorSenha.valida(senha);
+            ValidadorPrecoPositivo.validarValorPositivo(String.valueOf(preco));
+            carac = ValidadorCaracEndereco.validarTexto(carac, "Características");
+            ValidadorPrecoPositivo.validarValorPositivo(String.valueOf(quant));
+            ValidadorCodigo.validarCodigo(codigo);
         } catch (EntradaException e) {
             System.out.println("Erro: LoginException: " + e.getMessage());
             throw new CadastroException(e.getMessage());
         }
 
-        try {
+        /*try {
             ValidadorCpfBancoDeDadosFalse.valida(cpf);
             ValidadorCpfBancoDeDadosFalse.valida(cpf);
         }catch (BancoDeDadosException e){
@@ -185,11 +192,10 @@ public class GerenciadorSistemaGerente extends GerenciadorSistema{
         }
 
         Loja loja = listaLojas.getLoja(cpfGerente);
-        loja.addVendedor(nome, cpf, email, senha);
-        return "Vendedor Cadastrado";
+        loja.addVendedor(nome, cpf, email, senha);*/
+        return "Produto Cadastrado";
 
-        return "Produto registrado";
-    }*/
+    }
 
     public void listaDeVendedores(String cpfGerente){
 

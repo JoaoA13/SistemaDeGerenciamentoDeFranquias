@@ -15,6 +15,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.math.BigDecimal;
 
 public class IGAcoesGerente {
     private InterfaceGrafica interfaceGrafica;
@@ -445,6 +446,15 @@ public class IGAcoesGerente {
         escreveQuantidade.setAlignmentX(Component.LEFT_ALIGNMENT);
         cadastro.add(escreveQuantidade);
 
+        JLabel labelCodigo = new JLabel("Digite código do produto:");
+        labelCodigo.setAlignmentX(Component.LEFT_ALIGNMENT);
+        cadastro.add(labelCodigo);
+
+        JTextField escreveCodigo = new JTextField(20);
+        escreveCodigo.setMaximumSize(new Dimension(Integer.MAX_VALUE, 25));
+        escreveCodigo.setAlignmentX(Component.LEFT_ALIGNMENT);
+        cadastro.add(escreveCodigo);
+
         JButton voltar = new JButton("Voltar");
         JButton confirmar = new JButton("Confirmar");
 
@@ -461,22 +471,24 @@ public class IGAcoesGerente {
         escreveNome.addActionListener(e -> escrevePreco.requestFocusInWindow());
         escrevePreco.addActionListener(e -> escreveCaracteristicas.requestFocusInWindow());
         escreveCaracteristicas.addActionListener(e -> escreveQuantidade.requestFocusInWindow());
-        escreveQuantidade.addActionListener(e -> confirmar.requestFocusInWindow());
+        escreveQuantidade.addActionListener(e -> escreveCodigo.requestFocusInWindow());
+        escreveCodigo.addActionListener(e -> confirmar.doClick());
 
-        /*confirmar.addActionListener(e -> {
+        confirmar.addActionListener(e -> {
             System.out.println("Botão Confirmar clicado");
             String nome = escreveNome.getText().trim();
             String preco = escrevePreco.getText().trim();
             String carac = escreveCaracteristicas.getText().trim();
             String quant = escreveQuantidade.getText().trim();
+            String codigo = escreveCodigo.getText().trim();
             try {
-                String msg = gerenciaGerente.lancarProduto(nome, preco, carac, quant, cpfGerente);
+                String msg = gerenciaGerente.lancarProduto(nome, preco, carac, quant, codigo, cpfGerente);
                 JOptionPane.showMessageDialog(null, msg, "Sucesso", JOptionPane.INFORMATION_MESSAGE);
-                escreveNome.setText("");escreveCpf.setText("");escreveEmail.setText("");escreveSenha.setText("");
+                escreveNome.setText("");escrevePreco.setText("");escreveCaracteristicas.setText("");escreveQuantidade.setText("");escreveCodigo.setText("");
             } catch (CadastroException ex) {
                 JOptionPane.showMessageDialog(null, "Erro ao cadastrar: " + ex.getMessage(), "Erro", JOptionPane.ERROR_MESSAGE);
             }
-        });*/
+        });
 
         return cadastro;
     }
