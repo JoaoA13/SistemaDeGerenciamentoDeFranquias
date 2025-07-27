@@ -94,6 +94,7 @@ public class GerenciadorSistemaDono extends GerenciadorSistema {
     }
 
     static public String excluirLoja(String cpfGerente) throws EntradaException {
+        cpfGerente = cpfGerente.replaceAll("[^\\d]", "");
         try {
             ValidadorCampoVazio.valida(cpfGerente);
             ValidadorCpf.validarCpf(cpfGerente);

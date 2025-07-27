@@ -154,8 +154,8 @@ public class IGAcoesDono {
                     int linha = tabela.rowAtPoint(e.getPoint());
                     if (linha >= 0 && linha < tabela.getRowCount()) {
                         tabela.setRowSelectionInterval(linha, linha);
-                        String codigo = (String) tabela.getValueAt(linha, 1);
-                        String cpfGerente = (String) tabela.getValueAt(linha, 2);
+                        String codigo = (String) tabela.getValueAt(linha, 2);
+                        String cpfGerente = (String) tabela.getValueAt(linha, 1);
 
                         editarItem.addActionListener(ae -> {
                             editarLoja(cpfGerente);
