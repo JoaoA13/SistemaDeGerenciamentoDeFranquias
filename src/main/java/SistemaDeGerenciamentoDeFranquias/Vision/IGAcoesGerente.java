@@ -404,7 +404,7 @@ public class IGAcoesGerente {
         return solicitacoes;
     }
 
-    JPanel cadastrarProduto(){
+    JPanel cadastrarProduto(String cpfGerente){
         JPanel cadastro = new JPanel();
         cadastro.setLayout(new BoxLayout(cadastro, BoxLayout.Y_AXIS));
         cadastro.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
@@ -462,6 +462,21 @@ public class IGAcoesGerente {
         escrevePreco.addActionListener(e -> escreveCaracteristicas.requestFocusInWindow());
         escreveCaracteristicas.addActionListener(e -> escreveQuantidade.requestFocusInWindow());
         escreveQuantidade.addActionListener(e -> confirmar.requestFocusInWindow());
+
+        /*confirmar.addActionListener(e -> {
+            System.out.println("Botão Confirmar clicado");
+            String nome = escreveNome.getText().trim();
+            String preco = escrevePreco.getText().trim();
+            String carac = escreveCaracteristicas.getText().trim();
+            String quant = escreveQuantidade.getText().trim();
+            try {
+                String msg = gerenciaGerente.lancarProduto(nome, preco, carac, quant, cpfGerente);
+                JOptionPane.showMessageDialog(null, msg, "Sucesso", JOptionPane.INFORMATION_MESSAGE);
+                escreveNome.setText("");escreveCpf.setText("");escreveEmail.setText("");escreveSenha.setText("");
+            } catch (CadastroException ex) {
+                JOptionPane.showMessageDialog(null, "Erro ao cadastrar: " + ex.getMessage(), "Erro", JOptionPane.ERROR_MESSAGE);
+            }
+        });*/
 
         return cadastro;
     }

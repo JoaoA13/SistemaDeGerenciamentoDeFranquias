@@ -160,6 +160,37 @@ public class GerenciadorSistemaGerente extends GerenciadorSistema{
         return "Vendedor Excluído com Sucesso";
     }
 
+    /*public String lancarProduto(String nome, String preco, String carac, String quant, String cpfGerente) throws CadastroException{
+        try {
+            ValidadorCampoVazio.valida(nome);
+            ValidadorCampoVazio.valida(preco);
+            ValidadorCampoVazio.valida(carac);
+            ValidadorCampoVazio.valida(quant);
+
+            ValidadorNome.validarNome(nome);
+            ValidadorCpf.validarCpf(cpf);
+            ValidadorEmail.valida(email);
+            ValidadorSenha.valida(senha);
+        } catch (EntradaException e) {
+            System.out.println("Erro: LoginException: " + e.getMessage());
+            throw new CadastroException(e.getMessage());
+        }
+
+        try {
+            ValidadorCpfBancoDeDadosFalse.valida(cpf);
+            ValidadorCpfBancoDeDadosFalse.valida(cpf);
+        }catch (BancoDeDadosException e){
+            System.out.println("Erro: EntradaException: " + e.getMessage());
+            throw new CadastroException(e.getMessage());
+        }
+
+        Loja loja = listaLojas.getLoja(cpfGerente);
+        loja.addVendedor(nome, cpf, email, senha);
+        return "Vendedor Cadastrado";
+
+        return "Produto registrado";
+    }*/
+
     public void listaDeVendedores(String cpfGerente){
 
     }
