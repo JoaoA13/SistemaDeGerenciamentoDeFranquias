@@ -117,7 +117,7 @@ public class InterfaceGrafica {
                             validaLog = gerenciaVendedor.login(cpf,senha);
                             exibeInformacao(validaLog, "Login feito com sucesso");
                             menuLogin.setVisible(false);
-                            sistemaDono();
+                            sistemaVendedor();
                         }else
                             exibeException("Deve selecionar seu cargo!", "Login falhou");
                     }catch (LoginException mes) {
@@ -259,6 +259,49 @@ public class InterfaceGrafica {
                 System.out.println("Botão 'Sair' clicado");
                 menuBar.removeAll();
                 sistemaGerente.setVisible(false);
+                menuLogin();
+            }
+        });
+    }
+
+    void sistemaVendedor(){
+        JPanel sistemaDono = new JPanel();
+        IGAcoesDono acoes = new IGAcoesDono(this,gerenciaDeLojas);
+
+        JButton Sair = new JButton("Sair");
+        sistemaDono.add(Sair);
+
+        JMenuBar menuBar = new JMenuBar();
+        frame.setJMenuBar(menuBar);
+
+        JMenu lojas = new JMenu ("Lojas");
+        menuBar.add(lojas);
+        JMenuItem  cadastrarLoja = new JMenuItem ("Cadastrar loja", KeyEvent.VK_T);
+        lojas.add(cadastrarLoja);
+        JMenuItem  listaLoja = new JMenuItem ("Lista de lojas", KeyEvent.VK_T);
+        lojas.add(listaLoja);
+
+        JMenu gerentes = new JMenu ("Gerentes");
+        menuBar.add(gerentes);
+        JMenuItem  cadastrarGerente = new JMenuItem ("Cadastrar gerente", KeyEvent.VK_T);
+        gerentes.add(cadastrarGerente);
+        JMenuItem  listaGerente = new JMenuItem ("Lista de gerentes", KeyEvent.VK_T);
+        gerentes.add(listaGerente);
+
+        cadastrarLoja.addActionListener(e -> trocarTela(acoes.cadastraLojas(), 500, 500));
+        listaLoja.addActionListener(e -> trocarTela(acoes.listaDeLojas(), 500, 500));
+        cadastrarGerente.addActionListener(e -> trocarTela(acoes.cadastraGerentes(), 500, 500));
+        listaGerente.addActionListener(e -> trocarTela(acoes.listaDeGerente(), 500, 500));
+
+        frame.setContentPane(sistemaDono); //função que elimina painel anterior e adiciona outro
+        frame.revalidate();
+        frame.repaint();
+
+        Sair.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                System.out.println("Botão 'Sair' clicado");
+                menuBar.removeAll();
+                sistemaDono.setVisible(false);
                 menuLogin();
             }
         });

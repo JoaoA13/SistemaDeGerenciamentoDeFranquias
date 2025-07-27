@@ -93,23 +93,23 @@ public class GerenciadorSistemaDono extends GerenciadorSistema {
         GerenciadorDeLojas.cadastraGerente(cpfGerente, gerente);
     }
 
-    static public String excluirLoja(String cpfGerente) throws EntradaException {
+    static public String excluirLoja(String codigo) throws EntradaException {
         try {
-            ValidadorCampoVazio.valida(cpfGerente);
-            ValidadorCpf.validarCpf(cpfGerente);
+            ValidadorCampoVazio.valida(codigo);
+            //ValidadorCpf.validarCpf(cpfGerente);
         } catch (EntradaException e) {
             System.out.println("Erro: EntradaException: " + e.getMessage());
             throw new EntradaException(e.getMessage());
         }
 
         try {
-            ValidadorCpfBancoDeDadosTrue.valida(cpfGerente);
+            //ValidadorCpfBancoDeDadosTrue.valida(cpfGerente);
         } catch (BancoDeDadosException e) {
             System.out.println("Erro: EntradaException: " + e.getMessage());
             throw new EntradaException(e.getMessage());
         }
 
-        GerenciadorDeLojas.excluirLoja(cpfGerente);
+        GerenciadorDeLojas.excluirLoja(codigo);
 
         return "Loja excluída com Sucesso";
     }
@@ -232,12 +232,8 @@ public class GerenciadorSistemaDono extends GerenciadorSistema {
                 throw new EntradaException(e.getMessage());
             }
 
-            Loja loja = GerenciadorDeLojas.getLoja(codigo);
-            GerenciadorDeLojas.getLojas().remove(GerenciadorDeLojas.getCpfPorCodigo(codigo));
-            GerenciadorDeLojas.getLojas().put(cpfNovoGerente,loja);
-
-            GerenciadorDeLojas.getCodigoPraCpf().remove(codigo);
-            GerenciadorDeLojas.getCodigoPraCpf().put(GerenciadorDeLojas.getCodigoLoja(cpfNovoGerente),cpfNovoGerente);
+            GerenciadorDeLojas.getCodigoPraCpf().remove(GerenciadorDeLojas.getLoja(codigo).getCpfGerente());
+            GerenciadorDeLojas.getCodigoPraCpf().put(cpfNovoGerente,codigo);
 
             GerenciadorDeLojas.trocarGerente(codigo,GerenciadorDeLojas.getGerente(cpfNovoGerente));
 
