@@ -220,14 +220,16 @@ public class IGAcoesDono {
         tabela.add(criaCelula("CPF do gerente: "));
         tabela.add(criaCelula(loja.getCpfGerente()));
 
-        String[] colunas = {"Nome", "CPF", "e-mail"};
+        String[] colunas = {"Nome", "CPF", "e-mail","Valor atual de vendas"};
 
-        String[][] dados = new String[loja.getArmazenaVendedores().size()][3];
+        String[][] dados = new String[loja.getArmazenaVendedores().size()][4];
+        Vendedor[] v = GerenciadorSistemaDono.rankVendedores(loja);
         int i = 0;
-        for (Vendedor v : loja.getArmazenaVendedores().values()) {
-            dados[i][0] = v.getNome();
-            dados[i][1] = v.getCpf();
-            dados[i][2] = v.getEmail();
+        for (int j = 0; j < loja.getArmazenaVendedores().size();j++ ) {
+            dados[i][0] = v[j].getNome();
+            dados[i][1] = v[j].getCpf();
+            dados[i][2] = v[j].getEmail();
+            dados[i][3] = String.valueOf(v[j].getValorVenda());
             i++;
         }
 

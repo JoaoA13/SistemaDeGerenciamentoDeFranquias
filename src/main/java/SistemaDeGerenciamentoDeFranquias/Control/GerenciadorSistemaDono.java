@@ -7,8 +7,10 @@ import SistemaDeGerenciamentoDeFranquias.Model.Vendedor;
 import SistemaDeGerenciamentoDeFranquias.Validadores.*;
 
 import java.awt.*;
-import java.util.HashMap;
-import java.util.Map;
+import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 
 public class GerenciadorSistemaDono extends GerenciadorSistema {
     private String senhaGerentePadrão = "12345678";
@@ -206,12 +208,10 @@ public class GerenciadorSistemaDono extends GerenciadorSistema {
             return "";
         }
 
-    static public Map<Integer,Vendedor> rankVendedores(){
-        Map<Integer,Vendedor> rank = new HashMap<>();
-
-
-
-        return rank;
+    static public Vendedor[] rankVendedores(Loja loja){
+        List<Vendedor> lista = new ArrayList<>(loja.getArmazenaVendedores().values());
+        Collections.sort(lista, (v1, v2) -> v2.getValorVenda().compareTo(v1.getValorVenda()));
+        return lista.toArray(new Vendedor[0]);
     }
 
 
