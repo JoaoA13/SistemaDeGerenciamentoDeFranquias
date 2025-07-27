@@ -21,8 +21,8 @@ public class InterfaceGrafica {
     String cpf = "";
 
    public InterfaceGrafica(){
-       //menuLogin();
-       sistemaDono();
+       menuLogin();
+       //sistemaDono();
        frame.setSize(200, 200);
        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
        frame.setLocationRelativeTo(null);
@@ -232,7 +232,7 @@ public class InterfaceGrafica {
         JMenuItem  menu4Item2 = new JMenuItem ("Visualizar Lista de Produtos", KeyEvent.VK_T);
         menu4.add(menu4Item2);
 
-        menu4Item1.addActionListener(e -> trocarTela(acoes.cadastrarProduto(), 400, 300));
+        menu4Item1.addActionListener(e -> trocarTela(acoes.cadastrarProduto(cpf), 400, 300));
         menu4Item2.addActionListener(e -> trocarTela(acoes.visualizarListaDeProdutos(), 400, 300));
 
 

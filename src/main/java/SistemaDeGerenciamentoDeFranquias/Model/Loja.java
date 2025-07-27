@@ -9,12 +9,13 @@ public class Loja {
     private String endereco;
     private Gerente gerenteDaUnidade;
     public Map<String, Vendedor> armazenaVendedores = new HashMap<>();
+    public Map<String, Produto> armazenaProdutos = new HashMap<>();
 
     public Loja(String codigo, String endereco, Gerente gerenteDaUnidade){
         this.endereco = endereco;
         this.gerenteDaUnidade = gerenteDaUnidade;
         this.codigo = codigo;
-        Vendedor vendedor1 = new Vendedor("Jorge", "14714714714","socorro@gmail.com", "12345677");
+        Vendedor vendedor1 = new Vendedor("Gleiph", "14714714714","socorro@gmail.com", "12345677");
         Vendedor vendedor2 = new Vendedor("Carlos", "45645645645","eitanois@gmail.com", "12345677");
         Vendedor vendedor3 = new Vendedor("Ana", "78978978978","Tome-lheForro@gmail.com", "12345677");
         armazenaVendedores.put("14714714714",vendedor1);
@@ -53,5 +54,17 @@ public class Loja {
         List<Vendedor> lista = new ArrayList<>(getArmazenaVendedores().values());
         Collections.sort(lista, (v1, v2) -> v2.getValorVenda().compareTo(v1.getValorVenda()));
         return lista.toArray(new Vendedor[0]);
+    }
+
+    public Map<String, Produto> getArmazenaProdutos() { return armazenaProdutos; }
+
+    public void addProduto(String nome, BigDecimal preco, String carac, BigDecimal quant, String codigo){
+        Produto produto = new Produto(nome, preco, carac, quant, codigo);
+        armazenaProdutos.put(codigo,produto);
+    }
+    public void excluirProduto(String codigo){armazenaProdutos.remove(codigo);}
+
+    public Produto getProduto(String codigo){
+        return armazenaProdutos.getOrDefault(codigo,null);
     }
 }

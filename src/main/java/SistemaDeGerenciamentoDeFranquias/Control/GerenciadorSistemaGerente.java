@@ -9,6 +9,8 @@ import SistemaDeGerenciamentoDeFranquias.Model.Vendedor;
 import SistemaDeGerenciamentoDeFranquias.Validadores.*;
 import SistemaDeGerenciamentoDeFranquias.Validadores.ValidadorCpfBancoDeDadosTrue;
 
+import java.math.BigDecimal;
+
 public class GerenciadorSistemaGerente extends GerenciadorSistema{
 
     static GerenciadorDeLojas listaLojas = new GerenciadorDeLojas();
@@ -158,6 +160,41 @@ public class GerenciadorSistemaGerente extends GerenciadorSistema{
         loja.excluirVendedor(cpf);
 
         return "Vendedor Excluído com Sucesso";
+    }
+
+    public String lancarProduto(String nome, String precoSTR, String carac, String quantSTR, String codigo, String cpfGerente) throws CadastroException{
+        try {
+            ValidadorCampoVazio.valida(nome);
+            ValidadorCampoVazio.valida(precoSTR);
+            ValidadorCampoVazio.valida(carac);
+            ValidadorCampoVazio.valida(quantSTR);
+            ValidadorCampoVazio.valida(codigo);
+
+            BigDecimal preco = ValidadorBigDecimal.validarBigdecimal(precoSTR, "Preço Inválido");
+            BigDecimal quant = ValidadorBigDecimal.validarBigdecimal(quantSTR, "Quantidade Inválida");
+
+            ValidadorNome.validarNome(nome);
+            ValidadorPrecoPositivo.validarValorPositivo(String.valueOf(preco));
+            carac = ValidadorCaracEndereco.validarTexto(carac, "Características");
+            ValidadorPrecoPositivo.validarValorPositivo(String.valueOf(quant));
+            ValidadorCodigo.validarCodigo(codigo);
+        } catch (EntradaException e) {
+            System.out.println("Erro: LoginException: " + e.getMessage());
+            throw new CadastroException(e.getMessage());
+        }
+
+        /*try {
+            ValidadorCpfBancoDeDadosFalse.valida(cpf);
+            ValidadorCpfBancoDeDadosFalse.valida(cpf);
+        }catch (BancoDeDadosException e){
+            System.out.println("Erro: EntradaException: " + e.getMessage());
+            throw new CadastroException(e.getMessage());
+        }
+
+        Loja loja = listaLojas.getLoja(cpfGerente);
+        loja.addVendedor(nome, cpf, email, senha);*/
+        return "Produto Cadastrado";
+
     }
 
     public void listaDeVendedores(String cpfGerente){
