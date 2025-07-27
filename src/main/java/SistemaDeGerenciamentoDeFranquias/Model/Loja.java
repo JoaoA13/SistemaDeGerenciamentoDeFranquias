@@ -33,10 +33,10 @@ public class Loja {
     protected void setCpfGerente(String cpf) {gerenteDaUnidade.setCpf(cpf);}
 
     public String getEndereco() {return endereco;}
-    protected void setEndereco(String endereco) {this.endereco = endereco;}
+    public void setEndereco(String endereco) {this.endereco = endereco;}
 
     protected Gerente getGerenteDaUnidade() {return gerenteDaUnidade;}
-    protected void setGerenteDaUnidade(Gerente gerenteDaUnidade) {this.gerenteDaUnidade = gerenteDaUnidade;}
+    public void setGerenteDaUnidade(Gerente gerenteDaUnidade) {this.gerenteDaUnidade = gerenteDaUnidade;}
 
     public Map<String, Vendedor> getArmazenaVendedores() { return armazenaVendedores; }
 

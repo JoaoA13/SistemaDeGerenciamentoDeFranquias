@@ -208,6 +208,44 @@ public class GerenciadorSistemaDono extends GerenciadorSistema {
             return "";
         }
 
+    static public String editarLoja(String endereco, String cpfNovoGerente,String codigo) throws EntradaException {
+        if (endereco != "") {
+
+            GerenciadorDeLojas.getLoja(codigo).setEndereco(endereco);
+
+            return "Endereço editado";
+        }
+        /// troca o gerente da unidade
+        if (cpfNovoGerente != "") {
+            try {
+                ValidadorCampoVazio.valida(cpfNovoGerente);
+                ValidadorCpf.validarCpf(cpfNovoGerente);
+            } catch (EntradaException e) {
+                System.out.println("Erro: EntradaException: " + e.getMessage());
+                throw new EntradaException(e.getMessage());
+            }
+
+            try {
+                ValidadorCpfBancoDeDadosTrue.valida(cpfNovoGerente);
+            }catch (BancoDeDadosException e){
+                System.out.println("Erro: EntradaException: " + e.getMessage());
+                throw new EntradaException(e.getMessage());
+            }
+
+            Loja loja = GerenciadorDeLojas.getLoja(codigo);
+            GerenciadorDeLojas.getLojas().remove(GerenciadorDeLojas.getCpfPorCodigo(codigo));
+            GerenciadorDeLojas.getLojas().put(cpfNovoGerente,loja);
+
+            GerenciadorDeLojas.getCodigoPraCpf().remove(codigo);
+            GerenciadorDeLojas.getCodigoPraCpf().put(GerenciadorDeLojas.getCodigoLoja(cpfNovoGerente),cpfNovoGerente);
+
+            GerenciadorDeLojas.trocarGerente(codigo,GerenciadorDeLojas.getGerente(cpfNovoGerente));
+
+            return "Gerente da unidade foi trocado";
+        }
+        return "";
+    }
+
     static public Vendedor[] rankVendedores(Loja loja){
         List<Vendedor> lista = new ArrayList<>(loja.getArmazenaVendedores().values());
         Collections.sort(lista, (v1, v2) -> v2.getValorVenda().compareTo(v1.getValorVenda()));

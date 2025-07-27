@@ -125,7 +125,7 @@ public class IGAcoesDono {
             for (Loja loja : GerenciadorDeLojas.getLojas().values()) {
                 if (loja == null) continue;
                 dados[i][0] = loja.getEndereco();
-                dados[i][1] = loja.getCpfGerente();
+                dados[i][1] = GerenciadorDeLojas.getCpfPorCodigo(loja.getCodigo());
                 dados[i][2] = loja.getCodigo();
                 i++;
             }
@@ -157,9 +157,9 @@ public class IGAcoesDono {
                         String codigo = (String) tabela.getValueAt(linha, 1);
                         String cpfGerente = (String) tabela.getValueAt(linha, 2);
 
-//                        editarItem.addActionListener(ae -> {
-//                            editar(cpfGerente);
-//                        });
+                        editarItem.addActionListener(ae -> {
+                            editarLoja(cpfGerente);
+                        });
 
                         excluirItem.addActionListener(ae -> {
                             int confirm = JOptionPane.showConfirmDialog(lista,
@@ -256,16 +256,16 @@ public class IGAcoesDono {
         exibe.setVisible(true);
     }
 
-    void editarLoja(String cpf) {
+    void editarLoja(String codigo) {
         JPanel edicao = new JPanel();
         edicao.setLayout(new BoxLayout(edicao, BoxLayout.Y_AXIS));
         edicao.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
 
-        String[] opcoes = {"Nome", "Email", "CPF", "Senha"};
+        String[] opcoes = {"Endereco", "Novo gerente","Editar gerente"};
         int escolha = JOptionPane.showOptionDialog(
                 null,
                 "Qual informação deseja editar?",
-                "Editar Gerente",
+                "Editar Loja",
                 JOptionPane.DEFAULT_OPTION,
                 JOptionPane.QUESTION_MESSAGE,
                 null,
@@ -274,57 +274,61 @@ public class IGAcoesDono {
         );
 
         if (escolha < 0 || escolha >= opcoes.length) return;
+        if(escolha == 2)
+            editarGerente(GerenciadorDeLojas.getLoja(codigo).getCpfGerente());
+        else {
+            String campoSelecionado = opcoes[escolha];
+            String labelTexto = "Digite o novo " + campoSelecionado + " da Loja:";
 
-        String campoSelecionado = opcoes[escolha];
-        String labelTexto = "Digite o novo " + campoSelecionado + " do vendedor:";
+            JLabel label = new JLabel(labelTexto);
+            label.setAlignmentX(Component.LEFT_ALIGNMENT);
+            edicao.add(label);
 
-        JLabel label = new JLabel(labelTexto);
-        label.setAlignmentX(Component.LEFT_ALIGNMENT);
-        edicao.add(label);
+            JTextField campoTexto = new JTextField(20);
+            campoTexto.setMaximumSize(new Dimension(Integer.MAX_VALUE, 25));
+            campoTexto.setAlignmentX(Component.LEFT_ALIGNMENT);
+            edicao.add(campoTexto);
 
-        JTextField campoTexto = new JTextField(20);
-        campoTexto.setMaximumSize(new Dimension(Integer.MAX_VALUE, 25));
-        campoTexto.setAlignmentX(Component.LEFT_ALIGNMENT);
-        edicao.add(campoTexto);
+            JButton confirmar = new JButton("Confirmar");
 
-        JButton confirmar = new JButton("Confirmar");
+            campoTexto.addActionListener(e -> confirmar.doClick());
+            confirmar.addActionListener(e -> {
+                System.out.println("Botão Confirmar clicado");
+                String valor = campoTexto.getText().trim();
 
-        campoTexto.addActionListener(e -> confirmar.doClick());
-        confirmar.addActionListener(e -> {
-            System.out.println("Botão Confirmar clicado");
-            String valor = campoTexto.getText().trim();
-
-            try {
-                String nome = "", cpfNovo = "", email = "", senha = "";
-                switch (escolha) {
-                    case 0: nome = valor; break;
-                    case 1: email = valor; break;
-                    case 2: cpfNovo = valor; break;
-                    case 3: senha = valor; break;
+                try {
+                    String Endereco = "", novoGerente = "";
+                    switch (escolha) {
+                        case 0:
+                            Endereco = valor;
+                            break;
+                        case 1:
+                            novoGerente = valor;
+                            break;
+                    }
+                    String msg = GerenciadorSistemaDono.editarLoja(Endereco, novoGerente, codigo);
+                    JOptionPane.showMessageDialog(null, msg, "Sucesso", JOptionPane.INFORMATION_MESSAGE);
+                    campoTexto.setText("");
+                } catch (EntradaException ex) {
+                    JOptionPane.showMessageDialog(null, "Erro ao editar: " + ex.getMessage(), "Erro", JOptionPane.ERROR_MESSAGE);
                 }
+            });
 
-                String msg = GerenciadorSistemaDono.editarGerente(nome, cpfNovo, email, senha, cpf);
-                JOptionPane.showMessageDialog(null, msg, "Sucesso", JOptionPane.INFORMATION_MESSAGE);
-                campoTexto.setText("");
-            } catch (EntradaException ex) {
-                JOptionPane.showMessageDialog(null, "Erro ao cadastrar: " + ex.getMessage(), "Erro", JOptionPane.ERROR_MESSAGE);
-            }
-        });
+            JButton sair = new JButton("Sair");
+            //sair.addActionListener(e -> interfaceGrafica.voltar());
 
-        JButton sair = new JButton("Sair");
-        //sair.addActionListener(e -> interfaceGrafica.voltar());
+            JPanel botoesPanel = new JPanel();
+            botoesPanel.setLayout(new BoxLayout(botoesPanel, BoxLayout.X_AXIS));
+            botoesPanel.setAlignmentX(Component.LEFT_ALIGNMENT);
+            botoesPanel.setMaximumSize(new Dimension(400, 30));
 
-        JPanel botoesPanel = new JPanel();
-        botoesPanel.setLayout(new BoxLayout(botoesPanel, BoxLayout.X_AXIS));
-        botoesPanel.setAlignmentX(Component.LEFT_ALIGNMENT);
-        botoesPanel.setMaximumSize(new Dimension(400, 30));
+            botoesPanel.add(sair);
+            botoesPanel.add(Box.createHorizontalGlue());
+            botoesPanel.add(confirmar);
+            edicao.add(botoesPanel);
 
-        botoesPanel.add(sair);
-        botoesPanel.add(Box.createHorizontalGlue());
-        botoesPanel.add(confirmar);
-        edicao.add(botoesPanel);
-
-        InterfaceGrafica.trocarTela(edicao, 400, 200);
+            InterfaceGrafica.trocarTela(edicao, 400, 200);
+        }
     }
 
     JPanel cadastraGerentes(){
@@ -619,7 +623,7 @@ public class IGAcoesDono {
                 JOptionPane.showMessageDialog(null, msg, "Sucesso", JOptionPane.INFORMATION_MESSAGE);
                 campoTexto.setText("");
             } catch (EntradaException ex) {
-                JOptionPane.showMessageDialog(null, "Erro ao cadastrar: " + ex.getMessage(), "Erro", JOptionPane.ERROR_MESSAGE);
+                JOptionPane.showMessageDialog(null, "Erro ao editar: " + ex.getMessage(), "Erro", JOptionPane.ERROR_MESSAGE);
             }
         });
 

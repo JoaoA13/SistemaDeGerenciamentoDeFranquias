@@ -48,6 +48,12 @@ public class GerenciadorDeLojas {
         else
             return getLoja(cpfGerente).getCodigo();
     }
+    static public String getCpfPorCodigo(String codigo){
+        if(codigoParaCpf.get(codigo) == null)
+            return "Essa loja está sem um gerente associado";
+        else
+            return codigoParaCpf.get(codigo);
+    }
     static public Map<String,String> getCodigoPraCpf(){return codigoParaCpf;}
 
 
@@ -60,5 +66,12 @@ public class GerenciadorDeLojas {
         cpf = cpf.replaceAll("[^\\d]", "");
         armazenaGerentes.put(cpf,gerente);
     }
-    static public void excluirGerente(String cpf){armazenaGerentes.remove(cpf);}
+    static public void excluirGerente(String cpf){
+        getCodigoPraCpf().remove(getLoja(cpf).getCodigo());
+        getLoja(cpf).setGerenteDaUnidade(null);
+        armazenaGerentes.remove(cpf);
+    }
+    static public void trocarGerente(String codigo,Gerente gerenteNovo){
+        getLoja(codigo).setGerenteDaUnidade(gerenteNovo);
+    }
 }
