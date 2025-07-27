@@ -6,9 +6,11 @@ import SistemaDeGerenciamentoDeFranquias.Exceptions.CadastroException;
 import SistemaDeGerenciamentoDeFranquias.Control.GerenciadorSistemaGerente;
 import SistemaDeGerenciamentoDeFranquias.Exceptions.EntradaException;
 import SistemaDeGerenciamentoDeFranquias.Model.Loja;
+import SistemaDeGerenciamentoDeFranquias.Model.Produto;
 import SistemaDeGerenciamentoDeFranquias.Model.Vendedor;
 
 import javax.swing.*;
+import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -16,6 +18,9 @@ import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.math.BigDecimal;
+import java.text.DecimalFormat;
+import java.text.DecimalFormatSymbols;
+import java.util.Locale;
 
 public class IGAcoesGerente {
     private InterfaceGrafica interfaceGrafica;
@@ -160,7 +165,7 @@ public class IGAcoesGerente {
         return exclusao;
     }
 
-    void editar(String cpfGerente, String cfpSelecionado){
+    void editar(String cpfGerente, String cpfSelecionado){
         JPanel edicao = new JPanel();
         edicao.setLayout(new BoxLayout(edicao, BoxLayout.Y_AXIS));
         edicao.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
@@ -181,7 +186,7 @@ public class IGAcoesGerente {
 
         switch (escolha) {
             case 0:
-                JLabel labelNome = new JLabel("Digite o novo Nome do vendedor:");
+                JLabel labelNome = new JLabel("Digite o novo nome para o Vendedor:");
                 labelNome.setAlignmentX(Component.LEFT_ALIGNMENT);
                 edicao.add(labelNome);
 
@@ -195,7 +200,7 @@ public class IGAcoesGerente {
                     System.out.println("Botão Confirmar clicado");
                     String nome = escreveNome.getText().trim();
                     try {
-                        String msg = gerenciaGerente.editarVendedor(nome, "", "", "", cpfGerente, cfpSelecionado);
+                        String msg = gerenciaGerente.editarVendedor(nome, "", "", "", cpfGerente, cpfSelecionado);
                         JOptionPane.showMessageDialog(null, msg, "Sucesso", JOptionPane.INFORMATION_MESSAGE);
                         escreveNome.setText("");
                     } catch (EntradaException ex) {
@@ -218,7 +223,7 @@ public class IGAcoesGerente {
                     System.out.println("Botão Confirmar clicado");
                     String email = escreveEmail.getText().trim();
                     try {
-                        String msg = gerenciaGerente.editarVendedor("", "", email, "", cpfGerente, cfpSelecionado);
+                        String msg = gerenciaGerente.editarVendedor("", "", email, "", cpfGerente, cpfSelecionado);
                         JOptionPane.showMessageDialog(null, msg, "Sucesso", JOptionPane.INFORMATION_MESSAGE);
                         escreveEmail.setText("");
                     } catch (EntradaException ex) {
@@ -241,7 +246,7 @@ public class IGAcoesGerente {
                     System.out.println("Botão Confirmar clicado");
                     String cpf = escreveCpf.getText().trim();
                     try {
-                        String msg = gerenciaGerente.editarVendedor("", cpf, "", "", cpfGerente, cfpSelecionado);
+                        String msg = gerenciaGerente.editarVendedor("", cpf, "", "", cpfGerente, cpfSelecionado);
                         JOptionPane.showMessageDialog(null, msg, "Sucesso", JOptionPane.INFORMATION_MESSAGE);
                         escreveCpf.setText("");
                     } catch (EntradaException ex) {
@@ -264,7 +269,7 @@ public class IGAcoesGerente {
                     System.out.println("Botão Confirmar clicado");
                     String senha = escreveSenha.getText().trim();
                     try {
-                        String msg = gerenciaGerente.editarVendedor("", "", "", senha, cpfGerente, cfpSelecionado);
+                        String msg = gerenciaGerente.editarVendedor("", "", "", senha, cpfGerente, cpfSelecionado);
                         JOptionPane.showMessageDialog(null, msg, "Sucesso", JOptionPane.INFORMATION_MESSAGE);
                         escreveSenha.setText("");
                     } catch (EntradaException ex) {
@@ -493,10 +498,10 @@ public class IGAcoesGerente {
         return cadastro;
     }
 
-    JPanel visualizarListaDeProdutos(){
-        JPanel listaDeProd = new JPanel();
-        listaDeProd.setLayout(new BoxLayout(listaDeProd, BoxLayout.Y_AXIS));
-        listaDeProd.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
+    JPanel visualizarListaDeProdutos(String cpfGerente){
+        JPanel lista = new JPanel();
+        lista.setLayout(new BoxLayout(lista, BoxLayout.Y_AXIS));
+        lista.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
 
         JButton voltar = new JButton("Voltar");
 
@@ -504,11 +509,233 @@ public class IGAcoesGerente {
         botoesPanel.setLayout(new BoxLayout(botoesPanel, BoxLayout.X_AXIS));
         botoesPanel.setAlignmentX(Component.LEFT_ALIGNMENT);
 
+        String[] colunas = {"Nome", "preço", "características", "quantidade", "código"};
+        Loja loja = gerenciaDeLojas.getLoja(cpfGerente);
+
+        String[][] dados = new String[loja.getArmazenaProdutos().size()][5];
+
+        DecimalFormat formatadorPreco = new DecimalFormat("R$ #,##0.00", new DecimalFormatSymbols(new Locale("pt", "BR")));
+        DecimalFormat formatadorQuant = new DecimalFormat("00");
+
+        int i = 0;
+        for (Produto p : loja.getArmazenaProdutos().values()) {
+            dados[i][0] = p.getNomeProd();
+            dados[i][1] = formatadorPreco.format(p.getPreco()); // Ex: R$ 12,34
+            dados[i][2] = p.getCarac();
+            dados[i][3] = formatadorQuant.format(p.getQuant()); // Ex: 3.000
+            dados[i][4] = p.getCodigoProd();
+            i++;
+        }
+
+        DefaultTableModel modelo = new DefaultTableModel(dados, colunas) {
+            public boolean isCellEditable(int row, int column) {
+                return false;
+            }
+        };
+
+        JTable tabela = new JTable(modelo);
+
+        DefaultTableCellRenderer centralizado = new DefaultTableCellRenderer();
+        centralizado.setHorizontalAlignment(SwingConstants.CENTER);
+        for (int col = 0; col < tabela.getColumnCount(); col++) {
+            tabela.getColumnModel().getColumn(col).setCellRenderer(centralizado);
+        }
+
+        JScrollPane scroll = new JScrollPane(tabela);
+        lista.add(scroll, BorderLayout.CENTER);
+
+        JPopupMenu menuPopup = new JPopupMenu();
+        JMenuItem editarItem = new JMenuItem("Editar");
+        JMenuItem excluirItem = new JMenuItem("Excluir");
+        menuPopup.add(editarItem);
+        menuPopup.add(excluirItem);
+
+        tabela.addMouseListener(new MouseAdapter() {
+            public void mousePressed(MouseEvent e) {
+                if (e.isPopupTrigger() || SwingUtilities.isRightMouseButton(e)) {
+                    int linha = tabela.rowAtPoint(e.getPoint());
+                    if (linha >= 0 && linha < tabela.getRowCount()) {
+                        tabela.setRowSelectionInterval(linha, linha);
+                        String codigoSelecionado = (String) tabela.getValueAt(linha, 4);
+
+                        editarItem.addActionListener(ae -> {
+                            editarProd(cpfGerente, codigoSelecionado);
+                        });
+
+                        excluirItem.addActionListener(ae -> {
+                            int confirm = JOptionPane.showConfirmDialog(lista,
+                                    "Tem certeza que deseja excluir o produto com o " + codigoSelecionado + "?",
+                                    "Confirmar exclusão",
+                                    JOptionPane.YES_NO_OPTION);
+                            if (confirm == JOptionPane.YES_OPTION) {
+                                    gerenciaGerente.excluirProdutos(codigoSelecionado, cpfGerente);
+                                ((DefaultTableModel) tabela.getModel()).removeRow(linha);
+                            }
+                        });
+
+                        menuPopup.show(tabela, e.getX(), e.getY());
+                    }
+                }
+            }
+        });
+
         botoesPanel.add(voltar);
         botoesPanel.add(Box.createHorizontalGlue());
-        listaDeProd.add(botoesPanel);
+        lista.add(botoesPanel);
 
-        return listaDeProd;
+        return lista;
+    }
+
+    void editarProd(String cpfGerente, String codigoSelecionado){
+        JPanel edicao = new JPanel();
+        edicao.setLayout(new BoxLayout(edicao, BoxLayout.Y_AXIS));
+        edicao.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
+
+        String[] opcoes = {"Nome", "Preço", "Características", "Quantidade", "Código"};
+        int escolha = JOptionPane.showOptionDialog(
+                null,
+                "Qual informação deseja editar?",
+                "Editar Vendedor",
+                JOptionPane.DEFAULT_OPTION,
+                JOptionPane.QUESTION_MESSAGE,
+                null,
+                opcoes,
+                opcoes[0]
+        );
+
+        JButton confirmar = new JButton("Confirmar");
+
+        switch (escolha) {
+            case 0:
+                JLabel labelNome = new JLabel("Digite o novo Nome do produto:");
+                labelNome.setAlignmentX(Component.LEFT_ALIGNMENT);
+                edicao.add(labelNome);
+
+                JTextField escreveNome = new JTextField(20);
+                escreveNome.setMaximumSize(new Dimension(Integer.MAX_VALUE, 25));
+                escreveNome.setAlignmentX(Component.LEFT_ALIGNMENT);
+                edicao.add(escreveNome);
+
+                escreveNome.addActionListener(e -> confirmar.doClick());
+                confirmar.addActionListener(e -> {
+                    System.out.println("Botão Confirmar clicado");
+                    String nome = escreveNome.getText().trim();
+                    try {
+                        String msg = gerenciaGerente.editarProduto(nome, "", "", "","", cpfGerente, codigoSelecionado);
+                        JOptionPane.showMessageDialog(null, msg, "Sucesso", JOptionPane.INFORMATION_MESSAGE);
+                        escreveNome.setText("");
+                    } catch (EntradaException ex) {
+                        JOptionPane.showMessageDialog(null, "Erro ao editar: " + ex.getMessage(), "Erro", JOptionPane.ERROR_MESSAGE);
+                    }
+                });
+                break;
+            case 1:
+                JLabel labelPreco = new JLabel("Digite o novo Preço do produto:");
+                labelPreco.setAlignmentX(Component.LEFT_ALIGNMENT);
+                edicao.add(labelPreco);
+
+                JTextField escrevePreco = new JTextField(20);
+                escrevePreco.setMaximumSize(new Dimension(Integer.MAX_VALUE, 25));
+                escrevePreco.setAlignmentX(Component.LEFT_ALIGNMENT);
+                edicao.add(escrevePreco);
+
+                escrevePreco.addActionListener(e -> confirmar.doClick());
+                confirmar.addActionListener(e -> {
+                    System.out.println("Botão Confirmar clicado");
+                    String preco = escrevePreco.getText().trim();
+                    try {
+                        String msg = gerenciaGerente.editarProduto("", preco, "", "","", cpfGerente, codigoSelecionado);
+                        JOptionPane.showMessageDialog(null, msg, "Sucesso", JOptionPane.INFORMATION_MESSAGE);
+                        escrevePreco.setText("");
+                    } catch (EntradaException ex) {
+                        JOptionPane.showMessageDialog(null, "Erro ao editar: " + ex.getMessage(), "Erro", JOptionPane.ERROR_MESSAGE);
+                    }
+                });
+                break;
+            case 2:
+                JLabel labelCarac = new JLabel("Digite as novas características:");
+                labelCarac.setAlignmentX(Component.LEFT_ALIGNMENT);
+                edicao.add(labelCarac);
+
+                JTextField escreveCarac = new JTextField(20);
+                escreveCarac.setMaximumSize(new Dimension(Integer.MAX_VALUE, 25));
+                escreveCarac.setAlignmentX(Component.LEFT_ALIGNMENT);
+                edicao.add(escreveCarac);
+
+                escreveCarac.addActionListener(e -> confirmar.doClick());
+                confirmar.addActionListener(e -> {
+                    System.out.println("Botão Confirmar clicado");
+                    String carac = escreveCarac.getText().trim();
+                    try {
+                        String msg = gerenciaGerente.editarProduto("", "", carac, "","", cpfGerente, codigoSelecionado);
+                        JOptionPane.showMessageDialog(null, msg, "Sucesso", JOptionPane.INFORMATION_MESSAGE);
+                        escreveCarac.setText("");
+                    } catch (EntradaException ex) {
+                        JOptionPane.showMessageDialog(null, "Erro ao editar: " + ex.getMessage(), "Erro", JOptionPane.ERROR_MESSAGE);
+                    }
+                });
+                break;
+            case 3:
+                JLabel labelQuant = new JLabel("Digite a nova quantidade do produto:");
+                labelQuant.setAlignmentX(Component.LEFT_ALIGNMENT);
+                edicao.add(labelQuant);
+
+                JTextField escreveQuant = new JTextField(20);
+                escreveQuant.setMaximumSize(new Dimension(Integer.MAX_VALUE, 25));
+                escreveQuant.setAlignmentX(Component.LEFT_ALIGNMENT);
+                edicao.add(escreveQuant);
+
+                escreveQuant.addActionListener(e -> confirmar.doClick());
+                confirmar.addActionListener(e -> {
+                    System.out.println("Botão Confirmar clicado");
+                    String quant = escreveQuant.getText().trim();
+                    try {
+                        String msg = gerenciaGerente.editarProduto("", "", "", quant,"", cpfGerente, codigoSelecionado);
+                        JOptionPane.showMessageDialog(null, msg, "Sucesso", JOptionPane.INFORMATION_MESSAGE);
+                        escreveQuant.setText("");
+                    } catch (EntradaException ex) {
+                        JOptionPane.showMessageDialog(null, "Erro ao editar: " + ex.getMessage(), "Erro", JOptionPane.ERROR_MESSAGE);
+                    }
+                });
+                break;
+            case 4:
+                JLabel labelCod = new JLabel("Digite o novo código:");
+                labelCod.setAlignmentX(Component.LEFT_ALIGNMENT);
+                edicao.add(labelCod);
+
+                JTextField escreveCod = new JTextField(20);
+                escreveCod.setMaximumSize(new Dimension(Integer.MAX_VALUE, 25));
+                escreveCod.setAlignmentX(Component.LEFT_ALIGNMENT);
+                edicao.add(escreveCod);
+
+                escreveCod.addActionListener(e -> confirmar.doClick());
+                confirmar.addActionListener(e -> {
+                    System.out.println("Botão Confirmar clicado");
+                    String codigo = escreveCod.getText().trim();
+                    try {
+                        String msg = gerenciaGerente.editarProduto("", "", "", "", codigo, cpfGerente, codigoSelecionado);
+                        JOptionPane.showMessageDialog(null, msg, "Sucesso", JOptionPane.INFORMATION_MESSAGE);
+                        escreveCod.setText("");
+                    } catch (EntradaException ex) {
+                        JOptionPane.showMessageDialog(null, "Erro ao editar: " + ex.getMessage(), "Erro", JOptionPane.ERROR_MESSAGE);
+                    }
+                });
+                break;
+            default:}
+
+        JButton Sair = new JButton("Sair");
+
+        JPanel botoesPanel = new JPanel();
+        botoesPanel.setLayout(new BoxLayout(botoesPanel, BoxLayout.X_AXIS));
+        botoesPanel.setAlignmentX(Component.LEFT_ALIGNMENT);
+        botoesPanel.setMaximumSize(new Dimension(400, 30));
+
+        botoesPanel.add(Sair);
+        botoesPanel.add(Box.createHorizontalGlue());
+        botoesPanel.add(confirmar);
+        edicao.add(botoesPanel);
+
+        InterfaceGrafica.trocarTela(edicao, 400, 200);
     }
 
     JPanel historicoDeVendas(){

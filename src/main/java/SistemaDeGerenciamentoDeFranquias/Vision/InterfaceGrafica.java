@@ -233,7 +233,7 @@ public class InterfaceGrafica {
         menu4.add(menu4Item2);
 
         menu4Item1.addActionListener(e -> trocarTela(acoes.cadastrarProduto(cpf), 400, 300));
-        menu4Item2.addActionListener(e -> trocarTela(acoes.visualizarListaDeProdutos(), 400, 300));
+        menu4Item2.addActionListener(e -> trocarTela(acoes.visualizarListaDeProdutos(cpf), 600, 400));
 
 
         JMenu menu5 = new JMenu ("Relatórios");

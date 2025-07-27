@@ -30,5 +30,5 @@ public class Produto {
     public void setQuant(BigDecimal quant){ this.quant = quant; }
 
     public String getCodigoProd(){ return codigo; }
-    public void setCodigoProd(String prod){ this.preco = preco; }
+    public void setCodigoProd(String codigo){ this.codigo = codigo; }
 }

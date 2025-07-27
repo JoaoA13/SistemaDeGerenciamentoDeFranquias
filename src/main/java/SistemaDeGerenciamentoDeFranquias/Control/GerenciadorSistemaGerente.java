@@ -5,6 +5,7 @@ import SistemaDeGerenciamentoDeFranquias.Exceptions.CadastroException;
 import SistemaDeGerenciamentoDeFranquias.Exceptions.EntradaException;
 import SistemaDeGerenciamentoDeFranquias.Exceptions.LoginException;
 import SistemaDeGerenciamentoDeFranquias.Model.Loja;
+import SistemaDeGerenciamentoDeFranquias.Model.Produto;
 import SistemaDeGerenciamentoDeFranquias.Model.Vendedor;
 import SistemaDeGerenciamentoDeFranquias.Validadores.*;
 import SistemaDeGerenciamentoDeFranquias.Validadores.ValidadorCpfBancoDeDadosTrue;
@@ -150,7 +151,7 @@ public class GerenciadorSistemaGerente extends GerenciadorSistema{
         }
 
         try {
-            ValidadorCpfBancoDeDadosTrue.valida(cpf);
+            ValidadorCpfVendedorBancoDeDadosTrue.valida(cpf);
         }catch (BancoDeDadosException e){
             System.out.println("Erro: EntradaException: " + e.getMessage());
             throw new EntradaException(e.getMessage());
@@ -163,6 +164,9 @@ public class GerenciadorSistemaGerente extends GerenciadorSistema{
     }
 
     public String lancarProduto(String nome, String precoSTR, String carac, String quantSTR, String codigo, String cpfGerente) throws CadastroException{
+        BigDecimal preco = new BigDecimal(0);
+        BigDecimal quant = new BigDecimal(0);
+
         try {
             ValidadorCampoVazio.valida(nome);
             ValidadorCampoVazio.valida(precoSTR);
@@ -170,8 +174,8 @@ public class GerenciadorSistemaGerente extends GerenciadorSistema{
             ValidadorCampoVazio.valida(quantSTR);
             ValidadorCampoVazio.valida(codigo);
 
-            BigDecimal preco = ValidadorBigDecimal.validarBigdecimal(precoSTR, "Preço Inválido");
-            BigDecimal quant = ValidadorBigDecimal.validarBigdecimal(quantSTR, "Quantidade Inválida");
+            preco = ValidadorBigDecimal.validarBigdecimal(precoSTR, "Preço Inválido");
+            quant = ValidadorBigDecimal.validarBigdecimal(quantSTR, "Quantidade Inválida");
 
             ValidadorNome.validarNome(nome);
             ValidadorPrecoPositivo.validarValorPositivo(String.valueOf(preco));
@@ -183,18 +187,116 @@ public class GerenciadorSistemaGerente extends GerenciadorSistema{
             throw new CadastroException(e.getMessage());
         }
 
-        /*try {
-            ValidadorCpfBancoDeDadosFalse.valida(cpf);
-            ValidadorCpfBancoDeDadosFalse.valida(cpf);
+        try {
+            ValidadorCodigoProdutoBancoDeDadosFalse.valida(codigo, cpfGerente);
         }catch (BancoDeDadosException e){
             System.out.println("Erro: EntradaException: " + e.getMessage());
             throw new CadastroException(e.getMessage());
         }
 
         Loja loja = listaLojas.getLoja(cpfGerente);
-        loja.addVendedor(nome, cpf, email, senha);*/
+        loja.addProduto(nome, preco, carac, quant, codigo);
         return "Produto Cadastrado";
 
+    }
+
+    public String editarProduto (String nome, String preco, String carac, String quant, String codigo, String cpfGerente, String codigoAntigo) throws EntradaException{
+        if(nome != ""){
+            try {
+                ValidadorCampoVazio.valida(nome);
+                ValidadorNome.validarNome(nome);
+            } catch (EntradaException e) {
+                System.out.println("Erro: EntradaException: " + e.getMessage());
+                throw new EntradaException(e.getMessage());
+            }
+
+            Loja loja = GerenciadorDeLojas.getLoja(cpfGerente);
+            Produto produto = loja.getProduto(codigoAntigo);
+            produto.setNomeProd(nome);
+
+            return "Nome editado";
+        }
+        if(preco != ""){
+            BigDecimal precoProd = new BigDecimal(0);
+
+            try {
+                ValidadorCampoVazio.valida(preco);
+                precoProd = ValidadorBigDecimal.validarBigdecimal(preco, "Preço Inválido");
+                ValidadorPrecoPositivo.validarValorPositivo(String.valueOf(precoProd));
+            } catch (EntradaException e) {
+                System.out.println("Erro: EntradaException: " + e.getMessage());
+                throw new EntradaException(e.getMessage());
+            }
+
+            Loja loja = GerenciadorDeLojas.getLoja(cpfGerente);
+            Produto produto = loja.getProduto(codigoAntigo);
+            produto.setPreco(precoProd);
+
+            return "Preço editado";
+        }
+        if(carac != ""){
+            try {
+                ValidadorCampoVazio.valida(carac);
+                ValidadorCaracEndereco.validarTexto(carac, "Características");
+            } catch (EntradaException e) {
+                System.out.println("Erro: EntradaException: " + e.getMessage());
+                throw new EntradaException(e.getMessage());
+            }
+
+            Loja loja = GerenciadorDeLojas.getLoja(cpfGerente);
+            Produto produto = loja.getProduto(codigoAntigo);
+            produto.setCarac(carac);
+
+            return "Características editadas";
+        }
+        if(quant != ""){
+            BigDecimal quantProd = new BigDecimal(0);
+
+            try {
+                ValidadorCampoVazio.valida(quant);
+                quantProd = ValidadorBigDecimal.validarBigdecimal(quant, "Quantidade Inválida");
+                ValidadorPrecoPositivo.validarValorPositivo(String.valueOf(quantProd));
+            } catch (EntradaException e) {
+                System.out.println("Erro: EntradaException: " + e.getMessage());
+                throw new EntradaException(e.getMessage());
+            }
+
+            Loja loja = GerenciadorDeLojas.getLoja(cpfGerente);
+            Produto produto = loja.getProduto(codigoAntigo);
+            produto.setQuant(quantProd);
+
+            return "Quantidade editada";
+        }
+        if(codigo != ""){
+            try {
+                ValidadorCampoVazio.valida(codigo);
+                ValidadorCodigo.validarCodigo(codigo);
+            } catch (EntradaException e) {
+                System.out.println("Erro: EntradaException: " + e.getMessage());
+                throw new EntradaException(e.getMessage());
+            }
+
+            try {
+                ValidadorCodigoProdutoBancoDeDadosFalse.valida(codigo, cpfGerente);
+            }catch (BancoDeDadosException e){
+                System.out.println("Erro: EntradaException: " + e.getMessage());
+                throw new EntradaException(e.getMessage());
+            }
+
+            Loja loja = GerenciadorDeLojas.getLoja(cpfGerente);
+            Produto produto = loja.getProduto(codigoAntigo);
+            loja.excluirProduto(codigoAntigo);
+            produto.setCodigoProd(codigo);
+            loja.addProdutoDireto(produto);
+
+            return "Código editado";
+        }
+        return "";
+    }
+
+    public void excluirProdutos(String codigo, String cpfGerente){
+        Loja loja = listaLojas.getLoja(cpfGerente);
+        loja.excluirProduto(codigo);
     }
 
     public void listaDeVendedores(String cpfGerente){

@@ -62,6 +62,9 @@ public class Loja {
         Produto produto = new Produto(nome, preco, carac, quant, codigo);
         armazenaProdutos.put(codigo,produto);
     }
+
+    public void addProdutoDireto(Produto produto){ armazenaProdutos.put(produto.getCodigoProd(), produto); }
+
     public void excluirProduto(String codigo){armazenaProdutos.remove(codigo);}
 
     public Produto getProduto(String codigo){
