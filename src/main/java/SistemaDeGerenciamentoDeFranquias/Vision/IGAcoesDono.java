@@ -4,6 +4,7 @@ import SistemaDeGerenciamentoDeFranquias.Control.GerenciadorDeLojas;
 import SistemaDeGerenciamentoDeFranquias.Control.GerenciadorSistemaDono;
 import SistemaDeGerenciamentoDeFranquias.Exceptions.CadastroException;
 import SistemaDeGerenciamentoDeFranquias.Exceptions.EntradaException;
+import SistemaDeGerenciamentoDeFranquias.Model.Gerente;
 import SistemaDeGerenciamentoDeFranquias.Model.Loja;
 
 import javax.swing.*;
@@ -37,23 +38,11 @@ public class IGAcoesDono {
         linhaEndereco.add(escreveEndereco);
         subPainel.add(linhaEndereco);
 
-        JPanel linhaNome = new JPanel(new FlowLayout(FlowLayout.CENTER));
-        linhaNome.add(new JLabel("Nome do gerente responsável:"));
-        JTextField escreveNome = new JTextField(15);
-        linhaNome.add(escreveNome);
-        subPainel.add(linhaNome);
-
         JPanel linhaCpf = new JPanel(new FlowLayout(FlowLayout.CENTER));
         linhaCpf.add(new JLabel("Cpf do gerente responsável:"));
         JTextField escreveCpf = new JTextField(15);
         linhaCpf.add(escreveCpf);
         subPainel.add(linhaCpf);
-
-        JPanel linhaEmail = new JPanel(new FlowLayout(FlowLayout.CENTER));
-        linhaEmail.add(new JLabel("E-mail do gerente responsável:"));
-        JTextField escreveEmail = new JTextField(15);
-        linhaEmail.add(escreveEmail);
-        subPainel.add(linhaEmail);
 
         JButton Cadastrar = new JButton("Cadastrar");
         subPainel.add(Cadastrar);
@@ -67,36 +56,18 @@ public class IGAcoesDono {
             public void keyPressed(KeyEvent e) {
                 if (e.getKeyCode() == KeyEvent.VK_ENTER) {
                     System.out.println("Tecla Enter pressionada");
-                    escreveNome.requestFocusInWindow();
-                }
-            }
-        });
-        escreveNome.addKeyListener(new KeyAdapter() {
-            public void keyPressed(KeyEvent e) {
-                if (e.getKeyCode() == KeyEvent.VK_ENTER) {
-                    System.out.println("Tecla Enter pressionada");
                     escreveCpf.requestFocusInWindow();
                 }
             }
         });
+
         escreveCpf.addKeyListener(new KeyAdapter() {
             public void keyPressed(KeyEvent e) {
                 if (e.getKeyCode() == KeyEvent.VK_ENTER) {
-                    System.out.println("Tecla Enter pressionada");
-                    escreveEmail.requestFocusInWindow();
-                }
-            }
-        });
-
-        escreveEmail.addKeyListener(new KeyAdapter() {
-            public void keyPressed(KeyEvent e) {
-                if (e.getKeyCode() == KeyEvent.VK_ENTER) {
-                    if(botaoCadastrar(escreveEndereco.getText(), escreveNome.getText(), escreveCpf.getText(), escreveEmail.getText())) {
+                    if(botaoCadastrarLoja(escreveEndereco.getText(), escreveCpf.getText())){
 
                         escreveEndereco.setText("");
-                        escreveNome.setText("");
                         escreveCpf.setText("");
-                        escreveEmail.setText("");
                     }
                 }
             }
@@ -105,9 +76,9 @@ public class IGAcoesDono {
         Cadastrar.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 System.out.println("Botão 'Cadastrar' clicado");
-                if(botaoCadastrar(escreveEndereco.getText(), escreveNome.getText(), escreveCpf.getText(), escreveEmail.getText())) {
+                if(botaoCadastrarLoja(escreveEndereco.getText(),escreveCpf.getText())) {
 
-                    escreveEndereco.setText("");escreveNome.setText("");escreveCpf.setText("");escreveEmail.setText("");
+                    escreveEndereco.setText("");escreveCpf.setText("");
                 }
             }
         });
@@ -121,12 +92,12 @@ public class IGAcoesDono {
         });
         return painelCadastroLoja;
     }
-    boolean botaoCadastrar(String endereco, String nome, String cpf,String email){
+    boolean botaoCadastrarLoja(String endereco,String cpf){
             System.out.println("Tecla Enter pressionada");
 
         try{
-                interfaceGrafica.gerenciaDono.cadastroLoja(endereco,nome,cpf,email);
-                interfaceGrafica.exibeInformacao("Cadastro de Loja e gerente feitos corretamente","Cadastro de Loja e gerente feito com sucesso");
+                interfaceGrafica.gerenciaDono.cadastroLoja(endereco,cpf);
+                interfaceGrafica.exibeInformacao("Cadastro de Loja e atribuição de gerente feitos corretamente","Cadastro de Loja e gerente feito com sucesso");
                 return true;
             }catch (CadastroException mes) {
                 interfaceGrafica.exibeException(mes.getMessage(),"Cadastro falhou");
@@ -222,40 +193,284 @@ public class IGAcoesDono {
     }
 
     protected void exibeLoja(String codigo, Loja loja) {
+        if (loja == null) {
+            JOptionPane.showMessageDialog(null, "Gerente não encontrado!", "Erro", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
         JFrame exibe = new JFrame("Informações da Loja: " + codigo);
-        exibe.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE); // Fecha só essa janela
+        exibe.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+        exibe.setSize(450, 250);
+        exibe.setLocationRelativeTo(null);
 
-        JPanel exibeInformacaoLoja = new JPanel(new BorderLayout());
+        JPanel exibeInformacaoLoja = new JPanel(new BorderLayout(10, 10));
+        exibeInformacaoLoja.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
 
         JLabel titulo = new JLabel("Informações de loja", SwingConstants.CENTER);
         exibeInformacaoLoja.add(titulo, BorderLayout.NORTH);
+
+        JPanel tabela = new JPanel(new GridLayout(3, 2, 10, 10));
+
+        tabela.add(criaCelula("Código da loja: "));
+        tabela.add(criaCelula(loja.getCodigo()));
+
+        tabela.add(criaCelula("Endereço: "));
+        tabela.add(criaCelula(loja.getEndereco()));
+
+        tabela.add(criaCelula("CPF do gerente: "));
+        tabela.add(criaCelula(loja.getCpfGerente()));
+
+        exibeInformacaoLoja.add(tabela, BorderLayout.CENTER);
+
+        JPanel painelBotao = new JPanel();
+        JButton sair = new JButton("Fechar");
+        sair.addActionListener(e -> exibe.dispose());
+        painelBotao.add(sair);
+
+        exibeInformacaoLoja.add(painelBotao, BorderLayout.SOUTH);
+
+        exibe.setContentPane(exibeInformacaoLoja);
+        exibe.setVisible(true);
+    }
+
+    JPanel cadastraGerentes(){
+        JPanel cadastraGerentes = new JPanel();
+
+        JLabel titulo = new JLabel("Cadastro de gerente", SwingConstants.CENTER);
+        cadastraGerentes.add(titulo, BorderLayout.NORTH);
 
         JPanel subPainel = new JPanel();
         subPainel.setLayout(new BoxLayout(subPainel, BoxLayout.Y_AXIS));
         subPainel.setAlignmentX(Component.CENTER_ALIGNMENT);
 
-        JPanel linhaCodigo = new JPanel(new FlowLayout(FlowLayout.CENTER));
-        linhaCodigo.add(new JLabel("Código da loja: " + loja.getCodigo()));
-        subPainel.add(linhaCodigo);
+        JPanel linhaNome = new JPanel(new FlowLayout(FlowLayout.CENTER));
+        linhaNome.add(new JLabel("Nome do gerente responsável:"));
+        JTextField escreveNome = new JTextField(15);
+        linhaNome.add(escreveNome);
+        subPainel.add(linhaNome);
 
-        JPanel linhaEndereco = new JPanel(new FlowLayout(FlowLayout.CENTER));
-        linhaEndereco.add(new JLabel("Endereço: " + loja.getEndereco()));
-        subPainel.add(linhaEndereco);
+        JPanel linhaCpf = new JPanel(new FlowLayout(FlowLayout.CENTER));
+        linhaCpf.add(new JLabel("Cpf do gerente responsável:"));
+        JTextField escreveCpf = new JTextField(15);
+        linhaCpf.add(escreveCpf);
+        subPainel.add(linhaCpf);
 
-        JPanel linhaGerente = new JPanel(new FlowLayout(FlowLayout.CENTER));
-        linhaGerente.add(new JLabel("CPF do gerente: " + loja.getCpfGerente()));
-        subPainel.add(linhaGerente);
 
-        JButton Sair = new JButton("Fechar");
-        Sair.addActionListener(e -> exibe.dispose());
-        subPainel.add(Sair);
+        JPanel linhaEmail = new JPanel(new FlowLayout(FlowLayout.CENTER));
+        linhaEmail.add(new JLabel("E-mail do gerente responsável:"));
+        JTextField escreveEmail = new JTextField(15);
+        linhaEmail.add(escreveEmail);
+        subPainel.add(linhaEmail);
 
-        exibeInformacaoLoja.add(subPainel, BorderLayout.CENTER);
-        exibe.setContentPane(exibeInformacaoLoja);
+        JButton Cadastrar = new JButton("Cadastrar");
+        subPainel.add(Cadastrar);
 
-        exibe.pack(); // Calcula o tamanho ideal baseado nos componentes
-        exibe.setLocationRelativeTo(null); // Centraliza na tela
-        exibe.setVisible(true); // Torna visível
+        cadastraGerentes.add(subPainel, BorderLayout.CENTER);
+
+            escreveNome.addKeyListener(new KeyAdapter() {
+                public void keyPressed(KeyEvent e) {
+                    if (e.getKeyCode() == KeyEvent.VK_ENTER) {
+                        System.out.println("Tecla Enter pressionada");
+                        escreveCpf.requestFocusInWindow();
+                    }
+                }
+            });
+            escreveCpf.addKeyListener(new KeyAdapter() {
+                public void keyPressed(KeyEvent e) {
+                    if (e.getKeyCode() == KeyEvent.VK_ENTER) {
+                        System.out.println("Tecla Enter pressionada");
+                        escreveEmail.requestFocusInWindow();
+                    }
+                }
+            });
+
+            escreveEmail.addKeyListener(new KeyAdapter() {
+                public void keyPressed(KeyEvent e) {
+                    if (e.getKeyCode() == KeyEvent.VK_ENTER) {
+                        if(botaoCadastrarGerente( escreveNome.getText(), escreveCpf.getText(), escreveEmail.getText())) {
+                            escreveNome.setText("");escreveCpf.setText("");escreveEmail.setText("");
+                        }
+                    }
+                }
+            });
+
+            Cadastrar.addActionListener(new ActionListener() {
+                public void actionPerformed(ActionEvent e) {
+                    System.out.println("Botão 'Cadastrar' clicado");
+                    if(botaoCadastrarGerente(escreveNome.getText(), escreveCpf.getText(), escreveEmail.getText())) {
+                        escreveNome.setText("");escreveCpf.setText("");escreveEmail.setText("");
+                    }
+                }
+            });
+        return cadastraGerentes;
+    }
+
+    boolean botaoCadastrarGerente(String nome, String cpf,String email){
+        System.out.println("Tecla Enter pressionada");
+
+        try{
+            interfaceGrafica.gerenciaDono.cadastroGerente(nome,cpf,email);
+            interfaceGrafica.exibeInformacao("Cadastro de gerente feitos corretamente","Cadastro de gerente feito com sucesso");
+            return true;
+        }catch (CadastroException mes) {
+            interfaceGrafica.exibeException(mes.getMessage(),"Cadastro falhou");
+        }
+        return false;
+    }
+
+    JPanel listaDeGerente(){
+        JPanel lista = new JPanel();
+        lista.setLayout(new BoxLayout(lista, BoxLayout.Y_AXIS));
+        lista.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
+
+        JPanel botoesPanel = new JPanel();
+        botoesPanel.setLayout(new BoxLayout(botoesPanel, BoxLayout.X_AXIS));
+        botoesPanel.setAlignmentX(Component.LEFT_ALIGNMENT);
+
+        String[] colunas = {"Nome", "CPF", "Código da loja"};
+
+        String[][] dados = new String[GerenciadorDeLojas.getGerentes().size()][3];
+        int i = 0;
+        for (Gerente gerente: GerenciadorDeLojas.getGerentes().values()) {
+            if (gerente == null) continue;
+            dados[i][0] = gerente.getNome();
+            dados[i][1] = gerente.getCpf();
+            dados[i][2] = GerenciadorDeLojas.getCodigoLoja(gerente.getCpf());
+            i++;
+        }
+
+        DefaultTableModel modelo = new DefaultTableModel(dados, colunas) {
+            public boolean isCellEditable(int row, int column) {
+                return false;
+            }
+        };
+
+        JTable tabela = new JTable(modelo); // <-- corrigido aqui
+        JScrollPane scroll = new JScrollPane(tabela);
+        lista.add(scroll, BorderLayout.CENTER);
+
+        JPopupMenu menuPopup = new JPopupMenu();
+        JMenuItem editarItem = new JMenuItem("Editar");
+        JMenuItem excluirItem = new JMenuItem("Excluir");
+        JMenuItem visualizarItem = new JMenuItem("Visualizar");
+        menuPopup.add(editarItem);
+        menuPopup.add(excluirItem);
+        menuPopup.add(visualizarItem);
+
+        tabela.addMouseListener(new MouseAdapter() {
+            public void mousePressed(MouseEvent e) {
+                if (e.isPopupTrigger() || SwingUtilities.isRightMouseButton(e)) {
+                    int linha = tabela.rowAtPoint(e.getPoint());
+                    if (linha >= 0 && linha < tabela.getRowCount()) {
+                        tabela.setRowSelectionInterval(linha, linha);
+                        String cpf = (String) tabela.getValueAt(linha, 1);
+
+
+//                        editarItem.addActionListener(ae -> {
+//                            editar(cpfGerente);
+//                        });
+
+                        excluirItem.addActionListener(ae -> {
+                            int confirm;
+                            if(GerenciadorDeLojas.getLoja(cpf) == null) {
+                                confirm = JOptionPane.showConfirmDialog(lista,
+                                        "Tem certeza que deseja excluir o gerente com o CPF: " + cpf + "?",
+                                        "Confirmar exclusão",
+                                        JOptionPane.YES_NO_OPTION);
+                            }else {
+                                confirm = JOptionPane.showConfirmDialog(lista,
+                                        "Tem certeza que deseja excluir o gerente com o CPF: " + cpf + "? A UNIDADE" + GerenciadorDeLojas.getCodigoLoja(cpf) + " FICARÁ SEM GERENTE",
+                                        "Confirmar exclusão",
+                                        JOptionPane.YES_NO_OPTION);
+
+                                if (confirm == JOptionPane.YES_OPTION) {
+                                    int confirma = JOptionPane.showConfirmDialog(lista,
+                                            "Deseja excluir tambem a unidade do gerente: " + cpf + "?",
+                                            "Confirmar exclusão",
+                                            JOptionPane.YES_NO_OPTION);
+
+                                    if (confirma == JOptionPane.YES_OPTION) {
+                                        try {
+                                            GerenciadorSistemaDono.excluirLoja(cpf);
+                                            interfaceGrafica.exibeInformacao("Loja excluida com sucesso", "Exclusão concluida");
+                                        } catch (EntradaException ex) {
+                                            interfaceGrafica.exibeException(ex.getMessage(), "Exclusão falhou");
+                                        }
+                                    }
+                                }
+                            }
+
+                                try {
+                                    GerenciadorSistemaDono.excluirGerente(cpf);
+                                    interfaceGrafica.exibeInformacao("Gerente excluido com sucesso", "Exclusão concluida");
+                                    ((DefaultTableModel) tabela.getModel()).removeRow(linha);
+                                } catch (EntradaException ex) {
+                                    interfaceGrafica.exibeException(ex.getMessage(),"Exclusão falhou");
+                                }
+
+                        });
+
+                        visualizarItem.addActionListener(ae -> {
+                            exibeGerente(GerenciadorDeLojas.getGerente(cpf));
+                        });
+
+                        menuPopup.show(tabela, e.getX(), e.getY());
+                    }
+                }
+            }
+        });
+
+        botoesPanel.add(Box.createHorizontalGlue());
+        lista.add(botoesPanel);
+
+        return lista;
+    }
+
+    protected void exibeGerente(Gerente gerente) {
+        if (gerente == null) {
+            JOptionPane.showMessageDialog(null, "Gerente não encontrado!", "Erro", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+        JFrame exibe = new JFrame("Informações do Gerente: " + gerente.getNome());
+        exibe.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+        exibe.setSize(450, 250);
+        exibe.setLocationRelativeTo(null);
+
+        JPanel painelPrincipal = new JPanel(new BorderLayout(10, 10));
+        painelPrincipal.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
+
+        JLabel titulo = new JLabel("Informações do Gerente", SwingConstants.CENTER);
+        painelPrincipal.add(titulo, BorderLayout.NORTH);
+
+        JPanel tabela = new JPanel(new GridLayout(3, 2, 10, 10));
+
+        tabela.add(criaCelula("Nome do gerente:"));
+        tabela.add(criaCelula(gerente.getNome()));
+
+        tabela.add(criaCelula("CPF:"));
+        tabela.add(criaCelula(gerente.getCpf()));
+
+        tabela.add(criaCelula("Email:"));
+        tabela.add(criaCelula(gerente.getEmail()));
+
+        painelPrincipal.add(tabela, BorderLayout.CENTER);
+
+        // Botão de sair
+        JButton sair = new JButton("Fechar");
+        sair.addActionListener(e -> exibe.dispose());
+
+        JPanel painelBotao = new JPanel();
+        painelBotao.add(sair);
+
+        painelPrincipal.add(painelBotao, BorderLayout.SOUTH);
+
+        exibe.setContentPane(painelPrincipal);
+        exibe.setVisible(true);
+    }
+
+    private JLabel criaCelula(String valor) {
+        JLabel label = new JLabel(valor, SwingConstants.CENTER);
+        label.setBorder(BorderFactory.createLineBorder(Color.GRAY));
+        return label;
     }
 
 }

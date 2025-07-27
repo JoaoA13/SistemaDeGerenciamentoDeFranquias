@@ -154,9 +154,18 @@ public class InterfaceGrafica {
         JMenuItem  listaLoja = new JMenuItem ("Lista de lojas", KeyEvent.VK_T);
         lojas.add(listaLoja);
 
+        JMenu gerentes = new JMenu ("Gerentes");
+        menuBar.add(gerentes);
+        JMenuItem  cadastrarGerente = new JMenuItem ("Cadastrar gerente", KeyEvent.VK_T);
+        gerentes.add(cadastrarGerente);
+        JMenuItem  listaGerente = new JMenuItem ("Lista de gerentes", KeyEvent.VK_T);
+        gerentes.add(listaGerente);
+
         menu1Item1.addActionListener(e -> trocarTela(criarTela1(), 200, 200));
         cadastrarLoja.addActionListener(e -> trocarTela(acoes.cadastraLojas(), 500, 500));
         listaLoja.addActionListener(e -> trocarTela(acoes.listaDeLojas(), 500, 500));
+        cadastrarGerente.addActionListener(e -> trocarTela(acoes.cadastraGerentes(), 500, 500));
+        listaGerente.addActionListener(e -> trocarTela(acoes.listaDeGerente(), 500, 500));
 
         frame.setContentPane(sistemaDono); //função que elimina painel anterior e adiciona outro
         frame.revalidate();
