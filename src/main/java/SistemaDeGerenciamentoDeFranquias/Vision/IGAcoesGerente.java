@@ -541,6 +541,37 @@ public class IGAcoesGerente {
             tabela.getColumnModel().getColumn(col).setCellRenderer(centralizado);
         }
 
+        tabela.getColumnModel().getColumn(3).setCellRenderer(new DefaultTableCellRenderer() {
+            @Override
+            public Component getTableCellRendererComponent(JTable table, Object value,
+                                                           boolean isSelected, boolean hasFocus, int row, int column) {
+
+                Component c = super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
+                setHorizontalAlignment(SwingConstants.CENTER);
+
+                try {
+                    int quant = Integer.parseInt(value.toString());
+
+                    if (quant < 10) {
+                        setText("⚠️ " + String.format("%02d", quant));
+                        setForeground(Color.RED);
+                        setToolTipText("Estoque baixo!");
+                    } else {
+                        setText(String.format("%02d", quant));
+                        setForeground(Color.BLACK);
+                        setToolTipText(null); // Remove o tooltip quando não for necessário
+                    }
+
+                } catch (NumberFormatException e) {
+                    setText(value.toString());
+                    setForeground(Color.BLACK);
+                    setToolTipText(null);
+                }
+
+                return c;
+            }
+        });
+
         JScrollPane scroll = new JScrollPane(tabela);
         lista.add(scroll, BorderLayout.CENTER);
 

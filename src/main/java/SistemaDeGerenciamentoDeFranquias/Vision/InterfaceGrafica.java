@@ -265,35 +265,30 @@ public class InterfaceGrafica {
     }
 
     void sistemaVendedor(){
-        JPanel sistemaDono = new JPanel();
-        IGAcoesDono acoes = new IGAcoesDono(this,gerenciaDeLojas);
+        JPanel sistemaVendedor = new JPanel();
+        IGAcoesVendedor acoes = new IGAcoesVendedor();
 
         JButton Sair = new JButton("Sair");
-        sistemaDono.add(Sair);
+        sistemaVendedor.add(Sair);
 
         JMenuBar menuBar = new JMenuBar();
         frame.setJMenuBar(menuBar);
 
-        JMenu lojas = new JMenu ("Lojas");
-        menuBar.add(lojas);
-        JMenuItem  cadastrarLoja = new JMenuItem ("Cadastrar loja", KeyEvent.VK_T);
-        lojas.add(cadastrarLoja);
-        JMenuItem  listaLoja = new JMenuItem ("Lista de lojas", KeyEvent.VK_T);
-        lojas.add(listaLoja);
+        JMenu menu1 = new JMenu ("Pedidos");
+        menuBar.add(menu1);
 
-        JMenu gerentes = new JMenu ("Gerentes");
-        menuBar.add(gerentes);
-        JMenuItem  cadastrarGerente = new JMenuItem ("Cadastrar gerente", KeyEvent.VK_T);
-        gerentes.add(cadastrarGerente);
-        JMenuItem  listaGerente = new JMenuItem ("Lista de gerentes", KeyEvent.VK_T);
-        gerentes.add(listaGerente);
+        JMenuItem  menu1Item1 = new JMenuItem ("Cadastrar Pedidos", KeyEvent.VK_T);
+        menu1.add(menu1Item1);
+        JMenuItem  menu1Item2 = new JMenuItem ("Lista de Pedidos", KeyEvent.VK_T);
+        menu1.add(menu1Item2);
 
-        cadastrarLoja.addActionListener(e -> trocarTela(acoes.cadastraLojas(), 500, 500));
-        listaLoja.addActionListener(e -> trocarTela(acoes.listaDeLojas(), 500, 500));
-        cadastrarGerente.addActionListener(e -> trocarTela(acoes.cadastraGerentes(), 500, 500));
-        listaGerente.addActionListener(e -> trocarTela(acoes.listaDeGerente(), 500, 500));
+        menu1Item1.addActionListener(e -> trocarTela(acoes.lancarPedido(cpf), 400, 300));
+        menu1Item2.addActionListener(e -> trocarTela(acoes.listaDePedidos(), 500, 500));
 
-        frame.setContentPane(sistemaDono); //função que elimina painel anterior e adiciona outro
+        frame.pack();
+        frame.setSize(400, 300);
+        frame.setLocationRelativeTo(null);
+        frame.setContentPane(sistemaVendedor);
         frame.revalidate();
         frame.repaint();
 
@@ -301,7 +296,7 @@ public class InterfaceGrafica {
             public void actionPerformed(ActionEvent e) {
                 System.out.println("Botão 'Sair' clicado");
                 menuBar.removeAll();
-                sistemaDono.setVisible(false);
+                sistemaVendedor.setVisible(false);
                 menuLogin();
             }
         });
