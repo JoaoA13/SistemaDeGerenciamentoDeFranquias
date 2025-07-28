@@ -8,11 +8,11 @@ import SistemaDeGerenciamentoDeFranquias.Model.Vendedor;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.text.MaskFormatter;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.text.DecimalFormat;
-import java.text.DecimalFormatSymbols;
+import java.text.*;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -25,80 +25,33 @@ public class IGAcoesVendedor {
 
     JPanel lancarPedido(String cpfVendedor){
 
-        /*JPanel painel = new JPanel(new BorderLayout(10, 10));
-        painel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
-
-        GerenciadorDeLojas gerenciaDeLojas = new GerenciadorDeLojas();
-        Vendedor vendedor = (Vendedor) gerenciaDeLojas.getVendedorGeral(cpfVendedor);
-        Loja loja = gerenciaDeLojas.getLoja(vendedor.getCodigoLoja());
-        Collection<Produto> produtos = loja.getArmazenaProdutos().values();
-
-        String[] colunas = {"Selecionar", "Nome", "Preço", "Qtd. Disponível", "Qtd. Pedido"};
-        Object[][] dados = new Object[loja.getArmazenaProdutos().size()][5];
-
-        DecimalFormat formatador = new DecimalFormat("R$ #,##0.00", new DecimalFormatSymbols(new Locale("pt", "BR")));
-
-        int i = 0;
-        for (Produto p : produtos) {
-            dados[i][0] = false;
-            dados[i][1] = p.getNomeProd();
-            dados[i][2] = formatador.format(p.getPreco());
-            dados[i][3] = p.getQuant();
-            dados[i][4] = 0;
-            i++;
-        }
-
-        DefaultTableModel modelo = new DefaultTableModel(dados, colunas) {
-            @Override
-            public boolean isCellEditable(int row, int column) {
-                return column == 0 || column == 4; // só checkbox e qtd. pedido
-            }
-
-            @Override
-            public Class<?> getColumnClass(int columnIndex) {
-                if (columnIndex == 0) return Boolean.class; // checkbox
-                if (columnIndex == 4) return Integer.class; // qtd. pedido
-                return String.class;
-            }
-        };
-
-        JTable tabela = new JTable(modelo);
-        JScrollPane scroll = new JScrollPane(tabela);
-        painel.add(scroll, BorderLayout.CENTER);
-
-        JButton confirmar = new JButton("Confirmar Pedido");
-        confirmar.addActionListener(e -> {
-            List<String> produtosSelecionados = new ArrayList<>();
-            for (int linha = 0; linha < modelo.getRowCount(); linha++) {
-                boolean selecionado = (boolean) modelo.getValueAt(linha, 0);
-                int qtd = (int) modelo.getValueAt(linha, 4);
-                if (selecionado && qtd > 0) {
-                    String nome = (String) modelo.getValueAt(linha, 1);
-                    produtosSelecionados.add(nome + " - Qtd: " + qtd);
-                }
-            }
-
-            if (produtosSelecionados.isEmpty()) {
-                JOptionPane.showMessageDialog(painel, "Nenhum produto selecionado com quantidade válida.");
-            } else {
-                JOptionPane.showMessageDialog(painel, "Pedido confirmado com os produtos:\n" +
-                        String.join("\n", produtosSelecionados));
-            }
-        });
-
-        JPanel botoes = new JPanel(new FlowLayout(FlowLayout.RIGHT));
-        botoes.add(confirmar);
-        painel.add(botoes, BorderLayout.SOUTH);
-
-        return painel;*/
-
-        return null;
-
-        /*JPanel cadastro = new JPanel();
+        JPanel cadastro = new JPanel();
         cadastro.setLayout(new BoxLayout(cadastro, BoxLayout.Y_AXIS));
         cadastro.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
 
-        JLabel labelNome = new JLabel("Digite o código do produto desejado:");
+        Vendedor vendedor = (Vendedor) GerenciadorDeLojas.getVendedorGeral(cpfVendedor);
+        Loja loja = GerenciadorDeLojas.getLoja(vendedor.getCodigoLoja());
+        //Collection<Produto> produtos = loja.getArmazenaProdutos().values();
+
+        JLabel labelCodigo = new JLabel("Digite o código do produto desejado:");
+        labelCodigo.setAlignmentX(Component.LEFT_ALIGNMENT);
+        cadastro.add(labelCodigo);
+
+        JTextField escreveCodigo = new JTextField(20);
+        escreveCodigo.setMaximumSize(new Dimension(Integer.MAX_VALUE, 25));
+        escreveCodigo.setAlignmentX(Component.LEFT_ALIGNMENT);
+        cadastro.add(escreveCodigo);
+
+        JLabel labelQuantidade = new JLabel("Digite a quantidade:");
+        labelQuantidade.setAlignmentX(Component.LEFT_ALIGNMENT);
+        cadastro.add(labelQuantidade);
+
+        JTextField escreveQuantidade = new JTextField(20);
+        escreveQuantidade.setMaximumSize(new Dimension(Integer.MAX_VALUE, 25));
+        escreveQuantidade.setAlignmentX(Component.LEFT_ALIGNMENT);
+        cadastro.add(escreveQuantidade);
+
+        JLabel labelNome = new JLabel("Digite o nome do cliente:");
         labelNome.setAlignmentX(Component.LEFT_ALIGNMENT);
         cadastro.add(labelNome);
 
@@ -107,32 +60,60 @@ public class IGAcoesVendedor {
         escreveNome.setAlignmentX(Component.LEFT_ALIGNMENT);
         cadastro.add(escreveNome);
 
-        JLabel labelCpf = new JLabel("Digite o CPF do vendedor:");
-        labelCpf.setAlignmentX(Component.LEFT_ALIGNMENT);
-        cadastro.add(labelCpf);
+        JLabel labelData = new JLabel("Digite a data do pedido:");
+        labelData.setAlignmentX(Component.LEFT_ALIGNMENT);
+        cadastro.add(labelData);
 
-        JTextField escreveCpf = new JTextField(20);
-        escreveCpf.setMaximumSize(new Dimension(Integer.MAX_VALUE, 25));
-        escreveCpf.setAlignmentX(Component.LEFT_ALIGNMENT);
-        cadastro.add(escreveCpf);
+        JFormattedTextField escreveData = null;
+        try {
+            MaskFormatter mascaraData = new MaskFormatter("##/##/####");
+            mascaraData.setPlaceholderCharacter('_');
+            escreveData = new JFormattedTextField(mascaraData);
+            escreveData.setMaximumSize(new Dimension(Integer.MAX_VALUE, 25));
+            escreveData.setAlignmentX(Component.LEFT_ALIGNMENT);
+            escreveData.setColumns(10);
+            escreveData.setBorder(BorderFactory.createEmptyBorder());
+            escreveData.setOpaque(false);
+            cadastro.add(escreveData);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
 
-        JLabel labelEmail = new JLabel("Digite o e-mail do vendedor:");
-        labelEmail.setAlignmentX(Component.LEFT_ALIGNMENT);
-        cadastro.add(labelEmail);
+        JFormattedTextField escreveHora = null;
+        try {
+            MaskFormatter mascaraHora = new MaskFormatter("##:##");
+            mascaraHora.setPlaceholderCharacter('_');
+            escreveHora = new JFormattedTextField(mascaraHora);
+            escreveHora.setMaximumSize(new Dimension(Integer.MAX_VALUE, 25));
+            escreveHora.setAlignmentX(Component.LEFT_ALIGNMENT);
+            escreveHora.setColumns(5);
+            escreveData.setBorder(BorderFactory.createEmptyBorder());
+            escreveData.setOpaque(false);
+            cadastro.add(new JLabel("Digite a hora do pedido:"));
+            cadastro.add(escreveHora);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
 
-        JTextField escreveEmail = new JTextField(20);
-        escreveEmail.setMaximumSize(new Dimension(Integer.MAX_VALUE, 25));
-        escreveEmail.setAlignmentX(Component.LEFT_ALIGNMENT);
-        cadastro.add(escreveEmail);
+        JPanel painelPagamentos = new JPanel();
+        painelPagamentos.setLayout(new FlowLayout(FlowLayout.RIGHT, 10, 0));
 
-        JLabel labelSenha = new JLabel("Digite a senha do vendedor:");
-        labelSenha.setAlignmentX(Component.LEFT_ALIGNMENT);
-        cadastro.add(labelSenha);
+        JRadioButton btnDinheiro = new JRadioButton("Dinheiro Físico");
+        JRadioButton btnCartao = new JRadioButton("Cartão");
+        JRadioButton btnPix = new JRadioButton("Pix");
 
-        JTextField escreveSenha = new JTextField(20);
-        escreveSenha.setMaximumSize(new Dimension(Integer.MAX_VALUE, 25));
-        escreveSenha.setAlignmentX(Component.LEFT_ALIGNMENT);
-        cadastro.add(escreveSenha);
+        ButtonGroup grupoPagamento = new ButtonGroup();
+        grupoPagamento.add(btnDinheiro);
+        grupoPagamento.add(btnCartao);
+        grupoPagamento.add(btnPix);
+
+        painelPagamentos.add(btnCartao);
+        painelPagamentos.add(btnPix);
+        painelPagamentos.add(btnDinheiro);
+
+        btnCartao.setSelected(true);
+
+        cadastro.add(painelPagamentos);
 
         JButton Sair = new JButton("Sair");
         JButton confirmar = new JButton("Confirmar");
@@ -142,17 +123,25 @@ public class IGAcoesVendedor {
         botoesPanel.setAlignmentX(Component.LEFT_ALIGNMENT);
         botoesPanel.setMaximumSize(new Dimension(400, 30));
 
+        escreveCodigo.addActionListener(e -> escreveQuantidade.requestFocusInWindow());
+        escreveQuantidade.addActionListener(e -> escreveNome.requestFocusInWindow());
+        JFormattedTextField finalEscreveData = escreveData;
+        escreveNome.addActionListener(e -> finalEscreveData.requestFocusInWindow());
+
+        if (escreveData != null) {
+            JFormattedTextField finalEscreveHora = escreveHora;
+            escreveData.addActionListener(e -> finalEscreveHora.requestFocusInWindow());
+        }
+        if (escreveHora != null) {
+            escreveHora.addActionListener(e -> confirmar.doClick());
+        }
+
         botoesPanel.add(Sair);
         botoesPanel.add(Box.createHorizontalGlue());
         botoesPanel.add(confirmar);
         cadastro.add(botoesPanel);
 
-        escreveNome.addActionListener(e -> escreveCpf.requestFocusInWindow());
-        escreveCpf.addActionListener(e -> escreveEmail.requestFocusInWindow());
-        escreveEmail.addActionListener(e -> escreveSenha.requestFocusInWindow());
-        escreveSenha.addActionListener(e -> confirmar.doClick());
-
-        confirmar.addActionListener(e -> {
+        /*confirmar.addActionListener(e -> {
             System.out.println("Botão Confirmar clicado");
             String nome = escreveNome.getText().trim();
             String cpf = escreveCpf.getText().trim();
@@ -173,9 +162,9 @@ public class IGAcoesVendedor {
                 cadastro.setVisible(false);
                 interfaceGrafica.menuLogin();
             }
-        });
+        });*/
 
-        return cadastro;*/
+        return cadastro;
     }
 
     JPanel listaDePedidos(){
