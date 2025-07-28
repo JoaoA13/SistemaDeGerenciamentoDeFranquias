@@ -41,6 +41,12 @@ public class IGAcoesDono {
         linhaEndereco.add(escreveEndereco);
         subPainel.add(linhaEndereco);
 
+        JPanel linhaCodigo = new JPanel(new FlowLayout(FlowLayout.CENTER));
+        linhaCodigo.add(new JLabel("Código da loja:"));
+        JTextField escreveCodigo = new JTextField(15);
+        linhaCodigo.add(escreveCodigo);
+        subPainel.add(linhaCodigo);
+
         JPanel linhaCpf = new JPanel(new FlowLayout(FlowLayout.CENTER));
         linhaCpf.add(new JLabel("Cpf do gerente responsável:"));
         JTextField escreveCpf = new JTextField(15);
@@ -50,12 +56,21 @@ public class IGAcoesDono {
         JButton Cadastrar = new JButton("Cadastrar");
         subPainel.add(Cadastrar);
 
-        JButton Sair = new JButton("Sair");
-        subPainel.add(Sair);
+        JButton voltar = new JButton("voltar");
+        subPainel.add(voltar);
 
         painelCadastroLoja.add(subPainel, BorderLayout.CENTER);
 
         escreveEndereco.addKeyListener(new KeyAdapter() {
+            public void keyPressed(KeyEvent e) {
+                if (e.getKeyCode() == KeyEvent.VK_ENTER) {
+                    System.out.println("Tecla Enter pressionada");
+                    escreveCodigo.requestFocusInWindow();
+                }
+            }
+        });
+
+        escreveCodigo.addKeyListener(new KeyAdapter() {
             public void keyPressed(KeyEvent e) {
                 if (e.getKeyCode() == KeyEvent.VK_ENTER) {
                     System.out.println("Tecla Enter pressionada");
@@ -67,10 +82,8 @@ public class IGAcoesDono {
         escreveCpf.addKeyListener(new KeyAdapter() {
             public void keyPressed(KeyEvent e) {
                 if (e.getKeyCode() == KeyEvent.VK_ENTER) {
-                    if(botaoCadastrarLoja(escreveEndereco.getText(), escreveCpf.getText())){
-
-                        escreveEndereco.setText("");
-                        escreveCpf.setText("");
+                    if(botaoCadastrarLoja(escreveEndereco.getText(),escreveCodigo.getText(), escreveCpf.getText())){
+                        escreveEndereco.setText("");escreveCodigo.setText("");escreveCpf.setText("");
                     }
                 }
             }
@@ -79,27 +92,26 @@ public class IGAcoesDono {
         Cadastrar.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 System.out.println("Botão 'Cadastrar' clicado");
-                if(botaoCadastrarLoja(escreveEndereco.getText(),escreveCpf.getText())) {
-
-                    escreveEndereco.setText("");escreveCpf.setText("");
+                if(botaoCadastrarLoja(escreveEndereco.getText(),escreveCodigo.getText(),escreveCpf.getText())) {
+                    escreveEndereco.setText("");escreveCodigo.setText("");escreveCpf.setText("");
                 }
             }
         });
 
-        Sair.addActionListener(new ActionListener() {
+        voltar.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                System.out.println("Botão 'Sair' clicado");
+                System.out.println("Botão 'voltar' clicado");
                 painelCadastroLoja.setVisible(false);
-                interfaceGrafica.menuLogin();
+                interfaceGrafica.sistemaDono();
             }
         });
         return painelCadastroLoja;
     }
-    boolean botaoCadastrarLoja(String endereco,String cpf){
+    boolean botaoCadastrarLoja(String endereco,String codigo,String cpf){
             System.out.println("Tecla Enter pressionada");
 
         try{
-                interfaceGrafica.gerenciaDono.cadastroLoja(endereco,cpf);
+                interfaceGrafica.gerenciaDono.cadastroLoja(endereco,codigo,cpf);
                 interfaceGrafica.exibeInformacao("Cadastro de Loja e atribuição de gerente feitos corretamente","Cadastro de Loja e gerente feito com sucesso");
                 return true;
             }catch (CadastroException mes) {
@@ -179,7 +191,7 @@ public class IGAcoesDono {
                         });
 
                         visualizarItem.addActionListener(ae -> {
-                            exibeLoja(cpfGerente,GerenciadorDeLojas.getLoja(cpfGerente));
+                            exibeLoja(codigo,GerenciadorDeLojas.getLoja(codigo));
                         });
 
                         menuPopup.show(tabela, e.getX(), e.getY());
@@ -196,10 +208,7 @@ public class IGAcoesDono {
     }
 
     protected void exibeLoja(String codigo, Loja loja) {
-        if (loja == null) {
-            JOptionPane.showMessageDialog(null, "Gerente não encontrado!", "Erro", JOptionPane.ERROR_MESSAGE);
-            return;
-        }
+
         JFrame exibe = new JFrame("Informações da Loja: " + codigo);
         exibe.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         exibe.setSize(450, 250);
@@ -296,7 +305,7 @@ public class IGAcoesDono {
         campoTexto.addActionListener(e -> confirmar.doClick());
         confirmar.addActionListener(e -> {
             System.out.println("Botão Confirmar clicado");
-            String valor = campoTexto.getText().trim();
+            String valor = campoTexto.getText();
 
             try {
                 String Endereco = "", novoGerente = "";
@@ -312,7 +321,7 @@ public class IGAcoesDono {
             }
         });
 
-        JButton sair = new JButton("Sair");
+        JButton sair = new JButton("voltar");
         //sair.addActionListener(e -> interfaceGrafica.voltar());
 
         JPanel botoesPanel = new JPanel();
@@ -625,7 +634,7 @@ public class IGAcoesDono {
             }
         });
 
-        JButton sair = new JButton("Sair");
+        JButton sair = new JButton("voltar");
         //sair.addActionListener(e -> interfaceGrafica.voltar());
 
         JPanel botoesPanel = new JPanel();

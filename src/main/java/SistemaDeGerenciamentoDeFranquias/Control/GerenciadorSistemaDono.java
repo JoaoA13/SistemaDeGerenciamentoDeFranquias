@@ -41,19 +41,19 @@ public class GerenciadorSistemaDono extends GerenciadorSistema {
         }
     }
 
-    public void cadastroLoja(String endereco, String cpfGerente) throws CadastroException {
+    public void cadastroLoja(String endereco,String codigo, String cpfGerente) throws CadastroException {
         try {
             ValidadorCampoVazio.valida(endereco);
             ValidadorCampoVazio.valida(cpfGerente);
-
+            ValidadorCodigo.validarCodigo(codigo);
             ValidadorCpf.validarCpf(cpfGerente);
-
         } catch (EntradaException e) {
             System.out.println("Erro: EntradaException: " + e.getMessage());
             throw new LoginException(e.getMessage());
         }
 
         try {
+            ValidadorCodigoLojaBancoDeDadosFalse.valida(codigo);
             ValidadorCpfBancoDeDadosTrue.valida(cpfGerente);
         } catch (BancoDeDadosException e) {
             System.out.println("Erro: EntradaException: " + e.getMessage());
@@ -64,7 +64,7 @@ public class GerenciadorSistemaDono extends GerenciadorSistema {
             throw new CadastroException("Esse gerente já possui uma unidade");
 
 
-        GerenciadorDeLojas.cadastraLoja(endereco, GerenciadorDeLojas.getGerente(cpfGerente));
+        GerenciadorDeLojas.cadastraLoja(endereco,codigo, GerenciadorDeLojas.getGerente(cpfGerente));
     }
 
     public void cadastroGerente(String nomeGerente, String cpfGerente, String emailGerente) throws CadastroException {
@@ -210,8 +210,9 @@ public class GerenciadorSistemaDono extends GerenciadorSistema {
 
     static public String editarLoja(String endereco, String cpfNovoGerente,String codigo) throws EntradaException {
         if (endereco != "") {
-
-            GerenciadorDeLojas.getLoja(codigo).setEndereco(endereco);
+            Loja loja = GerenciadorDeLojas.getLoja(codigo);
+            if(loja != null)
+                loja.setEndereco(endereco);
 
             return "Endereço editado";
         }

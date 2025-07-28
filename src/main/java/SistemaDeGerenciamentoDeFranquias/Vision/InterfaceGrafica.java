@@ -144,7 +144,7 @@ public class InterfaceGrafica {
 
         JMenu menu1 = new JMenu ("Inico");
         menuBar.add (menu1);
-        JMenuItem  menu1Item1 = new JMenuItem ("Item de Menu", KeyEvent.VK_T);
+        JMenuItem  menu1Item1 = new JMenuItem ("Menu inicial", KeyEvent.VK_T);
         menu1.add(menu1Item1);
 
         JMenu lojas = new JMenu ("Lojas");
@@ -161,7 +161,8 @@ public class InterfaceGrafica {
         JMenuItem  listaGerente = new JMenuItem ("Lista de gerentes", KeyEvent.VK_T);
         gerentes.add(listaGerente);
 
-        menu1Item1.addActionListener(e -> trocarTela(criarTela1(), 200, 200));
+
+        menu1Item1.addActionListener(e -> trocarTela(sistemaDono, 200, 200));
         cadastrarLoja.addActionListener(e -> trocarTela(acoes.cadastraLojas(), 500, 500));
         listaLoja.addActionListener(e -> trocarTela(acoes.listaDeLojas(), 500, 500));
         cadastrarGerente.addActionListener(e -> trocarTela(acoes.cadastraGerentes(), 500, 500));
@@ -194,10 +195,10 @@ public class InterfaceGrafica {
 
         JMenu menu1 = new JMenu ("Inico");
         menuBar.add (menu1);
-        JMenuItem  menu1Item1 = new JMenuItem ("Item de Menu", KeyEvent.VK_T);
+        JMenuItem  menu1Item1 = new JMenuItem ("Menu inicial", KeyEvent.VK_T);
         menu1.add(menu1Item1);
 
-        menu1Item1.addActionListener(e -> trocarTela(criarTela1(), 200, 200));
+        menu1Item1.addActionListener(e -> trocarTela(sistemaGerente, 200, 200));
 
 
         JMenu menu2 = new JMenu ("Vendedores");
@@ -274,6 +275,13 @@ public class InterfaceGrafica {
         JMenuBar menuBar = new JMenuBar();
         frame.setJMenuBar(menuBar);
 
+        JMenu menu0 = new JMenu ("Inicio");
+        menuBar.add(menu0);
+        JMenuItem  menu0Item1 = new JMenuItem ("Menu inicial", KeyEvent.VK_T);
+        menu0.add(menu0Item1);
+
+        menu0Item1.addActionListener(e -> trocarTela(sistemaVendedor, 200, 200));
+
         JMenu menu1 = new JMenu ("Pedidos");
         menuBar.add(menu1);
 
@@ -312,14 +320,21 @@ public class InterfaceGrafica {
     }
 
     // Primeira tela
-    private JPanel criarTela1() {
-        JPanel painel = new JPanel();
-        painel.add(new JLabel("Você está na Tela 1"));
-        painel.add(new JButton("Botão da Tela 1"));
-        return painel;
+    private JPanel menuInicial() {
+        JPanel painel1 = new JPanel();
+        painel1.add(new JLabel("Você está na tela inicial"));
+        JButton Sair = new JButton("Sair");
+        painel1.add(Sair);
+
+        Sair.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                System.out.println("Botão 'Sair' clicado");
+                painel1.setVisible(false);
+                menuLogin();
+            }
+        });
+        return painel1;
     }
-
-
 
     public void exibeException(String menssagem, String titulo){
         JOptionPane.showMessageDialog(frame,

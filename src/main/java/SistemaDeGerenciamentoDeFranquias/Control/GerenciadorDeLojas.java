@@ -48,18 +48,13 @@ public class GerenciadorDeLojas {
         else
             return armazenaLojas.getOrDefault(Codigo,null);//se nao for cpf vai pelo codigo
     }
-    protected static void cadastraLoja(String endereco, Gerente gerente){
-        String codigo = geraCodigoLoja();
-        addLoja(endereco,gerente,codigo);
-    }
-    protected static void addLoja(String endereco, Gerente gerente,String codigo){
+    protected static void cadastraLoja(String endereco,String codigo, Gerente gerente){
         Loja loja = new Loja(codigo,endereco,gerente);
         armazenaLojas.put(codigo,loja);
         codigoParaCpf.put(gerente.getCpf(),codigo);
         salvaArquivos.salvarLojas(armazenaLojas);
         salvaArquivos.salvarCodigos(codigoParaCpf);
         salvaArquivos.salvarGerentes(armazenaGerentes);
-
         quantidadeDeLojas++;
         salvaArquivos.salvarQuantidadeDeLojas(quantidadeDeLojas);
     }
