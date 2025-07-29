@@ -14,6 +14,7 @@ import java.awt.*;
 import java.awt.event.*;
 
 import static SistemaDeGerenciamentoDeFranquias.Control.GerenciadorDeLojas.getCpfPorCodigo;
+import static SistemaDeGerenciamentoDeFranquias.Control.GerenciadorDeLojas.getLoja;
 
 public class IGAcoesDono {
     private InterfaceGrafica interfaceGrafica;
@@ -137,7 +138,7 @@ public class IGAcoesDono {
             for (Loja loja : GerenciadorDeLojas.getLojas().values()) {
                 if (loja == null) continue;
                 dados[i][0] = loja.getEndereco();
-                dados[i][1] = loja.getCpfGerente();
+                dados[i][1] = GerenciadorDeLojas.getCpfPorCodigo(loja.getCodigo());
                 dados[i][2] = loja.getCodigo();
                 i++;
             }
@@ -189,7 +190,7 @@ public class IGAcoesDono {
                         });
 
                         visualizarItem.addActionListener(ae -> {
-                            exibeLoja(codigo,GerenciadorDeLojas.getLoja(codigo));
+                            exibeLoja(codigo, getLoja(codigo));
                         });
 
                         menuPopup.show(tabela, e.getX(), e.getY());
@@ -293,7 +294,7 @@ public class IGAcoesDono {
 
         if (escolha < 0 || escolha >= opcoes.length) return;
         if(escolha == 2)
-            editarGerente(GerenciadorDeLojas.getLoja(codigo).getCpfGerente());
+            editarGerente(getLoja(codigo).getCpfGerente());
         else{
         String campoSelecionado = opcoes[escolha];
         String labelTexto = "Digite o novo " + campoSelecionado + " da Loja:";
@@ -364,6 +365,11 @@ public class IGAcoesDono {
         linhaCpf.add(escreveCpf);
         subPainel.add(linhaCpf);
 
+        JPanel linhaSenha = new JPanel(new FlowLayout(FlowLayout.CENTER));
+            linhaSenha.add(new JLabel("Senha do gerente responsável:"));
+        JTextField escreveSenha = new JTextField(15);
+        linhaSenha.add(escreveSenha);
+        subPainel.add(linhaSenha);
 
         JPanel linhaEmail = new JPanel(new FlowLayout(FlowLayout.CENTER));
         linhaEmail.add(new JLabel("E-mail do gerente responsável:"));
@@ -391,16 +397,25 @@ public class IGAcoesDono {
                 public void keyPressed(KeyEvent e) {
                     if (e.getKeyCode() == KeyEvent.VK_ENTER) {
                         System.out.println("Tecla Enter pressionada");
-                        escreveEmail.requestFocusInWindow();
+                        escreveSenha.requestFocusInWindow();
                     }
                 }
             });
 
+        escreveSenha.addKeyListener(new KeyAdapter() {
+            public void keyPressed(KeyEvent e) {
+                if (e.getKeyCode() == KeyEvent.VK_ENTER) {
+                    System.out.println("Tecla Enter pressionada");
+                    escreveEmail.requestFocusInWindow();
+                }
+            }
+        });
+
             escreveEmail.addKeyListener(new KeyAdapter() {
                 public void keyPressed(KeyEvent e) {
                     if (e.getKeyCode() == KeyEvent.VK_ENTER) {
-                        if(botaoCadastrarGerente( escreveNome.getText(), escreveCpf.getText(), escreveEmail.getText())) {
-                            escreveNome.setText("");escreveCpf.setText("");escreveEmail.setText("");
+                        if(botaoCadastrarGerente( escreveNome.getText(), escreveCpf.getText(),escreveSenha.getText(), escreveEmail.getText())) {
+                            escreveNome.setText("");escreveCpf.setText("");escreveSenha.setText("");escreveEmail.setText("");
                         }
                     }
                 }
@@ -409,8 +424,8 @@ public class IGAcoesDono {
             Cadastrar.addActionListener(new ActionListener() {
                 public void actionPerformed(ActionEvent e) {
                     System.out.println("Botão 'Cadastrar' clicado");
-                    if(botaoCadastrarGerente(escreveNome.getText(), escreveCpf.getText(), escreveEmail.getText())) {
-                        escreveNome.setText("");escreveCpf.setText("");escreveEmail.setText("");
+                    if(botaoCadastrarGerente(escreveNome.getText(), escreveCpf.getText(),escreveSenha.getText(), escreveEmail.getText())) {
+                        escreveNome.setText("");escreveCpf.setText("");escreveSenha.setText("");escreveEmail.setText("");
                     }
                 }
             });
@@ -427,11 +442,11 @@ public class IGAcoesDono {
         return cadastraGerentes;
     }
 
-    boolean botaoCadastrarGerente(String nome, String cpf,String email){
+    boolean botaoCadastrarGerente(String nome, String cpf,String senha,String email){
         System.out.println("Tecla Enter pressionada");
 
         try{
-            interfaceGrafica.gerenciaDono.cadastroGerente(nome,cpf,email);
+            interfaceGrafica.gerenciaDono.cadastroGerente(nome,cpf,senha,email);
             interfaceGrafica.exibeInformacao("Cadastro de gerente feitos corretamente","Cadastro de gerente feito com sucesso");
             return true;
         }catch (CadastroException mes) {
@@ -494,7 +509,7 @@ public class IGAcoesDono {
 
                         excluirItem.addActionListener(ae -> {
                             int confirm;
-                            if(GerenciadorDeLojas.getLoja(cpf) == null) {
+                            if(getLoja(cpf) == null) {
                                 confirm = JOptionPane.showConfirmDialog(lista,
                                         "Tem certeza que deseja excluir o gerente com o CPF: " + cpf + "?",
                                         "Confirmar exclusão",
@@ -531,7 +546,9 @@ public class IGAcoesDono {
                                 }
 
                         });
-
+                        for (ActionListener al : visualizarItem.getActionListeners()) {
+                            visualizarItem.removeActionListener(al);
+                        }
                         visualizarItem.addActionListener(ae -> {
                             exibeGerente(GerenciadorDeLojas.getGerente(cpf));
                         });
@@ -588,17 +605,31 @@ public class IGAcoesDono {
 
         painelPrincipal.add(tabela, BorderLayout.CENTER);
 
+        JButton visualizaLoja = new JButton("Visualizar loja");
+        if(getLoja(gerente.getCpf()) != null)
+        visualizaLoja.addActionListener(e -> exibeLoja(GerenciadorDeLojas.getCodigoLoja(gerente.getCpf()),getLoja(gerente.getCpf())));
+        else
+            visualizaLoja.addActionListener(e -> interfaceGrafica.exibeInformacao("Esse gerente não possui uma loja", "Sem loja"));
+
         // Botão de sair
         JButton sair = new JButton("Fechar");
         sair.addActionListener(e -> exibe.dispose());
+        sair.addActionListener(e -> exibe.removeAll());
 
         JPanel painelBotao = new JPanel();
+        painelBotao.add(visualizaLoja);
         painelBotao.add(sair);
 
         painelPrincipal.add(painelBotao, BorderLayout.SOUTH);
 
         exibe.setContentPane(painelPrincipal);
         exibe.setVisible(true);
+        exibe.addWindowListener(new WindowAdapter() {
+            @Override
+            public void windowClosed(WindowEvent e) {
+                System.out.println("Janela foi fechada");
+            }
+        });
     }
 
     void editarGerente(String cpf) {

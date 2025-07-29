@@ -134,26 +134,19 @@ public class GerenciadorDeLojas {
 
         String cpfGerente = loja.getCpfGerente();
 
-        // Atualize o código da loja antes de reinserir
         loja.setCodigo(novoCodigo);
 
-        // Atualize o código da loja em todos os vendedores também
         for (Vendedor vendedor : loja.getArmazenaVendedores().values()) {
             vendedor.setCodigoLoja(novoCodigo);
         }
 
-        // Remova a chave antiga
         armazenaLojas.remove(codigoAntigo);
 
-        // Adicione com o novo código
         armazenaLojas.put(novoCodigo, loja);
 
-        // Atualize o mapa código → CPF
         if (cpfGerente != null) {
             codigoParaCpf.put(cpfGerente, novoCodigo);
         }
-
-        // Salve tudo
         salvaArquivos.salvarLojas(armazenaLojas);
         salvaArquivos.salvarCodigos(codigoParaCpf);
         salvaArquivos.salvarGerentes(armazenaGerentes);

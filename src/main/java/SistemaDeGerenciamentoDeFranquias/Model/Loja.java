@@ -36,7 +36,8 @@ public class Loja {
         if (gerenteDaUnidade.getCpf().isEmpty())
             return null;
         else
-        return gerenteDaUnidade.getCpf();}
+        return gerenteDaUnidade.getCpf();
+    }
     protected void setCpfGerente(String cpf) {gerenteDaUnidade.setCpf(cpf);}
 
     public String getEndereco() {return endereco;}

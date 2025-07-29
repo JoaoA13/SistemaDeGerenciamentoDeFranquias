@@ -67,14 +67,16 @@ public class GerenciadorSistemaDono extends GerenciadorSistema {
         GerenciadorDeLojas.cadastraLoja(endereco,codigo, GerenciadorDeLojas.getGerente(cpfGerente));
     }
 
-    public void cadastroGerente(String nomeGerente, String cpfGerente, String emailGerente) throws CadastroException {
+    public void cadastroGerente(String nomeGerente, String cpfGerente,String senha, String emailGerente) throws CadastroException {
         try {
             ValidadorCampoVazio.valida(nomeGerente);
             ValidadorCampoVazio.valida(cpfGerente);
+            ValidadorCampoVazio.valida(senha);
             ValidadorCampoVazio.valida(emailGerente);
 
             ValidadorNome.validarNome(nomeGerente);
             ValidadorCpf.validarCpf(cpfGerente);
+            ValidadorSenha.valida(senha);
             ValidadorEmail.valida(emailGerente);
 
         } catch (EntradaException e) {
@@ -89,7 +91,7 @@ public class GerenciadorSistemaDono extends GerenciadorSistema {
             throw new CadastroException(e.getMessage());
         }
 
-        Gerente gerente = new Gerente(nomeGerente, cpfGerente, emailGerente, senhaGerentePadrão);
+        Gerente gerente = new Gerente(nomeGerente, cpfGerente, emailGerente, senha);
         GerenciadorDeLojas.cadastraGerente(cpfGerente, gerente);
     }
 

@@ -6,6 +6,7 @@ import SistemaDeGerenciamentoDeFranquias.Control.GerenciadorDeLojas;
 import SistemaDeGerenciamentoDeFranquias.Control.GerenciadorSistemaDono;
 import SistemaDeGerenciamentoDeFranquias.Control.GerenciadorSistemaGerente;
 import SistemaDeGerenciamentoDeFranquias.Control.GerenciadorSistemaVendedor;
+import SistemaDeGerenciamentoDeFranquias.Model.Loja;
 
 import javax.swing.*;
 import java.awt.event.*;
@@ -141,6 +142,11 @@ public class InterfaceGrafica {
         IGAcoesDono acoes = new IGAcoesDono(this,gerenciaDeLojas);
 
         JPanel sistemaDono = new JPanel(new BorderLayout());
+
+        for (Loja loja : GerenciadorDeLojas.getLojas().values()) {
+            if(loja.getCpfGerente() == null)
+                exibeException("A loja: " + loja.getCodigo() + " está sem gerente!","Loja sem gerente!");
+        }
 
         JLabel titulo = new JLabel("Menu Inicial", SwingConstants.CENTER);
         titulo.setFont(new Font("SansSerif", Font.BOLD, 20));
