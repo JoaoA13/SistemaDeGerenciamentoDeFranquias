@@ -77,7 +77,7 @@ public class IGAcoesGerente {
         escreveSenha.setAlignmentX(Component.LEFT_ALIGNMENT);
         cadastro.add(escreveSenha);
 
-        JButton Sair = new JButton("Sair");
+        JButton voltar = new JButton("voltar");
         JButton confirmar = new JButton("Confirmar");
 
         JPanel botoesPanel = new JPanel();
@@ -85,7 +85,7 @@ public class IGAcoesGerente {
         botoesPanel.setAlignmentX(Component.LEFT_ALIGNMENT);
         botoesPanel.setMaximumSize(new Dimension(400, 30));
 
-        botoesPanel.add(Sair);
+        botoesPanel.add(voltar);
         botoesPanel.add(Box.createHorizontalGlue());
         botoesPanel.add(confirmar);
         cadastro.add(botoesPanel);
@@ -110,11 +110,11 @@ public class IGAcoesGerente {
             }
         });
 
-        Sair.addActionListener(new ActionListener() {
+        voltar.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                System.out.println("Botão 'Sair' clicado");
+                System.out.println("Botão 'voltar' clicado");
                 cadastro.setVisible(false);
-                interfaceGrafica.menuLogin();
+                interfaceGrafica.sistemaGerente();
             }
         });
 

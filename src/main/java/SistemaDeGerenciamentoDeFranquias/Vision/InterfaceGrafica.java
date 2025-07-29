@@ -224,8 +224,28 @@ public class InterfaceGrafica {
         JPanel sistemaGerente = new JPanel();
         IGAcoesGerente acoes = new IGAcoesGerente(this,gerenciaDeLojas,cpf);
 
-        JButton Sair = new JButton("Sair");
-        sistemaGerente.add(Sair);
+        JLabel titulo = new JLabel("Menu Inicial", SwingConstants.CENTER);
+        titulo.setFont(new Font("SansSerif", Font.BOLD, 20));
+        sistemaGerente.add(titulo, BorderLayout.NORTH);
+
+        JPanel subPainel = new JPanel();
+        subPainel.setLayout(new BoxLayout(subPainel, BoxLayout.Y_AXIS));
+
+        subPainel.add(Box.createVerticalStrut(20));
+
+        JPanel descricao = new JPanel(new FlowLayout(FlowLayout.CENTER));
+        descricao.add(new JLabel("Esse é o menu inicial do sistema de gerenciamento destinado ao gerente da franquia."));
+        subPainel.add(descricao);
+
+        subPainel.add(Box.createVerticalStrut(15));
+
+        JButton sair = new JButton("Sair");
+        sair.setAlignmentX(Component.CENTER_ALIGNMENT);
+        subPainel.add(sair);
+
+        subPainel.add(Box.createVerticalStrut(20));
+
+        sistemaGerente.add(subPainel, BorderLayout.CENTER);
 
         JMenuBar menuBar = new JMenuBar();
         frame.setJMenuBar(menuBar);
@@ -286,13 +306,13 @@ public class InterfaceGrafica {
 
 
         frame.pack();
-        frame.setSize(400, 300);
+        frame.setSize(500, 300);
         frame.setLocationRelativeTo(null);
         frame.setContentPane(sistemaGerente);
         frame.revalidate();
         frame.repaint();
 
-        Sair.addActionListener(new ActionListener() {
+        sair.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 System.out.println("Botão 'Sair' clicado");
                 menuBar.removeAll();
@@ -306,8 +326,28 @@ public class InterfaceGrafica {
         JPanel sistemaVendedor = new JPanel();
         IGAcoesVendedor acoes = new IGAcoesVendedor();
 
-        JButton Sair = new JButton("Sair");
-        sistemaVendedor.add(Sair);
+        JLabel titulo = new JLabel("Menu Inicial", SwingConstants.CENTER);
+        titulo.setFont(new Font("SansSerif", Font.BOLD, 20));
+        sistemaVendedor.add(titulo, BorderLayout.NORTH);
+
+        JPanel subPainel = new JPanel();
+        subPainel.setLayout(new BoxLayout(subPainel, BoxLayout.Y_AXIS));
+
+        subPainel.add(Box.createVerticalStrut(20));
+
+        JPanel descricao = new JPanel(new FlowLayout(FlowLayout.CENTER));
+        descricao.add(new JLabel("Esse é o menu inicial do sistema de gerenciamento destinado a um vendedor da franquia."));
+        subPainel.add(descricao);
+
+        subPainel.add(Box.createVerticalStrut(15));
+
+        JButton sair = new JButton("Sair");
+        sair.setAlignmentX(Component.CENTER_ALIGNMENT);
+        subPainel.add(sair);
+
+        subPainel.add(Box.createVerticalStrut(20));
+
+        sistemaVendedor.add(subPainel, BorderLayout.CENTER);
 
         JMenuBar menuBar = new JMenuBar();
         frame.setJMenuBar(menuBar);
@@ -331,13 +371,13 @@ public class InterfaceGrafica {
         menu1Item2.addActionListener(e -> trocarTela(acoes.listaDePedidos(), 500, 500));
 
         frame.pack();
-        frame.setSize(400, 300);
+        frame.setSize(520, 300);
         frame.setLocationRelativeTo(null);
         frame.setContentPane(sistemaVendedor);
         frame.revalidate();
         frame.repaint();
 
-        Sair.addActionListener(new ActionListener() {
+        sair.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 System.out.println("Botão 'Sair' clicado");
                 menuBar.removeAll();
