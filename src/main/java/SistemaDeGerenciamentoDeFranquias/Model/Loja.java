@@ -28,6 +28,7 @@ public class Loja {
 
     /// Getters e Setters
     public String getCodigo(){return codigo;}
+    public void setCodigo(String novoCodigo){this.codigo = novoCodigo;}
 
     public String getCpfGerente() {
         if(gerenteDaUnidade == null)

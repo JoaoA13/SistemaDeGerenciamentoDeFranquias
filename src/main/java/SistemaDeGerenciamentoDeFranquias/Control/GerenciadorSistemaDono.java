@@ -208,13 +208,44 @@ public class GerenciadorSistemaDono extends GerenciadorSistema {
             return "";
         }
 
-    static public String editarLoja(String endereco, String cpfNovoGerente,String codigo) throws EntradaException {
+    static public String editarLoja(String endereco, String cpfNovoGerente,String novoCodigo,String codigo) throws EntradaException {
         if (endereco != "") {
             Loja loja = GerenciadorDeLojas.getLoja(codigo);
             if(loja != null)
                 loja.setEndereco(endereco);
 
             return "Endereço editado";
+        }
+        if (novoCodigo != "") {
+            System.out.println("entrou aqui");
+
+//            Loja loja = GerenciadorDeLojas.getLoja(codigo);
+//            if(loja == null)
+//                return  "Codigo de loja incorreto";
+
+            try {
+                ValidadorCodigo.validarCodigo(novoCodigo);
+            } catch (EntradaException e) {
+                System.out.println("Erro: EntradaException: " + e.getMessage());
+                throw new LoginException(e.getMessage());
+            }
+
+            try {
+                ValidadorCodigoLojaBancoDeDadosFalse.valida(novoCodigo);
+            } catch (BancoDeDadosException e) {
+                System.out.println("Erro: EntradaException: " + e.getMessage());
+                throw new CadastroException(e.getMessage());
+            }
+//
+//            GerenciadorDeLojas.getLojas();
+//            GerenciadorDeLojas.getLojas().put(novoCodigo,loja);
+//
+//            GerenciadorDeLojas.getCodigoPraCpf().remove(codigo);
+//            GerenciadorDeLojas.getCodigoPraCpf().put(loja.getCpfGerente(),novoCodigo);
+
+            GerenciadorDeLojas.trocarCodigo(novoCodigo,codigo);
+
+            return "Codigo da loja editado";
         }
         /// troca o gerente da unidade
         if (cpfNovoGerente != "") {

@@ -3,6 +3,7 @@ import SistemaDeGerenciamentoDeFranquias.Arquivos.salvaArquivos;
 import SistemaDeGerenciamentoDeFranquias.Model.Gerente;
 import SistemaDeGerenciamentoDeFranquias.Model.Loja;
 import SistemaDeGerenciamentoDeFranquias.Model.Usuario;
+import SistemaDeGerenciamentoDeFranquias.Model.Vendedor;
 
 import java.util.*;
 
@@ -27,7 +28,6 @@ public class GerenciadorDeLojas {
             armazenaLojas = recuperado;
         }
     }
-
     public static void carregaCodigoParaCpf() {
         Map<String, String> recuperado = salvaArquivos.carregarCodigos();
         if (recuperado != null) {
@@ -52,16 +52,18 @@ public class GerenciadorDeLojas {
         Loja loja = new Loja(codigo,endereco,gerente);
         armazenaLojas.put(codigo,loja);
         codigoParaCpf.put(gerente.getCpf(),codigo);
+        quantidadeDeLojas++;
+
         salvaArquivos.salvarLojas(armazenaLojas);
         salvaArquivos.salvarCodigos(codigoParaCpf);
         salvaArquivos.salvarGerentes(armazenaGerentes);
-        quantidadeDeLojas++;
         salvaArquivos.salvarQuantidadeDeLojas(quantidadeDeLojas);
     }
     static public void excluirLoja(String codigo){
         if(getLoja(codigo) == null)
             return;
 
+        codigoParaCpf.remove(getLoja(codigo).getCpfGerente());
         armazenaLojas.remove(codigo);
         salvaArquivos.salvarLojas(armazenaLojas);
         salvaArquivos.salvarCodigos(codigoParaCpf);
@@ -126,4 +128,35 @@ public class GerenciadorDeLojas {
         }
         return null;
     }
+    static public void trocarCodigo(String novoCodigo,String codigoAntigo){
+        Loja loja = getLoja(codigoAntigo);
+        if (loja == null) return;
+
+        String cpfGerente = loja.getCpfGerente();
+
+        // Atualize o código da loja antes de reinserir
+        loja.setCodigo(novoCodigo);
+
+        // Atualize o código da loja em todos os vendedores também
+        for (Vendedor vendedor : loja.getArmazenaVendedores().values()) {
+            vendedor.setCodigoLoja(novoCodigo);
+        }
+
+        // Remova a chave antiga
+        armazenaLojas.remove(codigoAntigo);
+
+        // Adicione com o novo código
+        armazenaLojas.put(novoCodigo, loja);
+
+        // Atualize o mapa código → CPF
+        if (cpfGerente != null) {
+            codigoParaCpf.put(cpfGerente, novoCodigo);
+        }
+
+        // Salve tudo
+        salvaArquivos.salvarLojas(armazenaLojas);
+        salvaArquivos.salvarCodigos(codigoParaCpf);
+        salvaArquivos.salvarGerentes(armazenaGerentes);
+    }
+
 }

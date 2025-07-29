@@ -137,7 +137,7 @@ public class IGAcoesDono {
             for (Loja loja : GerenciadorDeLojas.getLojas().values()) {
                 if (loja == null) continue;
                 dados[i][0] = loja.getEndereco();
-                dados[i][1] = getCpfPorCodigo(loja.getCodigo());
+                dados[i][1] = loja.getCpfGerente();
                 dados[i][2] = loja.getCodigo();
                 i++;
             }
@@ -170,7 +170,7 @@ public class IGAcoesDono {
                         String cpfGerente = (String) tabela.getValueAt(linha, 1);
 
                         editarItem.addActionListener(ae -> {
-                            editarLoja(cpfGerente);
+                            editarLoja(codigo);
                         });
 
                         excluirItem.addActionListener(ae -> {
@@ -279,7 +279,7 @@ public class IGAcoesDono {
         edicao.setLayout(new BoxLayout(edicao, BoxLayout.Y_AXIS));
         edicao.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
 
-        String[] opcoes = {"Endereco", "Novo gerente","Editar gerente"};
+        String[] opcoes = {"Endereco","Novo gerente","Editar gerente","codigo"};
         int escolha = JOptionPane.showOptionDialog(
                 null,
                 "Qual informação deseja editar?",
@@ -315,12 +315,13 @@ public class IGAcoesDono {
             String valor = campoTexto.getText();
 
             try {
-                String Endereco = "", novoGerente = "";
+                String Endereco = "", novoGerente = "", novoCodigo = "";
                 switch (escolha) {
                     case 0: Endereco = valor; break;
                     case 1: novoGerente = valor; break;
+                    case 3: novoCodigo = valor; break;
                 }
-                String msg = GerenciadorSistemaDono.editarLoja(Endereco, novoGerente,codigo);
+                String msg = GerenciadorSistemaDono.editarLoja(Endereco, novoGerente,novoCodigo,codigo);
                 JOptionPane.showMessageDialog(null, msg, "Sucesso", JOptionPane.INFORMATION_MESSAGE);
                 campoTexto.setText("");
             } catch (EntradaException ex) {

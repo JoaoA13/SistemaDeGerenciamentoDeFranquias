@@ -17,4 +17,7 @@ public class Vendedor extends Usuario {
     protected void setValorVenda(BigDecimal venda){valorVenda = valorVenda.add(venda);}
 
     public String getCodigoLoja(){ return codigoLoja; }
+    public void setCodigoLoja(String codigoLoja) {
+        this.codigoLoja = codigoLoja;
+    }
 }
