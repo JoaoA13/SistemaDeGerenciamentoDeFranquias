@@ -21,8 +21,8 @@ public class InterfaceGrafica {
     String cpf = "";
 
    public InterfaceGrafica(){
-       menuLogin();
-       //sistemaDono();
+       //menuLogin();
+       sistemaDono();
        frame.setSize(200, 200);
        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
        frame.setLocationRelativeTo(null);
@@ -127,17 +127,43 @@ public class InterfaceGrafica {
             }
         });
 
-        frame.setContentPane(menuLogin); //função que elimina painel anterior e adiciona outro
+        frame.pack();
+        frame.setContentPane(menuLogin);
+        frame.setSize(200, 200);
+        frame.setLocationRelativeTo(null);
+        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        frame.setVisible(true);
         frame.revalidate();
         frame.repaint();
     }
 
     void sistemaDono(){
-        JPanel sistemaDono = new JPanel();
         IGAcoesDono acoes = new IGAcoesDono(this,gerenciaDeLojas);
 
-        JButton Sair = new JButton("Sair");
-        sistemaDono.add(Sair);
+        JPanel sistemaDono = new JPanel(new BorderLayout());
+
+        JLabel titulo = new JLabel("Menu Inicial", SwingConstants.CENTER);
+        titulo.setFont(new Font("SansSerif", Font.BOLD, 20));
+        sistemaDono.add(titulo, BorderLayout.NORTH);
+
+        JPanel subPainel = new JPanel();
+        subPainel.setLayout(new BoxLayout(subPainel, BoxLayout.Y_AXIS));
+
+        subPainel.add(Box.createVerticalStrut(20));
+
+        JPanel descricao = new JPanel(new FlowLayout(FlowLayout.CENTER));
+        descricao.add(new JLabel("Esse é o menu inicial do sistema de gerenciamento destinado ao dono da franquia."));
+        subPainel.add(descricao);
+
+        subPainel.add(Box.createVerticalStrut(15));
+
+        JButton sair = new JButton("Sair");
+        sair.setAlignmentX(Component.CENTER_ALIGNMENT);
+        subPainel.add(sair);
+
+        subPainel.add(Box.createVerticalStrut(20));
+
+        sistemaDono.add(subPainel, BorderLayout.CENTER);
 
         JMenuBar menuBar = new JMenuBar();
         frame.setJMenuBar(menuBar);
@@ -168,11 +194,16 @@ public class InterfaceGrafica {
         cadastrarGerente.addActionListener(e -> trocarTela(acoes.cadastraGerentes(), 500, 500));
         listaGerente.addActionListener(e -> trocarTela(acoes.listaDeGerente(), 500, 500));
 
-        frame.setContentPane(sistemaDono); //função que elimina painel anterior e adiciona outro
+        frame.pack();
+        frame.setContentPane(sistemaDono);
+        frame.setSize(500, 300);
+        frame.setLocationRelativeTo(null);
+        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        frame.setVisible(true);
         frame.revalidate();
         frame.repaint();
 
-        Sair.addActionListener(new ActionListener() {
+        sair.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 System.out.println("Botão 'Sair' clicado");
                 menuBar.removeAll();
@@ -345,5 +376,10 @@ public class InterfaceGrafica {
         JOptionPane.showMessageDialog(frame,
                 menssagem,
                 titulo,JOptionPane.INFORMATION_MESSAGE);
+    }
+    protected JLabel criaCelula(String valor) {
+        JLabel label = new JLabel(valor, SwingConstants.CENTER);
+        label.setBorder(BorderFactory.createLineBorder(Color.GRAY));
+        return label;
     }
 }

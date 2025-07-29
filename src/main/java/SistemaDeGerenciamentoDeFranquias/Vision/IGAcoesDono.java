@@ -126,8 +126,6 @@ public class IGAcoesDono {
         lista.setLayout(new BoxLayout(lista, BoxLayout.Y_AXIS));
         lista.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
 
-        JButton voltar = new JButton("Voltar");
-
         JPanel botoesPanel = new JPanel();
         botoesPanel.setLayout(new BoxLayout(botoesPanel, BoxLayout.X_AXIS));
         botoesPanel.setAlignmentX(Component.LEFT_ALIGNMENT);
@@ -200,9 +198,18 @@ public class IGAcoesDono {
             }
         });
 
+        JButton voltar = new JButton("Voltar");
         botoesPanel.add(voltar);
         botoesPanel.add(Box.createHorizontalGlue());
         lista.add(botoesPanel);
+
+        voltar.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                System.out.println("Botão 'voltar' clicado");
+                lista.setVisible(false);
+                interfaceGrafica.sistemaDono();
+            }
+        });
 
         return lista;
     }
@@ -222,14 +229,14 @@ public class IGAcoesDono {
 
         JPanel tabela = new JPanel(new GridLayout(3, 2, 10, 10));
 
-        tabela.add(criaCelula("Código da loja: "));
-        tabela.add(criaCelula(loja.getCodigo()));
+        tabela.add(interfaceGrafica.criaCelula("Código da loja: "));
+        tabela.add(interfaceGrafica.criaCelula(loja.getCodigo()));
 
-        tabela.add(criaCelula("Endereço: "));
-        tabela.add(criaCelula(loja.getEndereco()));
+        tabela.add(interfaceGrafica.criaCelula("Endereço: "));
+        tabela.add(interfaceGrafica.criaCelula(loja.getEndereco()));
 
-        tabela.add(criaCelula("CPF do gerente: "));
-        tabela.add(criaCelula(loja.getCpfGerente()));
+        tabela.add(interfaceGrafica.criaCelula("CPF do gerente: "));
+        tabela.add(interfaceGrafica.criaCelula(loja.getCpfGerente()));
 
         String[] colunas = {"Nome", "CPF", "e-mail","Valor atual de vendas"};
 
@@ -321,15 +328,11 @@ public class IGAcoesDono {
             }
         });
 
-        JButton sair = new JButton("voltar");
-        //sair.addActionListener(e -> interfaceGrafica.voltar());
-
         JPanel botoesPanel = new JPanel();
         botoesPanel.setLayout(new BoxLayout(botoesPanel, BoxLayout.X_AXIS));
         botoesPanel.setAlignmentX(Component.LEFT_ALIGNMENT);
         botoesPanel.setMaximumSize(new Dimension(400, 30));
 
-        botoesPanel.add(sair);
         botoesPanel.add(Box.createHorizontalGlue());
         botoesPanel.add(confirmar);
         edicao.add(botoesPanel);
@@ -370,6 +373,9 @@ public class IGAcoesDono {
         JButton Cadastrar = new JButton("Cadastrar");
         subPainel.add(Cadastrar);
 
+        JButton voltar = new JButton("voltar");
+        subPainel.add(voltar);
+
         cadastraGerentes.add(subPainel, BorderLayout.CENTER);
 
             escreveNome.addKeyListener(new KeyAdapter() {
@@ -407,6 +413,16 @@ public class IGAcoesDono {
                     }
                 }
             });
+
+        voltar.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                System.out.println("Botão 'voltar' clicado");
+                cadastraGerentes.setVisible(false);
+                interfaceGrafica.sistemaDono();
+            }
+        });
+
+
         return cadastraGerentes;
     }
 
@@ -525,8 +541,19 @@ public class IGAcoesDono {
             }
         });
 
+        JButton voltar = new JButton("Voltar");
+        botoesPanel.add(voltar);
+
         botoesPanel.add(Box.createHorizontalGlue());
         lista.add(botoesPanel);
+
+        voltar.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                System.out.println("Botão 'voltar' clicado");
+                lista.setVisible(false);
+                interfaceGrafica.sistemaDono();
+            }
+        });
 
         return lista;
     }
@@ -549,14 +576,14 @@ public class IGAcoesDono {
 
         JPanel tabela = new JPanel(new GridLayout(3, 2, 10, 10));
 
-        tabela.add(criaCelula("Nome do gerente:"));
-        tabela.add(criaCelula(gerente.getNome()));
+        tabela.add(interfaceGrafica.criaCelula("Nome do gerente:"));
+        tabela.add(interfaceGrafica.criaCelula(gerente.getNome()));
 
-        tabela.add(criaCelula("CPF:"));
-        tabela.add(criaCelula(gerente.getCpf()));
+        tabela.add(interfaceGrafica.criaCelula("CPF:"));
+        tabela.add(interfaceGrafica.criaCelula(gerente.getCpf()));
 
-        tabela.add(criaCelula("Email:"));
-        tabela.add(criaCelula(gerente.getEmail()));
+        tabela.add(interfaceGrafica.criaCelula("Email:"));
+        tabela.add(interfaceGrafica.criaCelula(gerente.getEmail()));
 
         painelPrincipal.add(tabela, BorderLayout.CENTER);
 
@@ -571,12 +598,6 @@ public class IGAcoesDono {
 
         exibe.setContentPane(painelPrincipal);
         exibe.setVisible(true);
-    }
-
-    private JLabel criaCelula(String valor) {
-        JLabel label = new JLabel(valor, SwingConstants.CENTER);
-        label.setBorder(BorderFactory.createLineBorder(Color.GRAY));
-        return label;
     }
 
     void editarGerente(String cpf) {
