@@ -1,5 +1,6 @@
 package SistemaDeGerenciamentoDeFranquias.Control;
 
+import SistemaDeGerenciamentoDeFranquias.Arquivos.salvaArquivos;
 import SistemaDeGerenciamentoDeFranquias.Exceptions.*;
 import SistemaDeGerenciamentoDeFranquias.Model.Dono;
 import SistemaDeGerenciamentoDeFranquias.Model.Gerente;
@@ -15,9 +16,17 @@ import java.util.List;
 public class GerenciadorSistemaDono extends GerenciadorSistema {
     static private Map<String, Dono> armazenaDonos = new HashMap<>();
 
+    public static void carregaArmazenaDonos() {
+        Map<String, Dono> recuperado = salvaArquivos.carregarDono();
+        if (recuperado != null) {
+            armazenaDonos = recuperado;
+        }
+    }
+
     public GerenciadorSistemaDono() {
         Dono dono1 = new Dono("João","14127945605","joao@gmail","12345678");
         armazenaDonos.put(dono1.getCpf(), dono1);
+        carregaArmazenaDonos();
     }
 
     static public Dono getDono(String cpf){
@@ -133,6 +142,8 @@ public class GerenciadorSistemaDono extends GerenciadorSistema {
         Dono dono = new Dono(nome, cpf, email, senha);
         armazenaDonos.put(cpf, dono);
         System.out.println(armazenaDonos.get(cpf));
+
+        salvaArquivos.salvarDonos(armazenaDonos);
     }
 
     static public String excluirLoja(String codigo) throws EntradaException {

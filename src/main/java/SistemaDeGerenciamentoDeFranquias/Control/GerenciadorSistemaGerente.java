@@ -163,6 +163,7 @@ public class GerenciadorSistemaGerente extends GerenciadorSistema{
         return "Vendedor Excluído com Sucesso";
     }
 
+    /// FAZER SALVA ARQUIVOS
     public String lancarProduto(String nome, String precoSTR, String carac, String quantSTR, String codigo, String cpfGerente) throws CadastroException{
         BigDecimal preco = new BigDecimal(0);
         BigDecimal quant = new BigDecimal(0);
@@ -294,6 +295,7 @@ public class GerenciadorSistemaGerente extends GerenciadorSistema{
         return "";
     }
 
+    /// FAZER SALVA ARQUIVOS
     public void excluirProdutos(String codigo, String cpfGerente){
         Loja loja = listaLojas.getLoja(cpfGerente);
         loja.excluirProduto(codigo);

@@ -287,17 +287,25 @@ public class IGAcoesGerente {
                 break;
             default:}
 
-        JButton Sair = new JButton("Sair");
+        JButton voltar = new JButton("Voltar");
 
         JPanel botoesPanel = new JPanel();
         botoesPanel.setLayout(new BoxLayout(botoesPanel, BoxLayout.X_AXIS));
         botoesPanel.setAlignmentX(Component.LEFT_ALIGNMENT);
         botoesPanel.setMaximumSize(new Dimension(400, 30));
 
-        botoesPanel.add(Sair);
+        botoesPanel.add(voltar);
         botoesPanel.add(Box.createHorizontalGlue());
         botoesPanel.add(confirmar);
         edicao.add(botoesPanel);
+
+        voltar.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                System.out.println("Botão 'voltar' clicado");
+                edicao.setVisible(false);
+                listaDeVendedores(cpfGerente);
+            }
+        });
 
         InterfaceGrafica.trocarTela(edicao, 400, 200);
     }
@@ -385,6 +393,8 @@ public class IGAcoesGerente {
                 interfaceGrafica.sistemaGerente();
             }
         });
+
+        interfaceGrafica.atualizaFrame(lista);
 
         return lista;
 
@@ -662,6 +672,8 @@ public class IGAcoesGerente {
             }
         });
 
+        interfaceGrafica.atualizaFrame(lista);
+
         return lista;
     }
 
@@ -802,17 +814,25 @@ public class IGAcoesGerente {
                 break;
             default:}
 
-        JButton Sair = new JButton("Sair");
+        JButton voltar = new JButton("Voltar");
 
         JPanel botoesPanel = new JPanel();
         botoesPanel.setLayout(new BoxLayout(botoesPanel, BoxLayout.X_AXIS));
         botoesPanel.setAlignmentX(Component.LEFT_ALIGNMENT);
         botoesPanel.setMaximumSize(new Dimension(400, 30));
 
-        botoesPanel.add(Sair);
+        botoesPanel.add(voltar);
         botoesPanel.add(Box.createHorizontalGlue());
         botoesPanel.add(confirmar);
         edicao.add(botoesPanel);
+
+        voltar.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                System.out.println("Botão 'voltar' clicado");
+                edicao.setVisible(false);
+                visualizarListaDeProdutos(cpfGerente);
+            }
+        });
 
         InterfaceGrafica.trocarTela(edicao, 400, 200);
     }
