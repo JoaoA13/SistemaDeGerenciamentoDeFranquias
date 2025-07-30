@@ -314,7 +314,7 @@ public class IGAcoesVendedor {
         }
 
 
-        JButton Sair = new JButton("Sair");
+        JButton voltar = new JButton("Voltar");
         JButton confirmar = new JButton("Confirmar");
 
         JPanel botoesPanel = new JPanel();
@@ -325,7 +325,7 @@ public class IGAcoesVendedor {
         escreveCodigo.addActionListener(e -> escreveQuantidade.requestFocusInWindow());
         escreveQuantidade.addActionListener(e -> confirmar.doClick());
 
-        botoesPanel.add(Sair);
+        botoesPanel.add(voltar);
         botoesPanel.add(Box.createHorizontalGlue());
         botoesPanel.add(confirmar);
         cadastro.add(botoesPanel);
@@ -353,6 +353,7 @@ public class IGAcoesVendedor {
         frame.revalidate();
         frame.repaint();
         frame.setVisible(true);
+
     }
 
     JPanel listaDePedidos(){

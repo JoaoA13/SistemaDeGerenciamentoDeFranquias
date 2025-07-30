@@ -135,7 +135,7 @@ public class IGAcoesGerente {
         escreveCpf.setAlignmentX(Component.LEFT_ALIGNMENT);
         exclusao.add(escreveCpf);
 
-        JButton Sair = new JButton("Sair");
+        JButton voltar = new JButton("Voltar");
         JButton confirmar = new JButton("Confirmar");
 
         JPanel botoesPanel = new JPanel();
@@ -143,7 +143,7 @@ public class IGAcoesGerente {
         botoesPanel.setAlignmentX(Component.LEFT_ALIGNMENT);
         botoesPanel.setMaximumSize(new Dimension(400, 30));
 
-        botoesPanel.add(Sair);
+        botoesPanel.add(voltar);
         botoesPanel.add(Box.createHorizontalGlue());
         botoesPanel.add(confirmar);
         exclusao.add(botoesPanel);
@@ -159,6 +159,14 @@ public class IGAcoesGerente {
                 escreveCpf.setText("");
             } catch (EntradaException ex) {
                 JOptionPane.showMessageDialog(null, "Erro ao cadastrar: " + ex.getMessage(), "Erro", JOptionPane.ERROR_MESSAGE);
+            }
+        });
+
+        voltar.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                System.out.println("Botão 'voltar' clicado");
+                exclusao.setVisible(false);
+                interfaceGrafica.sistemaGerente();
             }
         });
 
@@ -370,6 +378,14 @@ public class IGAcoesGerente {
         botoesPanel.add(Box.createHorizontalGlue());
         lista.add(botoesPanel);
 
+        voltar.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                System.out.println("Botão 'voltar' clicado");
+                lista.setVisible(false);
+                interfaceGrafica.sistemaGerente();
+            }
+        });
+
         return lista;
 
     }
@@ -389,6 +405,14 @@ public class IGAcoesGerente {
         botoesPanel.add(Box.createHorizontalGlue());
         visualizacao.add(botoesPanel);
 
+        voltar.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                System.out.println("Botão 'voltar' clicado");
+                visualizacao.setVisible(false);
+                interfaceGrafica.sistemaGerente();
+            }
+        });
+
         return visualizacao;
     }
 
@@ -406,6 +430,14 @@ public class IGAcoesGerente {
         botoesPanel.add(voltar);
         botoesPanel.add(Box.createHorizontalGlue());
         solicitacoes.add(botoesPanel);
+
+        voltar.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                System.out.println("Botão 'voltar' clicado");
+                solicitacoes.setVisible(false);
+                interfaceGrafica.sistemaGerente();
+            }
+        });
 
         return solicitacoes;
     }
@@ -492,6 +524,14 @@ public class IGAcoesGerente {
                 escreveNome.setText("");escrevePreco.setText("");escreveCaracteristicas.setText("");escreveQuantidade.setText("");escreveCodigo.setText("");
             } catch (CadastroException ex) {
                 JOptionPane.showMessageDialog(null, "Erro ao cadastrar: " + ex.getMessage(), "Erro", JOptionPane.ERROR_MESSAGE);
+            }
+        });
+
+        voltar.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                System.out.println("Botão 'voltar' clicado");
+                cadastro.setVisible(false);
+                interfaceGrafica.sistemaGerente();
             }
         });
 
@@ -613,6 +653,14 @@ public class IGAcoesGerente {
         botoesPanel.add(voltar);
         botoesPanel.add(Box.createHorizontalGlue());
         lista.add(botoesPanel);
+
+        voltar.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                System.out.println("Botão 'voltar' clicado");
+                lista.setVisible(false);
+                interfaceGrafica.sistemaGerente();
+            }
+        });
 
         return lista;
     }
@@ -784,6 +832,14 @@ public class IGAcoesGerente {
         botoesPanel.add(Box.createHorizontalGlue());
         historico.add(botoesPanel);
 
+        voltar.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                System.out.println("Botão 'voltar' clicado");
+                historico.setVisible(false);
+                interfaceGrafica.sistemaGerente();
+            }
+        });
+
         return historico;
     }
 
@@ -801,6 +857,14 @@ public class IGAcoesGerente {
         botoesPanel.add(voltar);
         botoesPanel.add(Box.createHorizontalGlue());
         listaClientes.add(botoesPanel);
+
+        voltar.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                System.out.println("Botão 'voltar' clicado");
+                listaClientes.setVisible(false);
+                interfaceGrafica.sistemaGerente();
+            }
+        });
 
         return listaClientes;
     }

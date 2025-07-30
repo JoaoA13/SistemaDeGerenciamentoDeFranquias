@@ -1,6 +1,7 @@
 package SistemaDeGerenciamentoDeFranquias.Control;
 
 import SistemaDeGerenciamentoDeFranquias.Exceptions.*;
+import SistemaDeGerenciamentoDeFranquias.Model.Dono;
 import SistemaDeGerenciamentoDeFranquias.Model.Gerente;
 import SistemaDeGerenciamentoDeFranquias.Model.Loja;
 import SistemaDeGerenciamentoDeFranquias.Model.Vendedor;
@@ -8,14 +9,24 @@ import SistemaDeGerenciamentoDeFranquias.Validadores.*;
 
 import java.awt.*;
 import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.Collections;
+import java.util.*;
 import java.util.List;
 
 public class GerenciadorSistemaDono extends GerenciadorSistema {
-    private String senhaGerentePadrão = "12345678";
+    static private Map<String, Dono> armazenaDonos = new HashMap<>();
 
     public GerenciadorSistemaDono() {
+        Dono dono1 = new Dono("João","14127945605","joao@gmail","12345678");
+        armazenaDonos.put(dono1.getCpf(), dono1);
+    }
+
+    static public Dono getDono(String cpf){
+        Dono dono = armazenaDonos.get(cpf);
+        return dono;
+    }
+    static public Map<String, Dono> getDonos(){
+        Map<String, Dono> Donos = armazenaDonos;
+        return Donos;
     }
 
     @Override
@@ -33,7 +44,7 @@ public class GerenciadorSistemaDono extends GerenciadorSistema {
         }
 
         try {
-            ValidadorLogin.valida(getDono(), cpf, senha);
+            ValidadorLogin.valida(armazenaDonos.get(cpf), cpf, senha);
             return "CPF e senha corretos";
         } catch (LoginException e) {
             System.out.println("Erro: LoginException: " + e.getMessage());
@@ -95,6 +106,35 @@ public class GerenciadorSistemaDono extends GerenciadorSistema {
         GerenciadorDeLojas.cadastraGerente(cpfGerente, gerente);
     }
 
+    public void cadastroDono(String nome, String cpf,String senha, String email) throws CadastroException {
+        try {
+            ValidadorCampoVazio.valida(nome);
+            ValidadorCampoVazio.valida(cpf);
+            ValidadorCampoVazio.valida(senha);
+            ValidadorCampoVazio.valida(email);
+
+            ValidadorNome.validarNome(nome);
+            ValidadorCpf.validarCpf(cpf);
+            ValidadorSenha.valida(senha);
+            ValidadorEmail.valida(email);
+
+        } catch (EntradaException e) {
+            System.out.println("Erro: EntradaException: " + e.getMessage());
+            throw new LoginException(e.getMessage());
+        }
+
+        try {
+            ValidadorCpfBancoDeDadosFalse.valida(cpf);
+        } catch (BancoDeDadosException e) {
+            System.out.println("Erro: EntradaException: " + e.getMessage());
+            throw new CadastroException(e.getMessage());
+        }
+
+        Dono dono = new Dono(nome, cpf, email, senha);
+        armazenaDonos.put(cpf, dono);
+        System.out.println(armazenaDonos.get(cpf));
+    }
+
     static public String excluirLoja(String codigo) throws EntradaException {
         try {
             ValidadorCampoVazio.valida(codigo);
@@ -135,6 +175,27 @@ public class GerenciadorSistemaDono extends GerenciadorSistema {
         GerenciadorDeLojas.excluirGerente(cpf);
 
         return "Gerente excluído com Sucesso";
+    }
+
+    static public String excluirDono(String cpf) throws EntradaException {
+        try {
+            ValidadorCampoVazio.valida(cpf);
+            ValidadorCpf.validarCpf(cpf);
+        } catch (EntradaException e) {
+            System.out.println("Erro: EntradaException: " + e.getMessage());
+            throw new EntradaException(e.getMessage());
+        }
+
+        try {
+            ValidadorCpfBancoDeDadosTrue.valida(cpf);
+        } catch (BancoDeDadosException e) {
+            System.out.println("Erro: EntradaException: " + e.getMessage());
+            throw new EntradaException(e.getMessage());
+        }
+
+        armazenaDonos.remove(cpf);
+
+        return "Dono excluído com Sucesso";
     }
 
     static public String editarGerente(String nome, String cpfNovo, String email, String senha, String cpf) throws EntradaException {
@@ -210,6 +271,73 @@ public class GerenciadorSistemaDono extends GerenciadorSistema {
             return "";
         }
 
+    static public String editarDono(String nome, String cpfNovo, String email, String senha, String cpf) throws EntradaException {
+        if (nome != "") {
+            try {
+                ValidadorCampoVazio.valida(nome);
+                ValidadorNome.validarNome(nome);
+            } catch (EntradaException e) {
+                System.out.println("Erro: EntradaException: " + e.getMessage());
+                throw new EntradaException(e.getMessage());
+            }
+
+            getDono(cpf).setNome(nome);
+
+            return "Nome editado";
+        }
+        if (cpfNovo != "") {
+            try {
+                ValidadorCampoVazio.valida(cpfNovo);
+                ValidadorCpf.validarCpf(cpfNovo);
+            } catch (EntradaException e) {
+                System.out.println("Erro: EntradaException: " + e.getMessage());
+                throw new EntradaException(e.getMessage());
+            }
+
+            try {
+                ValidadorCpfBancoDeDadosFalse.valida(cpfNovo);
+            }catch (BancoDeDadosException e){
+                System.out.println("Erro: EntradaException: " + e.getMessage());
+                throw new EntradaException(e.getMessage());
+            }
+
+            Dono dono = getDono(cpf);
+            armazenaDonos.remove(cpf);
+
+            dono.setCpf(cpfNovo);
+            armazenaDonos.put(cpfNovo,dono);
+
+            return "CPf editado";
+        }
+        if (email != "") {
+            try {
+                ValidadorCampoVazio.valida(email);
+                ValidadorEmail.valida(email);
+            } catch (EntradaException e) {
+                System.out.println("Erro: EntradaException: " + e.getMessage());
+                throw new EntradaException(e.getMessage());
+            }
+
+            getDono(cpf).setEmail(email);
+
+            return "E-mail editado";
+        }
+        if (senha != "") {
+            try {
+                ValidadorCampoVazio.valida(senha);
+                ValidadorSenha.valida(senha);
+            } catch (EntradaException e) {
+                System.out.println("Erro: EntradaException: " + e.getMessage());
+                throw new EntradaException(e.getMessage());
+            }
+
+            getDono(cpf).setSenha(senha);
+
+            return "Senha editada";
+        }
+        return "";
+    }
+
     static public String editarLoja(String endereco, String cpfNovoGerente,String novoCodigo,String codigo) throws EntradaException {
         if (endereco != "") {
             Loja loja = GerenciadorDeLojas.getLoja(codigo);
@@ -238,12 +366,6 @@ public class GerenciadorSistemaDono extends GerenciadorSistema {
                 System.out.println("Erro: EntradaException: " + e.getMessage());
                 throw new CadastroException(e.getMessage());
             }
-//
-//            GerenciadorDeLojas.getLojas();
-//            GerenciadorDeLojas.getLojas().put(novoCodigo,loja);
-//
-//            GerenciadorDeLojas.getCodigoPraCpf().remove(codigo);
-//            GerenciadorDeLojas.getCodigoPraCpf().put(loja.getCpfGerente(),novoCodigo);
 
             GerenciadorDeLojas.trocarCodigo(novoCodigo,codigo);
 

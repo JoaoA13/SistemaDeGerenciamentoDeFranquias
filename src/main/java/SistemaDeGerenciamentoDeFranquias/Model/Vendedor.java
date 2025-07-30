@@ -10,6 +10,10 @@ public class Vendedor extends Usuario {
         super(nome,cpf,email,senha);
         this.codigoLoja = codigoLoja;
     }
+    @Override
+    public TipoUsuario getTipo() {
+        return TipoUsuario.VENDEDOR;
+    }
 
     public BigDecimal getValorVenda(){
         return valorVenda;
