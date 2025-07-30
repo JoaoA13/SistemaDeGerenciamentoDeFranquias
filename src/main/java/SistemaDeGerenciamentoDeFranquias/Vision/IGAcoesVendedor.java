@@ -26,6 +26,8 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Locale;
 
+import static java.math.BigDecimal.*;
+
 public class IGAcoesVendedor {
     static GerenciadorSistemaVendedor gerenciaVendedor = new GerenciadorSistemaVendedor();
     Loja loja;
@@ -144,10 +146,8 @@ public class IGAcoesVendedor {
         valoresPanel.add(taxaEntregaPanel);
         cadastro.add(valoresPanel);
 
-        String codigo = escreveCodigo.getText();
-        if(loja != null) {
-            Produto produto = loja.getProduto(codigo);
-            escreveQuantidade.getDocument().addDocumentListener(new DocumentListener() {
+        if (loja != null) {
+            DocumentListener listener = new DocumentListener() {
                 public void insertUpdate(DocumentEvent e) {
                     calcular();
                 }
@@ -162,16 +162,25 @@ public class IGAcoesVendedor {
 
                 private void calcular() {
                     try {
-                        int qtd = Integer.parseInt(escreveQuantidade.getText());
-                        BigDecimal total = BigDecimal.valueOf(0);
-                        if (produto != null)
-                            total = BigDecimal.valueOf(qtd).multiply(produto.getPreco());
+                        String codigo = escreveCodigo.getText();
+                        Produto produto = loja.getProduto(codigo);
+
+                        BigDecimal qtd = BigDecimal.valueOf(Integer.parseInt(escreveQuantidade.getText()));
+                        BigDecimal total = BigDecimal.ZERO;
+
+                        if (produto != null && qtd.compareTo(BigDecimal.ZERO) > 0) {
+                            total = qtd.multiply(produto.getPreco());
+                        }
+
                         campoValorPedido.setText(String.format("R$ %.2f", total));
                     } catch (NumberFormatException ex) {
                         campoValorPedido.setText("R$ 0.00");
                     }
                 }
-            });
+            };
+
+            escreveQuantidade.getDocument().addDocumentListener(listener);
+            escreveCodigo.getDocument().addDocumentListener(listener);
         }
 
 
@@ -284,9 +293,8 @@ public class IGAcoesVendedor {
         cadastro.add(valoresPanel);
 
         String codigo = escreveCodigo.getText();
-        if(loja != null) {
-            Produto produto = loja.getProduto(codigo);
-            escreveQuantidade.getDocument().addDocumentListener(new DocumentListener() {
+        if (loja != null) {
+            DocumentListener listener = new DocumentListener() {
                 public void insertUpdate(DocumentEvent e) {
                     calcular();
                 }
@@ -301,16 +309,25 @@ public class IGAcoesVendedor {
 
                 private void calcular() {
                     try {
-                        int qtd = Integer.parseInt(escreveQuantidade.getText());
-                        BigDecimal total = BigDecimal.valueOf(0);
-                        if (produto != null)
-                            total = BigDecimal.valueOf(qtd).multiply(produto.getPreco());
+                        String codigo = escreveCodigo.getText();
+                        Produto produto = loja.getProduto(codigo);
+
+                        BigDecimal qtd = BigDecimal.valueOf(Integer.parseInt(escreveQuantidade.getText()));
+                        BigDecimal total = BigDecimal.ZERO;
+
+                        if (produto != null) {
+                            total = qtd.multiply(produto.getPreco());
+                        }
+
                         campoValorPedido.setText(String.format("R$ %.2f", total));
                     } catch (NumberFormatException ex) {
                         campoValorPedido.setText("R$ 0.00");
                     }
                 }
-            });
+            };
+
+            escreveQuantidade.getDocument().addDocumentListener(listener);
+            escreveCodigo.getDocument().addDocumentListener(listener);
         }
 
 
