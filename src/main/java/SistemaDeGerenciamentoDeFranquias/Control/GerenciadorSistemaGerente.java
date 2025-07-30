@@ -1,5 +1,6 @@
 package SistemaDeGerenciamentoDeFranquias.Control;
 
+import SistemaDeGerenciamentoDeFranquias.Arquivos.salvaArquivos;
 import SistemaDeGerenciamentoDeFranquias.Exceptions.BancoDeDadosException;
 import SistemaDeGerenciamentoDeFranquias.Exceptions.CadastroException;
 import SistemaDeGerenciamentoDeFranquias.Exceptions.EntradaException;
@@ -197,6 +198,8 @@ public class GerenciadorSistemaGerente extends GerenciadorSistema{
 
         Loja loja = listaLojas.getLoja(cpfGerente);
         loja.addProduto(nome, preco, carac, quant, codigo);
+
+        salvaArquivos.salvarLojas(GerenciadorDeLojas.getLojas());
         return "Produto Cadastrado";
 
     }
@@ -299,6 +302,8 @@ public class GerenciadorSistemaGerente extends GerenciadorSistema{
     public void excluirProdutos(String codigo, String cpfGerente){
         Loja loja = listaLojas.getLoja(cpfGerente);
         loja.excluirProduto(codigo);
+
+        salvaArquivos.salvarLojas(GerenciadorDeLojas.getLojas());
     }
 
     public void listaDeVendedores(String cpfGerente){
