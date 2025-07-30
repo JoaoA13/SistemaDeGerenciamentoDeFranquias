@@ -4,6 +4,7 @@ import SistemaDeGerenciamentoDeFranquias.Control.GerenciadorDeLojas;
 import SistemaDeGerenciamentoDeFranquias.Control.GerenciadorSistemaDono;
 import SistemaDeGerenciamentoDeFranquias.Exceptions.CadastroException;
 import SistemaDeGerenciamentoDeFranquias.Exceptions.EntradaException;
+import SistemaDeGerenciamentoDeFranquias.Model.Dono;
 import SistemaDeGerenciamentoDeFranquias.Model.Gerente;
 import SistemaDeGerenciamentoDeFranquias.Model.Loja;
 import SistemaDeGerenciamentoDeFranquias.Model.Vendedor;
@@ -122,7 +123,7 @@ public class IGAcoesDono {
         return false;
     }
 
-    JPanel listaDeLojas(){
+    JPanel listaLojas(){
         JPanel lista = new JPanel();
         lista.setLayout(new BoxLayout(lista, BoxLayout.Y_AXIS));
         lista.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
@@ -211,6 +212,8 @@ public class IGAcoesDono {
                 interfaceGrafica.sistemaDono();
             }
         });
+
+        interfaceGrafica.atualizaFrame(lista);
 
         return lista;
     }
@@ -335,9 +338,20 @@ public class IGAcoesDono {
         botoesPanel.setAlignmentX(Component.LEFT_ALIGNMENT);
         botoesPanel.setMaximumSize(new Dimension(400, 30));
 
+        JButton voltar = new JButton("voltar");
+        botoesPanel.add(voltar);
+
         botoesPanel.add(Box.createHorizontalGlue());
         botoesPanel.add(confirmar);
         edicao.add(botoesPanel);
+
+            voltar.addActionListener(new ActionListener() {
+                public void actionPerformed(ActionEvent e) {
+                    System.out.println("Botão 'voltar' clicado");
+                    edicao.setVisible(false);
+                    listaLojas();
+                }
+            });
 
         InterfaceGrafica.trocarTela(edicao, 400, 200);
         }
@@ -447,7 +461,7 @@ public class IGAcoesDono {
 
         try{
             interfaceGrafica.gerenciaDono.cadastroGerente(nome,cpf,senha,email);
-            interfaceGrafica.exibeInformacao("Cadastro de gerente feitos corretamente","Cadastro de gerente feito com sucesso");
+            interfaceGrafica.exibeInformacao("Cadastro de gerente feito corretamente","Cadastro de gerente feito com sucesso");
             return true;
         }catch (CadastroException mes) {
             interfaceGrafica.exibeException(mes.getMessage(),"Cadastro falhou");
@@ -455,7 +469,7 @@ public class IGAcoesDono {
         return false;
     }
 
-    JPanel listaDeGerente(){
+    JPanel listaGerente(){
         JPanel lista = new JPanel();
         lista.setLayout(new BoxLayout(lista, BoxLayout.Y_AXIS));
         lista.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
@@ -573,6 +587,8 @@ public class IGAcoesDono {
             }
         });
 
+        interfaceGrafica.atualizaFrame(lista);
+
         return lista;
     }
 
@@ -687,7 +703,7 @@ public class IGAcoesDono {
             }
         });
 
-        JButton sair = new JButton("voltar");
+        JButton voltar = new JButton("voltar");
         //sair.addActionListener(e -> interfaceGrafica.voltar());
 
         JPanel botoesPanel = new JPanel();
@@ -695,13 +711,361 @@ public class IGAcoesDono {
         botoesPanel.setAlignmentX(Component.LEFT_ALIGNMENT);
         botoesPanel.setMaximumSize(new Dimension(400, 30));
 
-        botoesPanel.add(sair);
+        botoesPanel.add(voltar);
         botoesPanel.add(Box.createHorizontalGlue());
         botoesPanel.add(confirmar);
         edicao.add(botoesPanel);
 
+        voltar.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                System.out.println("Botão 'voltar' clicado");
+                edicao.setVisible(false);
+                listaGerente();
+            }
+        });
+
         InterfaceGrafica.trocarTela(edicao, 400, 200);
     }
 
+    JPanel cadastraDono(){
+        JPanel cadastraGerentes = new JPanel();
+
+        JLabel titulo = new JLabel("Cadastro de dono", SwingConstants.CENTER);
+        cadastraGerentes.add(titulo, BorderLayout.NORTH);
+
+        JPanel subPainel = new JPanel();
+        subPainel.setLayout(new BoxLayout(subPainel, BoxLayout.Y_AXIS));
+        subPainel.setAlignmentX(Component.CENTER_ALIGNMENT);
+
+        JPanel linhaNome = new JPanel(new FlowLayout(FlowLayout.CENTER));
+        linhaNome.add(new JLabel("Nome do dono:"));
+        JTextField escreveNome = new JTextField(15);
+        linhaNome.add(escreveNome);
+        subPainel.add(linhaNome);
+
+        JPanel linhaCpf = new JPanel(new FlowLayout(FlowLayout.CENTER));
+        linhaCpf.add(new JLabel("Cpf do dono:"));
+        JTextField escreveCpf = new JTextField(15);
+        linhaCpf.add(escreveCpf);
+        subPainel.add(linhaCpf);
+
+        JPanel linhaSenha = new JPanel(new FlowLayout(FlowLayout.CENTER));
+        linhaSenha.add(new JLabel("Senha do dono:"));
+        JTextField escreveSenha = new JTextField(15);
+        linhaSenha.add(escreveSenha);
+        subPainel.add(linhaSenha);
+
+        JPanel linhaEmail = new JPanel(new FlowLayout(FlowLayout.CENTER));
+        linhaEmail.add(new JLabel("E-mail do dono:"));
+        JTextField escreveEmail = new JTextField(15);
+        linhaEmail.add(escreveEmail);
+        subPainel.add(linhaEmail);
+
+        JButton Cadastrar = new JButton("Cadastrar");
+        subPainel.add(Cadastrar);
+
+        JButton voltar = new JButton("voltar");
+        subPainel.add(voltar);
+
+        cadastraGerentes.add(subPainel, BorderLayout.CENTER);
+
+        escreveNome.addKeyListener(new KeyAdapter() {
+            public void keyPressed(KeyEvent e) {
+                if (e.getKeyCode() == KeyEvent.VK_ENTER) {
+                    System.out.println("Tecla Enter pressionada");
+                    escreveCpf.requestFocusInWindow();
+                }
+            }
+        });
+        escreveCpf.addKeyListener(new KeyAdapter() {
+            public void keyPressed(KeyEvent e) {
+                if (e.getKeyCode() == KeyEvent.VK_ENTER) {
+                    System.out.println("Tecla Enter pressionada");
+                    escreveSenha.requestFocusInWindow();
+                }
+            }
+        });
+
+        escreveSenha.addKeyListener(new KeyAdapter() {
+            public void keyPressed(KeyEvent e) {
+                if (e.getKeyCode() == KeyEvent.VK_ENTER) {
+                    System.out.println("Tecla Enter pressionada");
+                    escreveEmail.requestFocusInWindow();
+                }
+            }
+        });
+
+        escreveEmail.addKeyListener(new KeyAdapter() {
+            public void keyPressed(KeyEvent e) {
+                if (e.getKeyCode() == KeyEvent.VK_ENTER) {
+                    if(botaoCadastrarDono( escreveNome.getText(), escreveCpf.getText(),escreveSenha.getText(), escreveEmail.getText())) {
+                        escreveNome.setText("");escreveCpf.setText("");escreveSenha.setText("");escreveEmail.setText("");
+                    }
+                }
+            }
+        });
+
+        Cadastrar.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                System.out.println("Botão 'Cadastrar' clicado");
+                if(botaoCadastrarDono(escreveNome.getText(), escreveCpf.getText(),escreveSenha.getText(), escreveEmail.getText())) {
+                    escreveNome.setText("");escreveCpf.setText("");escreveSenha.setText("");escreveEmail.setText("");
+                }
+            }
+        });
+
+        voltar.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                System.out.println("Botão 'voltar' clicado");
+                cadastraGerentes.setVisible(false);
+                interfaceGrafica.sistemaDono();
+            }
+        });
+
+
+        return cadastraGerentes;
+    }
+
+    boolean botaoCadastrarDono(String nome, String cpf,String senha,String email){
+        System.out.println("Tecla Enter pressionada");
+
+        try{
+            interfaceGrafica.gerenciaDono.cadastroDono(nome,cpf,senha,email);
+            interfaceGrafica.exibeInformacao("Cadastro de dono feito corretamente","Cadastro de dono feito com sucesso");
+            return true;
+        }catch (CadastroException mes) {
+            interfaceGrafica.exibeException(mes.getMessage(),"Cadastro falhou");
+        }
+        return false;
+    }
+
+    JPanel listaDono(){
+        JPanel lista = new JPanel();
+        lista.setLayout(new BoxLayout(lista, BoxLayout.Y_AXIS));
+        lista.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
+
+        JPanel botoesPanel = new JPanel();
+        botoesPanel.setLayout(new BoxLayout(botoesPanel, BoxLayout.X_AXIS));
+        botoesPanel.setAlignmentX(Component.LEFT_ALIGNMENT);
+
+            String[] colunas = {"Nome", "CPF", "Email"};
+
+        String[][] dados = new String[GerenciadorSistemaDono.getDonos().size()][3];
+        int i = 0;
+        for (Dono dono : GerenciadorSistemaDono.getDonos().values()) {
+            if (dono == null) continue;
+            dados[i][0] = dono.getNome();
+            dados[i][1] = dono.getCpf();
+            dados[i][2] = dono.getEmail();
+            i++;
+        }
+
+        DefaultTableModel modelo = new DefaultTableModel(dados, colunas) {
+            public boolean isCellEditable(int row, int column) {
+                return false;
+            }
+        };
+
+        JTable tabela = new JTable(modelo); // <-- corrigido aqui
+        JScrollPane scroll = new JScrollPane(tabela);
+        lista.add(scroll, BorderLayout.CENTER);
+
+        JPopupMenu menuPopup = new JPopupMenu();
+        JMenuItem editarItem = new JMenuItem("Editar");
+        JMenuItem excluirItem = new JMenuItem("Excluir");
+        JMenuItem visualizarItem = new JMenuItem("Visualizar");
+        menuPopup.add(editarItem);
+        menuPopup.add(excluirItem);
+        menuPopup.add(visualizarItem);
+
+        tabela.addMouseListener(new MouseAdapter() {
+            public void mousePressed(MouseEvent e) {
+                if (e.isPopupTrigger() || SwingUtilities.isRightMouseButton(e)) {
+                    int linha = tabela.rowAtPoint(e.getPoint());
+                    if (linha >= 0 && linha < tabela.getRowCount()) {
+                        tabela.setRowSelectionInterval(linha, linha);
+                        String cpf = (String) tabela.getValueAt(linha, 1);
+
+
+                        editarItem.addActionListener(ae -> {
+                            editarDono(cpf);
+                        });
+
+                        excluirItem.addActionListener(ae -> {
+                            int confirm;
+                                confirm = JOptionPane.showConfirmDialog(lista,
+                                        "Tem certeza que deseja excluir o dono com o CPF: " + cpf + "?",
+                                        "Confirmar exclusão",
+                                        JOptionPane.YES_NO_OPTION);
+                                if (confirm == JOptionPane.YES_OPTION)
+                            try {
+                                GerenciadorSistemaDono.excluirDono(cpf);
+                                interfaceGrafica.exibeInformacao("Dono excluido com sucesso", "Exclusão concluida");
+                                ((DefaultTableModel) tabela.getModel()).removeRow(linha);
+                            } catch (EntradaException ex) {
+                                interfaceGrafica.exibeException(ex.getMessage(),"Exclusão falhou");
+                            }
+
+                        });
+
+                        for (ActionListener al : visualizarItem.getActionListeners()) {
+                            visualizarItem.removeActionListener(al);
+                        }
+                        visualizarItem.addActionListener(ae -> {
+                            exibeDono(GerenciadorSistemaDono.getDono(cpf));
+                        });
+
+                        menuPopup.show(tabela, e.getX(), e.getY());
+                    }
+                }
+            }
+        });
+
+        JButton voltar = new JButton("Voltar");
+        botoesPanel.add(voltar);
+
+        botoesPanel.add(Box.createHorizontalGlue());
+        lista.add(botoesPanel);
+
+        voltar.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                System.out.println("Botão 'voltar' clicado");
+                lista.setVisible(false);
+                interfaceGrafica.sistemaDono();
+            }
+        });
+
+        interfaceGrafica.atualizaFrame(lista);
+
+        return lista;
+    }
+
+    protected void exibeDono(Dono dono) {
+        if (dono == null) {
+            JOptionPane.showMessageDialog(null, "Dono não encontrado!", "Erro", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+        JFrame exibe = new JFrame("Informações do Gerente: " + dono.getNome());
+        exibe.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+        exibe.setSize(450, 250);
+        exibe.setLocationRelativeTo(null);
+
+        JPanel painelPrincipal = new JPanel(new BorderLayout(10, 10));
+        painelPrincipal.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
+
+        JLabel titulo = new JLabel("Informações do Dono", SwingConstants.CENTER);
+        painelPrincipal.add(titulo, BorderLayout.NORTH);
+
+        JPanel tabela = new JPanel(new GridLayout(3, 2, 10, 10));
+
+        tabela.add(interfaceGrafica.criaCelula("Nome :"));
+        tabela.add(interfaceGrafica.criaCelula(dono.getNome()));
+
+        tabela.add(interfaceGrafica.criaCelula("CPF:"));
+        tabela.add(interfaceGrafica.criaCelula(dono.getCpf()));
+
+        tabela.add(interfaceGrafica.criaCelula("Email:"));
+        tabela.add(interfaceGrafica.criaCelula(dono.getEmail()));
+
+        painelPrincipal.add(tabela, BorderLayout.CENTER);
+
+        // Botão de sair
+        JButton sair = new JButton("Fechar");
+        sair.addActionListener(e -> exibe.dispose());
+        sair.addActionListener(e -> exibe.removeAll());
+
+        JPanel painelBotao = new JPanel();
+        painelBotao.add(sair);
+
+        painelPrincipal.add(painelBotao, BorderLayout.SOUTH);
+
+        exibe.setContentPane(painelPrincipal);
+        exibe.setVisible(true);
+        exibe.addWindowListener(new WindowAdapter() {
+            @Override
+            public void windowClosed(WindowEvent e) {
+                System.out.println("Janela foi fechada");
+            }
+        });
+    }
+
+    void editarDono(String cpf) {
+        JPanel edicao = new JPanel();
+        edicao.setLayout(new BoxLayout(edicao, BoxLayout.Y_AXIS));
+        edicao.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
+
+        String[] opcoes = {"Nome", "Email", "CPF", "Senha"};
+        int escolha = JOptionPane.showOptionDialog(
+                null,
+                "Qual informação deseja editar?",
+                "Editar Gerente",
+                JOptionPane.DEFAULT_OPTION,
+                JOptionPane.QUESTION_MESSAGE,
+                null,
+                opcoes,
+                opcoes[0]
+        );
+
+        if (escolha < 0 || escolha >= opcoes.length) return;
+
+        String campoSelecionado = opcoes[escolha];
+        String labelTexto = "Digite o novo " + campoSelecionado + " do gerente:";
+
+        JLabel label = new JLabel(labelTexto);
+        label.setAlignmentX(Component.LEFT_ALIGNMENT);
+        edicao.add(label);
+
+        JTextField campoTexto = new JTextField(20);
+        campoTexto.setMaximumSize(new Dimension(Integer.MAX_VALUE, 25));
+        campoTexto.setAlignmentX(Component.LEFT_ALIGNMENT);
+        edicao.add(campoTexto);
+
+        JButton confirmar = new JButton("Confirmar");
+
+        campoTexto.addActionListener(e -> confirmar.doClick());
+        confirmar.addActionListener(e -> {
+            System.out.println("Botão Confirmar clicado");
+            String valor = campoTexto.getText().trim();
+
+            try {
+                String nome = "", cpfNovo = "", email = "", senha = "";
+                switch (escolha) {
+                    case 0: nome = valor; break;
+                    case 1: email = valor; break;
+                    case 2: cpfNovo = valor; break;
+                    case 3: senha = valor; break;
+                }
+
+                String msg = GerenciadorSistemaDono.editarDono(nome, cpfNovo, email, senha, cpf);
+                JOptionPane.showMessageDialog(null, msg, "Sucesso", JOptionPane.INFORMATION_MESSAGE);
+                campoTexto.setText("");
+            } catch (EntradaException ex) {
+                JOptionPane.showMessageDialog(null, "Erro ao editar: " + ex.getMessage(), "Erro", JOptionPane.ERROR_MESSAGE);
+            }
+        });
+
+        JButton voltar = new JButton("voltar");
+        //sair.addActionListener(e -> interfaceGrafica.voltar());
+
+        JPanel botoesPanel = new JPanel();
+        botoesPanel.setLayout(new BoxLayout(botoesPanel, BoxLayout.X_AXIS));
+        botoesPanel.setAlignmentX(Component.LEFT_ALIGNMENT);
+        botoesPanel.setMaximumSize(new Dimension(400, 30));
+
+        botoesPanel.add(voltar);
+        botoesPanel.add(Box.createHorizontalGlue());
+        botoesPanel.add(confirmar);
+        edicao.add(botoesPanel);
+
+        voltar.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                System.out.println("Botão 'voltar' clicado");
+                edicao.setVisible(false);
+                listaDono();
+            }
+        });
+
+        InterfaceGrafica.trocarTela(edicao, 400, 200);
+    }
 
 }

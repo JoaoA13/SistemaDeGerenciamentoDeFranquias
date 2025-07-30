@@ -22,7 +22,7 @@ public class salvaArquivos {
 
     // ===================== SALVAR =====================
 
-    public static void salvarDonos(List<Dono> dono) {
+    public static void salvarDonos(Map<String, Dono> dono) {
         salvarEmArquivo(dono, CAMINHO_DONO);
     }
 
@@ -46,8 +46,8 @@ public class salvaArquivos {
 
     // ===================== CARREGAR =====================
 
-    public static List<Dono> carregarDono() {
-        Type tipo = new TypeToken<List<Dono>>() {}.getType();
+    public static Map<String, Dono> carregarDono() {
+        Type tipo = new TypeToken<Map<String, Dono>>() {}.getType();
         return carregarDeArquivo(CAMINHO_DONO, tipo);
     }
 

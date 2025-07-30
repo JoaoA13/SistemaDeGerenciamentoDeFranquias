@@ -1,5 +1,6 @@
 package SistemaDeGerenciamentoDeFranquias.Validadores;
 
+import SistemaDeGerenciamentoDeFranquias.Control.GerenciadorSistemaDono;
 import SistemaDeGerenciamentoDeFranquias.Exceptions.BancoDeDadosException;
 import SistemaDeGerenciamentoDeFranquias.Control.GerenciadorDeLojas;
 import SistemaDeGerenciamentoDeFranquias.Control.GerenciadorSistema;
@@ -16,7 +17,7 @@ public class ValidadorCpfBancoDeDadosFalse implements ValidadorBancoDeDados{
             if (loja.getVendedor(cpf) != null)
                 throw new BancoDeDadosException("Esse Cpf já está cadastrado");
         }
-        if(GerenciadorDeLojas.getGerente(cpf) != null || cpf.equals(GerenciadorSistema.getDono().getCpf()) )
+        if(GerenciadorDeLojas.getGerente(cpf) != null || GerenciadorSistemaDono.getDono(cpf) != null )
             throw new BancoDeDadosException("Esse Cpf já está cadastrado");
         else
             return true;

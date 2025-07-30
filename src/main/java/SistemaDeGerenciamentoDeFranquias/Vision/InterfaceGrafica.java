@@ -17,7 +17,6 @@ public class InterfaceGrafica {
     protected GerenciadorSistemaDono gerenciaDono = new GerenciadorSistemaDono();
     protected GerenciadorSistemaGerente gerenciaGerente = new GerenciadorSistemaGerente();
     protected GerenciadorSistemaVendedor gerenciaVendedor = new GerenciadorSistemaVendedor();
-    protected GerenciadorDeLojas gerenciador = new GerenciadorDeLojas();
     private GerenciadorDeLojas gerenciaDeLojas = new GerenciadorDeLojas();
     String cpf = "";
 
@@ -172,7 +171,6 @@ public class InterfaceGrafica {
         sistemaDono.add(subPainel, BorderLayout.CENTER);
 
         JMenuBar menuBar = new JMenuBar();
-        frame.setJMenuBar(menuBar);
 
         JMenu menu1 = new JMenu ("Inico");
         menuBar.add (menu1);
@@ -193,12 +191,27 @@ public class InterfaceGrafica {
         JMenuItem  listaGerente = new JMenuItem ("Lista de gerentes", KeyEvent.VK_T);
         gerentes.add(listaGerente);
 
+        JMenu donos = new JMenu ("Donos");
+        menuBar.add(donos);
+        JMenuItem  cadastrarDono = new JMenuItem ("Cadastrar donos", KeyEvent.VK_T);
+        donos.add(cadastrarDono);
+        JMenuItem  listaDono = new JMenuItem ("Lista de donos", KeyEvent.VK_T);
+        donos.add(listaDono);
+
+        frame.setJMenuBar(menuBar);
+
 
         menu1Item1.addActionListener(e -> trocarTela(sistemaDono, 200, 200));
+
         cadastrarLoja.addActionListener(e -> trocarTela(acoes.cadastraLojas(), 500, 500));
-        listaLoja.addActionListener(e -> trocarTela(acoes.listaDeLojas(), 500, 500));
+        listaLoja.addActionListener(e -> trocarTela(acoes.listaLojas(), 500, 500));
+
         cadastrarGerente.addActionListener(e -> trocarTela(acoes.cadastraGerentes(), 500, 500));
-        listaGerente.addActionListener(e -> trocarTela(acoes.listaDeGerente(), 500, 500));
+        listaGerente.addActionListener(e -> trocarTela(acoes.listaGerente(), 500, 500));
+
+        cadastrarDono.addActionListener(e -> trocarTela(acoes.cadastraDono(), 300, 400));
+        listaDono.addActionListener(e -> trocarTela(acoes.listaDono(), 300, 400));
+
 
         frame.pack();
         frame.setContentPane(sistemaDono);
@@ -427,5 +440,16 @@ public class InterfaceGrafica {
         JLabel label = new JLabel(valor, SwingConstants.CENTER);
         label.setBorder(BorderFactory.createLineBorder(Color.GRAY));
         return label;
+    }
+
+    protected void atualizaFrame(JPanel painel){
+        getFrame().pack();
+        getFrame().setContentPane(painel);
+        getFrame().setSize(500, 300);
+        getFrame().setLocationRelativeTo(null);
+        getFrame().setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        getFrame().setVisible(true);
+        getFrame().revalidate();
+        getFrame().repaint();
     }
 }

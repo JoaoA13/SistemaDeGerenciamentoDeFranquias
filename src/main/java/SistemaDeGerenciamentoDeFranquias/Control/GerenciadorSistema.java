@@ -3,14 +3,17 @@ package SistemaDeGerenciamentoDeFranquias.Control;
 import SistemaDeGerenciamentoDeFranquias.Exceptions.BancoDeDadosException;
 import SistemaDeGerenciamentoDeFranquias.Exceptions.LoginException;
 import SistemaDeGerenciamentoDeFranquias.Model.Dono;
+import SistemaDeGerenciamentoDeFranquias.Model.Gerente;
 import SistemaDeGerenciamentoDeFranquias.Model.Loja;
 import SistemaDeGerenciamentoDeFranquias.Model.Vendedor;
 import SistemaDeGerenciamentoDeFranquias.Validadores.ValidadorCpfBancoDeDadosFalse;
 import SistemaDeGerenciamentoDeFranquias.Validadores.ValidadorCpfBancoDeDadosTrue;
 
+import java.util.HashMap;
+import java.util.Map;
+
 public abstract class GerenciadorSistema {
 
-    static private Dono dono = new Dono("João","14127945605","joao@gmail","12345678");
     //protected GerenciadorDeLojas gerenciadorDeLojas = new GerenciadorDeLojas();
 
     public GerenciadorSistema(){
@@ -18,10 +21,6 @@ public abstract class GerenciadorSistema {
 
     String login(String nome,String senha) throws LoginException {
         return null;
-    }
-
-    static public Dono getDono(){
-        return dono;
     }
 
     static public void buscaCpfExiste(String cpf) throws LoginException{

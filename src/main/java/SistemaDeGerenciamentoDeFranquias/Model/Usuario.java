@@ -14,6 +14,8 @@ public abstract class Usuario {
 
     }
 
+    public abstract TipoUsuario getTipo();
+
     /// Getters e Setters gerais
     public String getNome() { return nome;}
     public void setNome(String nome) { this.nome = nome;}
