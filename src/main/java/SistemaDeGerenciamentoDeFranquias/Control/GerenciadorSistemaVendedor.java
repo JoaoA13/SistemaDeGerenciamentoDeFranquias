@@ -1,22 +1,22 @@
 package SistemaDeGerenciamentoDeFranquias.Control;
 
 import SistemaDeGerenciamentoDeFranquias.Exceptions.BancoDeDadosException;
-import SistemaDeGerenciamentoDeFranquias.Exceptions.CadastroException;
 import SistemaDeGerenciamentoDeFranquias.Exceptions.EntradaException;
 import SistemaDeGerenciamentoDeFranquias.Exceptions.LoginException;
 import SistemaDeGerenciamentoDeFranquias.Model.Loja;
-import SistemaDeGerenciamentoDeFranquias.Model.Produto;
 import SistemaDeGerenciamentoDeFranquias.Model.Vendedor;
 import SistemaDeGerenciamentoDeFranquias.Validadores.*;
+import SistemaDeGerenciamentoDeFranquias.Validadores.ValidadoresBancoDados.ValidadorCodigoPedidoBancoDeDadosFalse;
+import SistemaDeGerenciamentoDeFranquias.Validadores.ValidadoresBancoDados.ValidadorCodigoProdutoBancoDeDadosTrue;
+import SistemaDeGerenciamentoDeFranquias.Validadores.ValidadorCpf;
+import SistemaDeGerenciamentoDeFranquias.Validadores.ValidadoresBancoDados.ValidadorCpfBancoDeDadosTrue;
+import SistemaDeGerenciamentoDeFranquias.Validadores.ValidadoresNumericos.ValidadorPrecoPositivo;
+import SistemaDeGerenciamentoDeFranquias.Validadores.ValidadoresNumericos.ValidadorValorNaoNegativo;
 import SistemaDeGerenciamentoDeFranquias.Vision.IGAcoesVendedor;
-import SistemaDeGerenciamentoDeFranquias.Vision.InterfaceGrafica;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.LocalTime;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.concurrent.atomic.AtomicBoolean;
 
 import static SistemaDeGerenciamentoDeFranquias.Control.GerenciadorDeLojas.getVendedorGeral;
 
@@ -62,7 +62,7 @@ public class GerenciadorSistemaVendedor extends GerenciadorSistema{
             ValidadorCodigo.validarCodigo(codigoPedido);
             ValidadorCodigoPedidoBancoDeDadosFalse.valida(codigoPedido);
 
-            quant = ValidadorPrecoPositivo.validarValorPositivo(quantTexto);
+            quant = ValidadorPrecoPositivo.valida(quantTexto);
             ValidadorNome.validarNome(nomeCliente);
             data = ValidadorData.validarData(dataTexto);
             hora = ValidadorHora.validarHora(horaTexto);
@@ -107,7 +107,7 @@ public class GerenciadorSistemaVendedor extends GerenciadorSistema{
             ValidadorCodigo.validarCodigo(codigo);
             ValidadorCodigoProdutoBancoDeDadosTrue.valida(codigo, vendedor.getCodigoLoja());
 
-            quant = ValidadorPrecoPositivo.validarValorPositivo(quantTexto);
+            quant = ValidadorPrecoPositivo.valida(quantTexto);
         } catch (EntradaException e) {
             System.out.println("Erro: LoginException: " + e.getMessage());
             throw new EntradaException(e.getMessage());

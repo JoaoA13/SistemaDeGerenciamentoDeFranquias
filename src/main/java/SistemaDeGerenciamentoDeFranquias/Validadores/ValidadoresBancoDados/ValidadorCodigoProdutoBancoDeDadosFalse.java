@@ -1,7 +1,6 @@
-package SistemaDeGerenciamentoDeFranquias.Validadores;
+package SistemaDeGerenciamentoDeFranquias.Validadores.ValidadoresBancoDados;
 
 import SistemaDeGerenciamentoDeFranquias.Control.GerenciadorDeLojas;
-import SistemaDeGerenciamentoDeFranquias.Control.GerenciadorSistema;
 import SistemaDeGerenciamentoDeFranquias.Exceptions.BancoDeDadosException;
 import SistemaDeGerenciamentoDeFranquias.Model.Loja;
 

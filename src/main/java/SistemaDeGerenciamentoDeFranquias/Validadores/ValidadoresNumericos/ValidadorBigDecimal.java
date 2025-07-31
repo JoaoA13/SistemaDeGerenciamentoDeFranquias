@@ -1,11 +1,11 @@
-package SistemaDeGerenciamentoDeFranquias.Validadores;
+package SistemaDeGerenciamentoDeFranquias.Validadores.ValidadoresNumericos;
 
 import SistemaDeGerenciamentoDeFranquias.Exceptions.EntradaException;
 
 import java.math.BigDecimal;
 
-public class ValidadorBigDecimal {
-    public static BigDecimal validarBigdecimal(String entrada, String tipo) throws EntradaException {
+public class ValidadorBigDecimal implements ValidadorNumerico{
+    public static BigDecimal valida(String entrada, String tipo) throws EntradaException {
         try {
             if (!entrada.matches("\\d+(\\.\\d+)?")) {
                 throw new EntradaException(tipo + ". Digite apenas números válidos");

@@ -6,12 +6,8 @@ import SistemaDeGerenciamentoDeFranquias.Control.GerenciadorSistemaGerente;
 import SistemaDeGerenciamentoDeFranquias.Control.GerenciadorSistemaVendedor;
 import SistemaDeGerenciamentoDeFranquias.Exceptions.*;
 import SistemaDeGerenciamentoDeFranquias.Model.Dono;
-import SistemaDeGerenciamentoDeFranquias.Model.Gerente;
-import SistemaDeGerenciamentoDeFranquias.Model.Loja;
-import SistemaDeGerenciamentoDeFranquias.Model.Vendedor;
 import SistemaDeGerenciamentoDeFranquias.Validadores.ValidadorCpf;
-import SistemaDeGerenciamentoDeFranquias.Validadores.ValidadorCpfBancoDeDadosFalse;
-import SistemaDeGerenciamentoDeFranquias.Validadores.ValidadorCpfVendedorBancoDeDadosTrue;
+import SistemaDeGerenciamentoDeFranquias.Validadores.ValidadoresBancoDados.ValidadorCpfBancoDeDadosFalse;
 import SistemaDeGerenciamentoDeFranquias.Validadores.ValidadorSenha;
 import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.Test;
@@ -73,6 +69,7 @@ public abstract class Testes {
     @Test
     void deveLancarExcecaoParaSenhaCurta() {
         assertThrows(SenhaInvalidaException.class, () -> ValidadorSenha.valida("123"));
+        assertThrows(SenhaInvalidaException.class, () -> ValidadorSenha.valida("    "));
     }
 
     @Test
