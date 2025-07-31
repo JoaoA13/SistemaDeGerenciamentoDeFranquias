@@ -49,7 +49,7 @@ public class GerenciadorSistemaVendedor extends GerenciadorSistema{
         }
     }
 
-    public Pedido lancarPedido(String nomeCliente, String dataTexto, String horaTexto, String formaDePagamento, String taxaEntregaTexto, String cpfCliente, Vendedor vendedor, Loja loja) throws EntradaException {
+    public Pedido lancarPedido(String nomeCliente, String dataTexto, String horaTexto, String formaDePagamento, String taxaEntregaTexto, String cpfCliente, String codigo, Vendedor vendedor, Loja loja) throws EntradaException {
         LocalDate data;
         LocalTime hora;
         BigDecimal taxaEntrega;
@@ -57,12 +57,16 @@ public class GerenciadorSistemaVendedor extends GerenciadorSistema{
             ValidadorCampoVazio.valida(nomeCliente);
             ValidadorCampoVazio.valida(taxaEntregaTexto);
             ValidadorCampoVazio.valida(cpfCliente);
+            ValidadorCampoVazio.valida(codigo);
 
             ValidadorNome.validarNome(nomeCliente);
             ValidadorCpf.validarCpf(cpfCliente);
+            ValidadorCodigo.validarCodigo(codigo);
             data = ValidadorData.validarData(dataTexto);
             hora = ValidadorHora.validarHora(horaTexto);
             taxaEntrega = ValidadorValorNaoNegativo.validarValorNaoNegativo(taxaEntregaTexto);
+
+            ValidadorCodigoPedidoBancoDeDadosFalse.valida(codigo);
         } catch (EntradaException e) {
             System.out.println("Erro: Entrada Exception: " + e.getMessage());
             throw new EntradaException(e.getMessage());
@@ -70,14 +74,14 @@ public class GerenciadorSistemaVendedor extends GerenciadorSistema{
             System.out.println("Erro: Entrada Exception: " + e.getMessage());
             throw new EntradaException(e.getMessage());
         }
-        Pedido pedido = new Pedido("001", nomeCliente, data, hora, formaDePagamento, taxaEntrega);
+        Pedido pedido = new Pedido(codigo, nomeCliente, data, hora, formaDePagamento, taxaEntrega);
 
         return pedido;
     }
 
     public String validarNovosProdutos(String codigo, BigDecimal quantidade, Loja loja) throws EntradaException {
         try {
-            ValidadorPrecoPositivo.validarValorPositivo(String.valueOf(quantidade));
+            ValidadorPrecoPositivo.valida(String.valueOf(quantidade));
             ValidadorQuantidadeValida.validar(quantidade, loja.getProduto(codigo));
         } catch (EntradaException e) {
             System.out.println("Erro: Quantidade inválida " + e.getMessage());

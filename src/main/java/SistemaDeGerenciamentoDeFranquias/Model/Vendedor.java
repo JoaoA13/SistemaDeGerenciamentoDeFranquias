@@ -28,6 +28,8 @@ public class Vendedor extends Usuario {
         pedidosOficial = pedidos;
     }
     public Pedido getPedido(String codigo){
+        if(pedidosOficial == null)
+            pedidosOficial = new HashMap<>();
         Pedido pedido = pedidosOficial.get(codigo);
         if(pedidosOficial.get(codigo) != null)
             return pedido;

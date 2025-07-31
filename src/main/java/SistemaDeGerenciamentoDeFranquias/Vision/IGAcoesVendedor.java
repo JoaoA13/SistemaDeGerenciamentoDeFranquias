@@ -116,6 +116,15 @@ public class IGAcoesVendedor {
         taxaEntregaPanel.add(campoTaxaEntrega);
         cadastro.add(taxaEntregaPanel);
 
+        JLabel labelCodigo = new JLabel("Digite o codigo do pedido:");
+        labelCodigo.setAlignmentX(Component.LEFT_ALIGNMENT);
+        cadastro.add(labelCodigo);
+
+        JTextField escreveCodigo = new JTextField(20);
+        escreveCodigo.setMaximumSize(new Dimension(Integer.MAX_VALUE, 25));
+        escreveCodigo.setAlignmentX(Component.LEFT_ALIGNMENT);
+        cadastro.add(escreveCodigo);
+
         JButton Sair = new JButton("Sair");
         JButton confirmar = new JButton("Confirmar");
 
@@ -135,7 +144,8 @@ public class IGAcoesVendedor {
         if (escreveHora != null) {
             escreveHora.addActionListener(e -> campoTaxaEntrega.requestFocusInWindow());
         }
-        campoTaxaEntrega.addActionListener(e -> confirmar.doClick());
+        campoTaxaEntrega.addActionListener(e -> escreveCodigo.requestFocusInWindow());
+        escreveCodigo.addActionListener(e -> confirmar.doClick());
 
         botoesPanel.add(Sair);
         botoesPanel.add(Box.createHorizontalGlue());
@@ -154,11 +164,12 @@ public class IGAcoesVendedor {
             String formaDePagamento = (String) comboPagamento.getSelectedItem();
             String taxaEntrega = campoTaxaEntrega.getText().trim();
             String cpfCliente = escreveCpf.getText().trim();
+            String codigo = escreveCodigo.getText().trim();
 
             try {
-                Pedido pedido = gerenciaVendedor.lancarPedido(nome, dataTexto, horaTexto,formaDePagamento, taxaEntrega, cpfCliente, vendedor, loja);
+                Pedido pedido = gerenciaVendedor.lancarPedido(nome, dataTexto, horaTexto,formaDePagamento, taxaEntrega, cpfCliente, codigo, vendedor, loja);
                 JOptionPane.showMessageDialog(null, "Escolha a lista de produtos do pedido", "Sucesso", JOptionPane.INFORMATION_MESSAGE);
-                escreveNome.setText("");finalEscreveData3.setText("");finalEscreveHora2.setText("");campoTaxaEntrega.setText("");
+                escreveNome.setText("");finalEscreveData3.setText("");finalEscreveHora2.setText("");campoTaxaEntrega.setText("");escreveCpf.setText("");escreveCodigo.setText("");
                 produtosPedido(vendedor, pedido, cpfCliente);
             } catch (CadastroException ex) {
                 JOptionPane.showMessageDialog(null, "Erro ao registrar pedido: " + ex.getMessage(), "Erro", JOptionPane.ERROR_MESSAGE);
@@ -296,7 +307,7 @@ public class IGAcoesVendedor {
                     }
                 }
                 JOptionPane.showMessageDialog(null, "pedido feito", "Sucesso", JOptionPane.INFORMATION_MESSAGE);
-                InterfaceGrafica.trocarTela(lancarPedido(vendedor.getCpf()), 400, 350);
+                InterfaceGrafica.trocarTela(lancarPedido(vendedor.getCpf()), 400, 400);
                 vendedor.setValorVenda(pedido.getValorTotal().subtract(pedido.getTaxaEntrega()));
                 vendedor.addPedido(pedido);
                 pedido.setCliente(cliente);
@@ -318,12 +329,12 @@ public class IGAcoesVendedor {
         botoesPanel.setLayout(new BoxLayout(botoesPanel, BoxLayout.X_AXIS));
         botoesPanel.setAlignmentX(Component.LEFT_ALIGNMENT);
 
-        String[] colunas = {"Código", "CPF do cliente", "Data", "Hora", "Forma de Pagamento", "Valor total"};
+        String[] colunas = {"Código", "CPF do cliente", "Data", "Hora", "Forma de Pagamento","Taxa de entrega", "Valor total"};
         Vendedor vendedor = (Vendedor) GerenciadorDeLojas.getVendedorGeral(cpfVendedor);
         System.out.println(vendedor.getCodigoLoja() + " códogo da loja");
         this.loja = GerenciadorDeLojas.getLoja(vendedor.getCodigoLoja());
 
-        String[][] dados = new String[loja.getArmazenaProdutos().size()][6];
+        String[][] dados = new String[vendedor.getPedidosOficial().size()][7];
 
         DecimalFormat formatadorPreco = new DecimalFormat("R$ #,##0.00", new DecimalFormatSymbols(new Locale("pt", "BR")));
         DecimalFormat formatadorQuant = new DecimalFormat("00");
@@ -335,7 +346,8 @@ public class IGAcoesVendedor {
             dados[i][2] = String.valueOf(p.getData());
             dados[i][3] = String.valueOf(p.getHora());
             dados[i][4] = p.getFormaDePagamento();
-            dados[i][5] = formatadorPreco.format(p.getValorTotal());
+            dados[i][5] = formatadorPreco.format(p.getTaxaEntrega());
+            dados[i][6] = formatadorPreco.format(p.getValorTotal());
             i++;
         }
 
@@ -362,7 +374,7 @@ public class IGAcoesVendedor {
         menuPopup.add(editarItem);
         menuPopup.add(excluirItem);
 
-        /*tabela.addMouseListener(new MouseAdapter() {
+        tabela.addMouseListener(new MouseAdapter() {
             public void mousePressed(MouseEvent e) {
                 if (e.isPopupTrigger() || SwingUtilities.isRightMouseButton(e)) {
                     int linha = tabela.rowAtPoint(e.getPoint());
@@ -371,16 +383,16 @@ public class IGAcoesVendedor {
                         String codigoSelecionado = (String) tabela.getValueAt(linha, 4);
 
                         editarItem.addActionListener(ae -> {
-                            editarProd(cpfGerente, codigoSelecionado);
+                            editarProd();
                         });
 
                         excluirItem.addActionListener(ae -> {
                             int confirm = JOptionPane.showConfirmDialog(lista,
-                                    "Tem certeza que deseja excluir o produto com o " + codigoSelecionado + "?",
+                                    "Tem certeza que deseja solicitar a exclusão do produto?",
                                     "Confirmar exclusão",
                                     JOptionPane.YES_NO_OPTION);
                             if (confirm == JOptionPane.YES_OPTION) {
-                                gerenciaGerente.excluirProdutos(codigoSelecionado, cpfGerente);
+                                excluirProd();
                                 ((DefaultTableModel) tabela.getModel()).removeRow(linha);
                             }
                         });
@@ -389,12 +401,48 @@ public class IGAcoesVendedor {
                     }
                 }
             }
-        });*/
+        });
 
         botoesPanel.add(voltar);
         botoesPanel.add(Box.createHorizontalGlue());
         lista.add(botoesPanel);
 
         return lista;
+    }
+
+    public void editarProd(){
+        JPanel edicao = new JPanel();
+        edicao.setLayout(new BoxLayout(edicao, BoxLayout.Y_AXIS));
+        edicao.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
+
+        String[] opcoes = {"Código", "CPF do Cliente", "data", "hora", "Forma de Pagamento", "Taxa de Entrega"};
+        int escolha = JOptionPane.showOptionDialog(
+                null,
+                "Qual informação deseja editar?",
+                "Editar Pedido",
+                JOptionPane.DEFAULT_OPTION,
+                JOptionPane.QUESTION_MESSAGE,
+                null,
+                opcoes,
+                opcoes[0]
+        );
+    }
+
+    public void excluirProd(){
+        JPanel edicao = new JPanel();
+        edicao.setLayout(new BoxLayout(edicao, BoxLayout.Y_AXIS));
+        edicao.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
+
+        String[] opcoes = {"Nome", "Preço", "Características", "Quantidade", "Código"};
+        int escolha = JOptionPane.showOptionDialog(
+                null,
+                "Qual informação deseja editar?",
+                "Editar Vendedor",
+                JOptionPane.DEFAULT_OPTION,
+                JOptionPane.QUESTION_MESSAGE,
+                null,
+                opcoes,
+                opcoes[0]
+        );
     }
 }
