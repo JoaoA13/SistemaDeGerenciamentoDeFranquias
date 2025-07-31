@@ -340,7 +340,7 @@ public class InterfaceGrafica {
 
     void sistemaVendedor(){
         JPanel sistemaVendedor = new JPanel();
-        IGAcoesVendedor acoes = new IGAcoesVendedor(this);
+        IGAcoesVendedor acoes = new IGAcoesVendedor();
 
         JLabel titulo = new JLabel("Menu Inicial", SwingConstants.CENTER);
         titulo.setFont(new Font("SansSerif", Font.BOLD, 20));
@@ -384,7 +384,7 @@ public class InterfaceGrafica {
         menu1.add(menu1Item2);
 
         menu1Item1.addActionListener(e -> trocarTela(acoes.lancarPedido(cpf), 400, 400));
-        menu1Item2.addActionListener(e -> trocarTela(acoes.listaDePedidos(cpf), 500, 500));
+        menu1Item2.addActionListener(e -> trocarTela(acoes.listaDePedidos(), 500, 500));
 
         frame.pack();
         frame.setSize(520, 300);
