@@ -1,10 +1,10 @@
-package SistemaDeGerenciamentoDeFranquias.Validadores;
+package SistemaDeGerenciamentoDeFranquias.Validadores.ValidadoresNumericos;
 
 import SistemaDeGerenciamentoDeFranquias.Exceptions.EntradaException;
 
 import java.math.BigDecimal;
 
-public class ValidadorValorNaoNegativo {
+public class ValidadorValorNaoNegativo implements ValidadorNumerico{
     public static BigDecimal validarValorNaoNegativo(String entrada) throws EntradaException {
         try {
             BigDecimal valor = new BigDecimal(entrada.replace(",", "."));

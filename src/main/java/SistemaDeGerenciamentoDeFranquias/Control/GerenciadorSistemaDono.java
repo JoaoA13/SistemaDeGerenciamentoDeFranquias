@@ -5,13 +5,13 @@ import SistemaDeGerenciamentoDeFranquias.Exceptions.*;
 import SistemaDeGerenciamentoDeFranquias.Model.Dono;
 import SistemaDeGerenciamentoDeFranquias.Model.Gerente;
 import SistemaDeGerenciamentoDeFranquias.Model.Loja;
-import SistemaDeGerenciamentoDeFranquias.Model.Vendedor;
 import SistemaDeGerenciamentoDeFranquias.Validadores.*;
+import SistemaDeGerenciamentoDeFranquias.Validadores.ValidadoresBancoDados.ValidadorCodigoLojaBancoDeDadosFalse;
+import SistemaDeGerenciamentoDeFranquias.Validadores.ValidadorCpf;
+import SistemaDeGerenciamentoDeFranquias.Validadores.ValidadoresBancoDados.ValidadorCpfBancoDeDadosFalse;
+import SistemaDeGerenciamentoDeFranquias.Validadores.ValidadoresBancoDados.ValidadorCpfBancoDeDadosTrue;
 
-import java.awt.*;
-import java.math.BigDecimal;
 import java.util.*;
-import java.util.List;
 
 public class GerenciadorSistemaDono extends GerenciadorSistema {
     static private Map<String, Dono> armazenaDonos = new HashMap<>();

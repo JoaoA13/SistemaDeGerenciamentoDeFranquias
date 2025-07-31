@@ -9,7 +9,9 @@ import SistemaDeGerenciamentoDeFranquias.Model.Loja;
 import SistemaDeGerenciamentoDeFranquias.Model.Produto;
 import SistemaDeGerenciamentoDeFranquias.Model.Vendedor;
 import SistemaDeGerenciamentoDeFranquias.Validadores.*;
-import SistemaDeGerenciamentoDeFranquias.Validadores.ValidadorCpfBancoDeDadosTrue;
+import SistemaDeGerenciamentoDeFranquias.Validadores.ValidadoresBancoDados.*;
+import SistemaDeGerenciamentoDeFranquias.Validadores.ValidadoresNumericos.ValidadorBigDecimal;
+import SistemaDeGerenciamentoDeFranquias.Validadores.ValidadoresNumericos.ValidadorPrecoPositivo;
 
 import java.math.BigDecimal;
 
@@ -176,13 +178,13 @@ public class GerenciadorSistemaGerente extends GerenciadorSistema{
             ValidadorCampoVazio.valida(quantSTR);
             ValidadorCampoVazio.valida(codigo);
 
-            preco = ValidadorBigDecimal.validarBigdecimal(precoSTR, "Preço Inválido");
-            quant = ValidadorBigDecimal.validarBigdecimal(quantSTR, "Quantidade Inválida");
+            preco = ValidadorBigDecimal.valida(precoSTR, "Preço Inválido");
+            quant = ValidadorBigDecimal.valida(quantSTR, "Quantidade Inválida");
 
             ValidadorNome.validarNome(nome);
-            ValidadorPrecoPositivo.validarValorPositivo(String.valueOf(preco));
+            ValidadorPrecoPositivo.valida(String.valueOf(preco));
             carac = ValidadorCaracEndereco.validarTexto(carac, "Características");
-            ValidadorPrecoPositivo.validarValorPositivo(String.valueOf(quant));
+            ValidadorPrecoPositivo.valida(String.valueOf(quant));
             ValidadorCodigo.validarCodigo(codigo);
         } catch (EntradaException e) {
             System.out.println("Erro: LoginException: " + e.getMessage());
@@ -225,8 +227,8 @@ public class GerenciadorSistemaGerente extends GerenciadorSistema{
 
             try {
                 ValidadorCampoVazio.valida(preco);
-                precoProd = ValidadorBigDecimal.validarBigdecimal(preco, "Preço Inválido");
-                ValidadorPrecoPositivo.validarValorPositivo(String.valueOf(precoProd));
+                precoProd = ValidadorBigDecimal.valida(preco, "Preço Inválido");
+                ValidadorPrecoPositivo.valida(String.valueOf(precoProd));
             } catch (EntradaException e) {
                 System.out.println("Erro: EntradaException: " + e.getMessage());
                 throw new EntradaException(e.getMessage());
@@ -258,8 +260,8 @@ public class GerenciadorSistemaGerente extends GerenciadorSistema{
 
             try {
                 ValidadorCampoVazio.valida(quant);
-                quantProd = ValidadorBigDecimal.validarBigdecimal(quant, "Quantidade Inválida");
-                ValidadorPrecoPositivo.validarValorPositivo(String.valueOf(quantProd));
+                quantProd = ValidadorBigDecimal.valida(quant, "Quantidade Inválida");
+                ValidadorPrecoPositivo.valida(String.valueOf(quantProd));
             } catch (EntradaException e) {
                 System.out.println("Erro: EntradaException: " + e.getMessage());
                 throw new EntradaException(e.getMessage());

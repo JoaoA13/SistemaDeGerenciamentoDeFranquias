@@ -1,12 +1,11 @@
-package SistemaDeGerenciamentoDeFranquias.Validadores;
+package SistemaDeGerenciamentoDeFranquias.Validadores.ValidadoresNumericos;
 
-import SistemaDeGerenciamentoDeFranquias.Exceptions.CpfInvalidoException;
 import SistemaDeGerenciamentoDeFranquias.Exceptions.EntradaException;
 
 import java.math.BigDecimal;
 
-public class ValidadorPrecoPositivo {
-    public static BigDecimal validarValorPositivo(String entrada) throws EntradaException {
+public class ValidadorPrecoPositivo implements ValidadorNumerico{
+    public static BigDecimal valida(String entrada) throws EntradaException {
         try {
             BigDecimal valor = new BigDecimal(entrada.replace(",", "."));
             if (valor.compareTo(BigDecimal.ZERO) <= 0) {

@@ -1,11 +1,9 @@
-package SistemaDeGerenciamentoDeFranquias.Validadores;
+package SistemaDeGerenciamentoDeFranquias.Validadores.ValidadoresBancoDados;
 
 import SistemaDeGerenciamentoDeFranquias.Control.GerenciadorDeLojas;
-import SistemaDeGerenciamentoDeFranquias.Control.GerenciadorSistema;
 import SistemaDeGerenciamentoDeFranquias.Exceptions.BancoDeDadosException;
-import SistemaDeGerenciamentoDeFranquias.Model.Loja;
 
-public class ValidadorCodigoLojaBancoDeDadosFalse implements ValidadorBancoDeDados{
+public class ValidadorCodigoLojaBancoDeDadosFalse implements ValidadorBancoDeDados {
     static public boolean valida(String codigo)  throws BancoDeDadosException {
         codigo = codigo.replaceAll("[^\\d]", "");
         if(GerenciadorDeLojas.getLoja(codigo) != null)
