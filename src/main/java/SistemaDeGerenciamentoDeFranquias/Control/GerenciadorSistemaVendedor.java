@@ -20,46 +20,40 @@ import java.util.concurrent.atomic.AtomicBoolean;
 
 import static SistemaDeGerenciamentoDeFranquias.Control.GerenciadorDeLojas.getVendedorGeral;
 
-public class GerenciadorSistemaVendedor extends GerenciadorSistema{
+public class GerenciadorSistemaVendedor extends GerenciadorSistema {
 
     public String login(String cpf, String senha) throws LoginException {
-        super.login(cpf,senha);
+        super.login(cpf, senha);
 
         try {
             ValidadorCampoVazio.valida(cpf);
             ValidadorCampoVazio.valida(senha);
             ValidadorCpf.validarCpf(cpf);
             ValidadorSenha.valida(senha);
-        }catch (EntradaException e){
+        } catch (EntradaException e) {
             System.out.println("Erro: LoginException: " + e.getMessage());
             throw new LoginException(e.getMessage());
         }
 
         try {
             ValidadorCpfBancoDeDadosTrue.valida(cpf);
-            ValidadorLogin.valida(getVendedorGeral(cpf),cpf,senha);
+            ValidadorLogin.valida(getVendedorGeral(cpf), cpf, senha);
             return "CPF e senha corretos";
-        }catch (LoginException e){
+        } catch (LoginException e) {
             System.out.println("Erro: LoginException: " + e.getMessage());
             throw new LoginException(e.getMessage());
         }
     }
 
-    public String lancarPedido(String codigo, String quantTexto, String nomeCliente, String dataTexto, String horaTexto,String formaDePagamento, String taxaEntregaTexto, Vendedor vendedor, Loja loja) throws EntradaException {
+    public String lancarPedido(String nomeCliente, String dataTexto, String horaTexto, String formaDePagamento, String taxaEntregaTexto, Vendedor vendedor, Loja loja) throws EntradaException {
         LocalDate data;
         LocalTime hora;
         BigDecimal quant;
         BigDecimal taxaEntrega;
         try {
-            ValidadorCampoVazio.valida(codigo);
-            ValidadorCampoVazio.valida(quantTexto);
             ValidadorCampoVazio.valida(nomeCliente);
             ValidadorCampoVazio.valida(taxaEntregaTexto);
 
-            ValidadorCodigo.validarCodigo(codigo);
-            ValidadorCodigoProdutoBancoDeDadosTrue.valida(codigo, vendedor.getCodigoLoja());
-
-            quant = ValidadorPrecoPositivo.validarValorPositivo(quantTexto);
             ValidadorNome.validarNome(nomeCliente);
             data = ValidadorData.validarData(dataTexto);
             hora = ValidadorHora.validarHora(horaTexto);
@@ -67,35 +61,16 @@ public class GerenciadorSistemaVendedor extends GerenciadorSistema{
         } catch (EntradaException e) {
             System.out.println("Erro: Entrada Exception: " + e.getMessage());
             throw new EntradaException(e.getMessage());
-        }
-        catch (BancoDeDadosException e) {
+        } catch (BancoDeDadosException e) {
             System.out.println("Erro: Entrada Exception: " + e.getMessage());
             throw new EntradaException(e.getMessage());
         }
 
-        boolean continuar = true;
-
-        while (continuar) {
-            continuar = IGAcoesVendedor.outrosProdutos(vendedor, loja);
-            if (continuar) {
-                continuar = IGAcoesVendedor.maisProdutos();
-            }
-        }
-
-        return "Pedido Cadastrado";
+        return "Escolha a lista de produtos do pedido";
     }
 
-    public static void iniciarCadastro(Vendedor vendedor, Loja loja) {
-        IGAcoesVendedor.outrosProdutos(vendedor, loja);
 
-        boolean continuar = IGAcoesVendedor.maisProdutos();
-
-        if (continuar) {
-            iniciarCadastro(vendedor, loja);
-        }
-    }
-
-    public void registraNovosProdutos(String codigo, String quantTexto, Vendedor vendedor, Loja loja) throws EntradaException{
+    public String registraNovosProdutos(String codigo, String quantTexto, Vendedor vendedor, Loja loja) throws EntradaException {
         BigDecimal quant;
         try {
             ValidadorCampoVazio.valida(codigo);
@@ -108,10 +83,11 @@ public class GerenciadorSistemaVendedor extends GerenciadorSistema{
         } catch (EntradaException e) {
             System.out.println("Erro: LoginException: " + e.getMessage());
             throw new EntradaException(e.getMessage());
-        }
-        catch (BancoDeDadosException e) {
+        } catch (BancoDeDadosException e) {
             System.out.println("Erro: Entrada Exception: " + e.getMessage());
             throw new EntradaException(e.getMessage());
         }
+
+        return "Pedido Cadastrado";
     }
 }

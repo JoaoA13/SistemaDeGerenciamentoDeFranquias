@@ -41,6 +41,13 @@
         "carac": "dsadasdasdasdasdasdas",
         "quant": 5,
         "codigo": "123"
+      },
+      "100": {
+        "nome": "feijão",
+        "preco": 10,
+        "carac": "robusto e  bom",
+        "quant": 10,
+        "codigo": "100"
       }
     }
   },

@@ -11,10 +11,15 @@ import SistemaDeGerenciamentoDeFranquias.Model.Vendedor;
 import javax.swing.*;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
+import javax.swing.table.DefaultTableCellRenderer;
+import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableCellEditor;
+import javax.swing.table.TableCellRenderer;
 import javax.swing.text.MaskFormatter;
 import java.awt.*;
 import java.math.BigDecimal;
 import java.text.*;
+import java.util.Locale;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 public class IGAcoesVendedor {
@@ -34,24 +39,6 @@ public class IGAcoesVendedor {
         Vendedor vendedor = (Vendedor) GerenciadorDeLojas.getVendedorGeral(cpfVendedor);
         System.out.println(vendedor.getCodigoLoja() + " códogo da loja");
         this.loja = GerenciadorDeLojas.getLoja(vendedor.getCodigoLoja());
-
-        JLabel labelCodigo = new JLabel("Digite o código do produto desejado:");
-        labelCodigo.setAlignmentX(Component.LEFT_ALIGNMENT);
-        cadastro.add(labelCodigo);
-
-        JTextField escreveCodigo = new JTextField(20);
-        escreveCodigo.setMaximumSize(new Dimension(Integer.MAX_VALUE, 25));
-        escreveCodigo.setAlignmentX(Component.LEFT_ALIGNMENT);
-        cadastro.add(escreveCodigo);
-
-        JLabel labelQuantidade = new JLabel("Digite a quantidade:");
-        labelQuantidade.setAlignmentX(Component.LEFT_ALIGNMENT);
-        cadastro.add(labelQuantidade);
-
-        JTextField escreveQuantidade = new JTextField(20);
-        escreveQuantidade.setMaximumSize(new Dimension(Integer.MAX_VALUE, 25));
-        escreveQuantidade.setAlignmentX(Component.LEFT_ALIGNMENT);
-        cadastro.add(escreveQuantidade);
 
         JLabel labelNome = new JLabel("Digite o nome do cliente:");
         labelNome.setAlignmentX(Component.LEFT_ALIGNMENT);
@@ -110,68 +97,13 @@ public class IGAcoesVendedor {
         cadastro.add(new JLabel("Forma de Pagamento:"));
         cadastro.add(comboPagamento);
 
-
-        JPanel valoresPanel = new JPanel();
-        valoresPanel.setLayout(new BoxLayout(valoresPanel, BoxLayout.X_AXIS));
-        valoresPanel.setAlignmentX(Component.LEFT_ALIGNMENT);
-
-        JPanel valorPedidoPanel = new JPanel();
-        valorPedidoPanel.setLayout(new BoxLayout(valorPedidoPanel, BoxLayout.Y_AXIS));
-        valorPedidoPanel.add(new JLabel("Valor do Pedido:"));
-        JTextField campoValorPedido = new JTextField(10);
-        campoValorPedido.setEditable(false);
-        campoValorPedido.setMaximumSize(new Dimension(200, 25));
-        valorPedidoPanel.add(campoValorPedido);
-        valoresPanel.add(valorPedidoPanel);
-
-        valoresPanel.add(Box.createRigidArea(new Dimension(20, 0)));
-
         JPanel taxaEntregaPanel = new JPanel();
         taxaEntregaPanel.setLayout(new BoxLayout(taxaEntregaPanel, BoxLayout.Y_AXIS));
         taxaEntregaPanel.add(new JLabel("Taxa de Entrega:"));
         JTextField campoTaxaEntrega = new JTextField(10);
         campoTaxaEntrega.setMaximumSize(new Dimension(100, 25));
         taxaEntregaPanel.add(campoTaxaEntrega);
-        valoresPanel.add(taxaEntregaPanel);
-        cadastro.add(valoresPanel);
-
-        if (loja != null) {
-            DocumentListener listener = new DocumentListener() {
-                public void insertUpdate(DocumentEvent e) {
-                    calcular();
-                }
-
-                public void removeUpdate(DocumentEvent e) {
-                    calcular();
-                }
-
-                public void changedUpdate(DocumentEvent e) {
-                    calcular();
-                }
-
-                private void calcular() {
-                    try {
-                        String codigo = escreveCodigo.getText();
-                        Produto produto = loja.getProduto(codigo);
-
-                        BigDecimal qtd = BigDecimal.valueOf(Integer.parseInt(escreveQuantidade.getText()));
-                        BigDecimal total = BigDecimal.ZERO;
-
-                        if (produto != null && qtd.compareTo(BigDecimal.ZERO) > 0) {
-                            total = qtd.multiply(produto.getPreco());
-                        }
-
-                        campoValorPedido.setText(String.format("R$ %.2f", total));
-                    } catch (NumberFormatException ex) {
-                        campoValorPedido.setText("R$ 0.00");
-                    }
-                }
-            };
-
-            escreveQuantidade.getDocument().addDocumentListener(listener);
-            escreveCodigo.getDocument().addDocumentListener(listener);
-        }
-
+        cadastro.add(taxaEntregaPanel);
 
         JButton Sair = new JButton("Sair");
         JButton confirmar = new JButton("Confirmar");
@@ -181,8 +113,6 @@ public class IGAcoesVendedor {
         botoesPanel.setAlignmentX(Component.LEFT_ALIGNMENT);
         botoesPanel.setMaximumSize(new Dimension(400, 30));
 
-        escreveCodigo.addActionListener(e -> escreveQuantidade.requestFocusInWindow());
-        escreveQuantidade.addActionListener(e -> escreveNome.requestFocusInWindow());
         JFormattedTextField finalEscreveData = escreveData;
         escreveNome.addActionListener(e -> finalEscreveData.requestFocusInWindow());
 
@@ -206,8 +136,6 @@ public class IGAcoesVendedor {
         JFormattedTextField finalEscreveHora2 = escreveHora;
         confirmar.addActionListener(e -> {
             System.out.println("Botão Confirmar clicado");
-            String cod = escreveCodigo.getText().trim();
-            String quantidade = escreveQuantidade.getText().trim();
             String nome = escreveNome.getText().trim();
             String dataTexto = finalEscreveData2.getText();
             String horaTexto = finalEscreveHora1.getText();
@@ -215,9 +143,10 @@ public class IGAcoesVendedor {
             String  taxaEntrega = campoTaxaEntrega.getText().trim();
 
             try {
-                String msg = gerenciaVendedor.lancarPedido(cod, quantidade, nome, dataTexto, horaTexto,formaDePagamento, taxaEntrega, vendedor, loja);
+                String msg = gerenciaVendedor.lancarPedido(nome, dataTexto, horaTexto,formaDePagamento, taxaEntrega, vendedor, loja);
                 JOptionPane.showMessageDialog(null, msg, "Sucesso", JOptionPane.INFORMATION_MESSAGE);
-                escreveCodigo.setText("");escreveQuantidade.setText("");escreveNome.setText("");finalEscreveData3.setText("");finalEscreveHora2.setText("");campoTaxaEntrega.setText("");
+                escreveNome.setText("");finalEscreveData3.setText("");finalEscreveHora2.setText("");campoTaxaEntrega.setText("");
+                produtosPedido(vendedor);
             } catch (CadastroException ex) {
                 JOptionPane.showMessageDialog(null, "Erro ao registrar pedido: " + ex.getMessage(), "Erro", JOptionPane.ERROR_MESSAGE);
             } catch (EntradaException ex) {
@@ -227,134 +156,94 @@ public class IGAcoesVendedor {
         return cadastro;
     }
 
-    public static boolean maisProdutos(){
-        int resposta = JOptionPane.showConfirmDialog(
-                null,
-                "Deseja registrar outro produto para o pedido?",
-                "Registrar Produto",
-                JOptionPane.YES_NO_OPTION
-        );
+    public void produtosPedido(Vendedor vendedor) {
+        String[] colunas = {"Selecionar", "Nome", "Preço", "Estoque", "Código", "Qtd. Desejada"};
 
-        if (resposta != JOptionPane.YES_OPTION) {
-            JOptionPane.showMessageDialog(null, "Registro finalizado.");
-            return  false;
-        }
-        return true;
-    }
+        DecimalFormat formatadorPreco = new DecimalFormat("R$ #,##0.00", new DecimalFormatSymbols(new Locale("pt", "BR")));
 
-    public static boolean outrosProdutos(Vendedor vendedor, Loja loja){
-        JPanel cadastro = new JPanel();
-        cadastro.setLayout(new BoxLayout(cadastro, BoxLayout.Y_AXIS));
-        cadastro.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
-
-        JLabel labelCodigo = new JLabel("Digite o código do produto desejado:");
-        labelCodigo.setAlignmentX(Component.LEFT_ALIGNMENT);
-        cadastro.add(labelCodigo);
-
-        JTextField escreveCodigo = new JTextField(20);
-        escreveCodigo.setMaximumSize(new Dimension(Integer.MAX_VALUE, 25));
-        escreveCodigo.setAlignmentX(Component.LEFT_ALIGNMENT);
-        cadastro.add(escreveCodigo);
-
-        JLabel labelQuantidade = new JLabel("Digite a quantidade:");
-        labelQuantidade.setAlignmentX(Component.LEFT_ALIGNMENT);
-        cadastro.add(labelQuantidade);
-
-        JTextField escreveQuantidade = new JTextField(20);
-        escreveQuantidade.setMaximumSize(new Dimension(Integer.MAX_VALUE, 25));
-        escreveQuantidade.setAlignmentX(Component.LEFT_ALIGNMENT);
-        cadastro.add(escreveQuantidade);
-
-        JPanel valoresPanel = new JPanel();
-        valoresPanel.setLayout(new BoxLayout(valoresPanel, BoxLayout.X_AXIS));
-        valoresPanel.setAlignmentX(Component.LEFT_ALIGNMENT);
-
-        JPanel valorPedidoPanel = new JPanel();
-        valorPedidoPanel.setLayout(new BoxLayout(valorPedidoPanel, BoxLayout.Y_AXIS));
-        valorPedidoPanel.add(new JLabel("Valor do Pedido:"));
-        JTextField campoValorPedido = new JTextField(10);
-        campoValorPedido.setEditable(false);
-        campoValorPedido.setMaximumSize(new Dimension(200, 25));
-        valorPedidoPanel.add(campoValorPedido);
-        valoresPanel.add(valorPedidoPanel);
-
-        valoresPanel.add(Box.createRigidArea(new Dimension(20, 0)));
-        cadastro.add(valoresPanel);
-
-        String codigo = escreveCodigo.getText();
-        if (loja != null) {
-            DocumentListener listener = new DocumentListener() {
-                public void insertUpdate(DocumentEvent e) {
-                    calcular();
-                }
-
-                public void removeUpdate(DocumentEvent e) {
-                    calcular();
-                }
-
-                public void changedUpdate(DocumentEvent e) {
-                    calcular();
-                }
-
-                private void calcular() {
-                    try {
-                        String codigo = escreveCodigo.getText();
-                        Produto produto = loja.getProduto(codigo);
-
-                        BigDecimal qtd = BigDecimal.valueOf(Integer.parseInt(escreveQuantidade.getText()));
-                        BigDecimal total = BigDecimal.ZERO;
-
-                        if (produto != null) {
-                            total = qtd.multiply(produto.getPreco());
-                        }
-
-                        campoValorPedido.setText(String.format("R$ %.2f", total));
-                    } catch (NumberFormatException ex) {
-                        campoValorPedido.setText("R$ 0.00");
-                    }
-                }
-            };
-
-            escreveQuantidade.getDocument().addDocumentListener(listener);
-            escreveCodigo.getDocument().addDocumentListener(listener);
+        Object[][] dados = new Object[loja.getArmazenaProdutos().size()][6];
+        int i = 0;
+        for (Produto p : loja.getArmazenaProdutos().values()) {
+            dados[i][0] = Boolean.FALSE;
+            dados[i][1] = p.getNomeProd();
+            dados[i][2] = formatadorPreco.format(p.getPreco());
+            dados[i][3] = p.getQuant();
+            dados[i][4] = p.getCodigoProd();
+            dados[i][5] = 0;
+            i++;
         }
 
+        DefaultTableModel modelo = new DefaultTableModel(dados, colunas) {
+            @Override
+            public boolean isCellEditable(int row, int column) {
+                if (column == 5) {
+                    Boolean selecionado = (Boolean) getValueAt(row, 0);
+                    return selecionado != null && selecionado;
+                }
+                return column == 0;
+            }
 
-        JButton voltar = new JButton("Voltar");
-        JButton confirmar = new JButton("Confirmar");
+            @Override
+            public Class<?> getColumnClass(int columnIndex) {
+                return switch (columnIndex) {
+                    case 0 -> Boolean.class;
+                    case 3, 5 -> Integer.class;
+                    default -> String.class;
+                };
+            }
+        };
 
-        JPanel botoesPanel = new JPanel();
-        botoesPanel.setLayout(new BoxLayout(botoesPanel, BoxLayout.X_AXIS));
-        botoesPanel.setAlignmentX(Component.LEFT_ALIGNMENT);
-        botoesPanel.setMaximumSize(new Dimension(400, 30));
+        JTable tabela = new JTable(modelo) {
+            @Override
+            public TableCellRenderer getCellRenderer(int row, int column) {
+                if (column == 5) {
+                    return new QuantidadeDesejadaRenderer();
+                }
+                return super.getCellRenderer(row, column);
+            }
+        };
 
-        escreveCodigo.addActionListener(e -> escreveQuantidade.requestFocusInWindow());
-        escreveQuantidade.addActionListener(e -> confirmar.doClick());
+        tabela.setRowHeight(30);
 
-        botoesPanel.add(voltar);
-        botoesPanel.add(Box.createHorizontalGlue());
-        botoesPanel.add(confirmar);
-        cadastro.add(botoesPanel);
+        DefaultTableCellRenderer centralizado = new DefaultTableCellRenderer();
+        centralizado.setHorizontalAlignment(SwingConstants.CENTER);
 
-        confirmar.addActionListener(e -> {
-            System.out.println("Botão Confirmar clicado");
-            String cod = escreveCodigo.getText().trim();
-            String quantidade = escreveQuantidade.getText().trim();
+        for (int col = 0; col < tabela.getColumnCount(); col++) {
+            if (col != 0 && col != 5) {
+                tabela.getColumnModel().getColumn(col).setCellRenderer(centralizado);
+            }
+        }
 
-            try {
-                gerenciaVendedor.registraNovosProdutos(cod, quantidade, vendedor, loja);
-                JOptionPane.showMessageDialog(null, "", "Sucesso", JOptionPane.INFORMATION_MESSAGE);
-                escreveCodigo.setText("");escreveQuantidade.setText("");
+        modelo.addTableModelListener(e -> {
+            if (e.getColumn() == 0 && e.getFirstRow() >= 0) {
+                int row = e.getFirstRow();
+                Boolean selecionado = (Boolean) modelo.getValueAt(row, 0);
 
-            } catch (CadastroException ex) {
-                JOptionPane.showMessageDialog(null, "Erro ao registrar pedido: " + ex.getMessage(), "Erro", JOptionPane.ERROR_MESSAGE);
-            } catch (EntradaException ex) {
-                JOptionPane.showMessageDialog(null, "Erro nos dados inseridos: " + ex.getMessage(), "Erro", JOptionPane.ERROR_MESSAGE);
+                if (selecionado == Boolean.FALSE) {
+                    modelo.setValueAt(0, row, 5);
+                }
+
+                SwingUtilities.invokeLater(tabela::repaint);
             }
         });
 
-        InterfaceGrafica.trocarTela(cadastro, 300, 210);
-        return true;
+        JPanel painelTabela = new JPanel(new BorderLayout());
+        painelTabela.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
+        painelTabela.add(new JScrollPane(tabela), BorderLayout.CENTER);
+
+        JButton confirmar = new JButton("Confirmar Pedido");
+        JPanel painelInferior = new JPanel(new FlowLayout(FlowLayout.RIGHT));
+        painelInferior.add(confirmar);
+        painelTabela.add(painelInferior, BorderLayout.SOUTH);
+
+        confirmar.addActionListener(e -> {
+            System.out.println("Botão Confirmar clicado");
+            JOptionPane.showMessageDialog(null, "pedido feito", "Sucesso", JOptionPane.INFORMATION_MESSAGE);
+            InterfaceGrafica.trocarTela(lancarPedido(vendedor.getCpf()), 400, 300);
+        });
+
+        painelTabela.add(painelInferior, BorderLayout.SOUTH);
+        InterfaceGrafica.trocarTela(painelTabela, 600, 400);
     }
 
     JPanel listaDePedidos(){
