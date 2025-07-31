@@ -69,15 +69,6 @@ public class GerenciadorSistemaVendedor extends GerenciadorSistema{
         return "Escolha a lista de produtos do pedido";
     }
 
-    public static void iniciarCadastro(Vendedor vendedor, Loja loja) {
-        IGAcoesVendedor.outrosProdutos(vendedor, loja);
-
-        boolean continuar = IGAcoesVendedor.maisProdutos();
-
-        if (continuar) {
-            iniciarCadastro(vendedor, loja);
-        }
-    }
 
     public String registraNovosProdutos(String codigo, String quantTexto, Vendedor vendedor, Loja loja) throws EntradaException {
         BigDecimal quant;
