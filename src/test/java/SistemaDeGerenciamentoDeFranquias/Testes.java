@@ -4,12 +4,15 @@ import SistemaDeGerenciamentoDeFranquias.Control.GerenciadorDeLojas;
 import SistemaDeGerenciamentoDeFranquias.Control.GerenciadorSistemaDono;
 import SistemaDeGerenciamentoDeFranquias.Control.GerenciadorSistemaGerente;
 import SistemaDeGerenciamentoDeFranquias.Control.GerenciadorSistemaVendedor;
-import SistemaDeGerenciamentoDeFranquias.Exceptions.CadastroException;
-import SistemaDeGerenciamentoDeFranquias.Exceptions.EntradaException;
-import SistemaDeGerenciamentoDeFranquias.Exceptions.LoginException;
+import SistemaDeGerenciamentoDeFranquias.Exceptions.*;
 import SistemaDeGerenciamentoDeFranquias.Model.Dono;
 import SistemaDeGerenciamentoDeFranquias.Model.Gerente;
 import SistemaDeGerenciamentoDeFranquias.Model.Loja;
+import SistemaDeGerenciamentoDeFranquias.Model.Vendedor;
+import SistemaDeGerenciamentoDeFranquias.Validadores.ValidadorCpf;
+import SistemaDeGerenciamentoDeFranquias.Validadores.ValidadorCpfBancoDeDadosFalse;
+import SistemaDeGerenciamentoDeFranquias.Validadores.ValidadorCpfVendedorBancoDeDadosTrue;
+import SistemaDeGerenciamentoDeFranquias.Validadores.ValidadorSenha;
 import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.Test;
 
@@ -50,6 +53,40 @@ public abstract class Testes {
         sistemaGerente.lancarCadastro("luis","12312312312","l@gmail.com","12345678","12345678900");
         String resultado3 = sistemaVendedor.login("12312312312", "12345678");
         assertEquals("CPF e senha corretos", resultado3);
+    }
+
+    @Test
+    void deveAceitarCpfValido() {
+        assertDoesNotThrow(() -> ValidadorCpf.validarCpf("12345678909"));
+    }
+
+    @Test
+    void deveLancarExcecaoParaCpfInvalido() {
+        assertThrows(CpfInvalidoException.class, () -> ValidadorCpf.validarCpf("11111111111"));
+    }
+
+    @Test
+    void deveAceitarSenhaValida() {
+        assertDoesNotThrow(() -> ValidadorSenha.valida("12345678"));
+    }
+
+    @Test
+    void deveLancarExcecaoParaSenhaCurta() {
+        assertThrows(SenhaInvalidaException.class, () -> ValidadorSenha.valida("123"));
+    }
+
+    @Test
+    void deveLancarExcecaoQuandoCpfJaExiste() {
+        Dono dono = new Dono("João", "12345678900", "joao@gmail.com", "12345678");
+        GerenciadorSistemaDono.getDonos().put(dono.getCpf(), dono);
+
+        assertThrows(BancoDeDadosException.class, () ->
+                ValidadorCpfBancoDeDadosFalse.valida("12345678900"));
+    }
+
+    @Test
+    void deveAceitarCpfNovo() {
+        assertDoesNotThrow(() -> ValidadorCpfBancoDeDadosFalse.valida("00000000191"));
     }
 
 //    @Test

@@ -26,6 +26,7 @@ public class GerenciadorSistemaDono extends GerenciadorSistema {
     public GerenciadorSistemaDono() {
         Dono dono1 = new Dono("João","14127945605","joao@gmail","12345678");
         armazenaDonos.put(dono1.getCpf(), dono1);
+        salvaArquivos.salvarDonos(armazenaDonos);
         carregaArmazenaDonos();
     }
 
@@ -209,6 +210,60 @@ public class GerenciadorSistemaDono extends GerenciadorSistema {
         return "Dono excluído com Sucesso";
     }
 
+    static public String editarLoja(String endereco, String cpfNovoGerente,String novoCodigo,String codigo) throws EntradaException {
+        if (endereco != "") {
+            Loja loja = GerenciadorDeLojas.getLoja(codigo);
+            if(loja != null)
+                loja.setEndereco(endereco);
+
+            return "Endereço editado";
+        }
+        if (novoCodigo != "") {
+            try {
+                ValidadorCodigo.validarCodigo(novoCodigo);
+            } catch (EntradaException e) {
+                System.out.println("Erro: EntradaException: " + e.getMessage());
+                throw new LoginException(e.getMessage());
+            }
+
+            try {
+                ValidadorCodigoLojaBancoDeDadosFalse.valida(novoCodigo);
+            } catch (BancoDeDadosException e) {
+                System.out.println("Erro: EntradaException: " + e.getMessage());
+                throw new CadastroException(e.getMessage());
+            }
+
+            GerenciadorDeLojas.trocarCodigo(novoCodigo,codigo);
+
+            return "Codigo da loja editado";
+        }
+        /// troca o gerente da unidade
+        if (cpfNovoGerente != "") {
+            try {
+                ValidadorCampoVazio.valida(cpfNovoGerente);
+                ValidadorCpf.validarCpf(cpfNovoGerente);
+            } catch (EntradaException e) {
+                System.out.println("Erro: EntradaException: " + e.getMessage());
+                throw new EntradaException(e.getMessage());
+            }
+
+            try {
+                ValidadorCpfBancoDeDadosTrue.valida(cpfNovoGerente);
+            }catch (BancoDeDadosException e){
+                System.out.println("Erro: EntradaException: " + e.getMessage());
+                throw new EntradaException(e.getMessage());
+            }
+
+            GerenciadorDeLojas.getCodigoPraCpf().remove(GerenciadorDeLojas.getLoja(codigo).getCpfGerente());
+            GerenciadorDeLojas.getCodigoPraCpf().put(cpfNovoGerente,codigo);
+
+            GerenciadorDeLojas.trocarGerente(codigo,GerenciadorDeLojas.getGerente(cpfNovoGerente));
+
+            return "Gerente da unidade foi trocado";
+        }
+        return "";
+    }
+
     static public String editarGerente(String nome, String cpfNovo, String email, String senha, String cpf) throws EntradaException {
         if (nome != "") {
             try {
@@ -345,66 +400,6 @@ public class GerenciadorSistemaDono extends GerenciadorSistema {
             getDono(cpf).setSenha(senha);
 
             return "Senha editada";
-        }
-        return "";
-    }
-
-    static public String editarLoja(String endereco, String cpfNovoGerente,String novoCodigo,String codigo) throws EntradaException {
-        if (endereco != "") {
-            Loja loja = GerenciadorDeLojas.getLoja(codigo);
-            if(loja != null)
-                loja.setEndereco(endereco);
-
-            return "Endereço editado";
-        }
-        if (novoCodigo != "") {
-            System.out.println("entrou aqui");
-
-//            Loja loja = GerenciadorDeLojas.getLoja(codigo);
-//            if(loja == null)
-//                return  "Codigo de loja incorreto";
-
-            try {
-                ValidadorCodigo.validarCodigo(novoCodigo);
-            } catch (EntradaException e) {
-                System.out.println("Erro: EntradaException: " + e.getMessage());
-                throw new LoginException(e.getMessage());
-            }
-
-            try {
-                ValidadorCodigoLojaBancoDeDadosFalse.valida(novoCodigo);
-            } catch (BancoDeDadosException e) {
-                System.out.println("Erro: EntradaException: " + e.getMessage());
-                throw new CadastroException(e.getMessage());
-            }
-
-            GerenciadorDeLojas.trocarCodigo(novoCodigo,codigo);
-
-            return "Codigo da loja editado";
-        }
-        /// troca o gerente da unidade
-        if (cpfNovoGerente != "") {
-            try {
-                ValidadorCampoVazio.valida(cpfNovoGerente);
-                ValidadorCpf.validarCpf(cpfNovoGerente);
-            } catch (EntradaException e) {
-                System.out.println("Erro: EntradaException: " + e.getMessage());
-                throw new EntradaException(e.getMessage());
-            }
-
-            try {
-                ValidadorCpfBancoDeDadosTrue.valida(cpfNovoGerente);
-            }catch (BancoDeDadosException e){
-                System.out.println("Erro: EntradaException: " + e.getMessage());
-                throw new EntradaException(e.getMessage());
-            }
-
-            GerenciadorDeLojas.getCodigoPraCpf().remove(GerenciadorDeLojas.getLoja(codigo).getCpfGerente());
-            GerenciadorDeLojas.getCodigoPraCpf().put(cpfNovoGerente,codigo);
-
-            GerenciadorDeLojas.trocarGerente(codigo,GerenciadorDeLojas.getGerente(cpfNovoGerente));
-
-            return "Gerente da unidade foi trocado";
         }
         return "";
     }

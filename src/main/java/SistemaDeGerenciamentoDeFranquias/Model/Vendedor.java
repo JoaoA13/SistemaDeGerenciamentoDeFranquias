@@ -1,8 +1,12 @@
 package SistemaDeGerenciamentoDeFranquias.Model;
 
 import java.math.BigDecimal;
+import java.util.HashMap;
+import java.util.Map;
 
 public class Vendedor extends Usuario {
+    private Map<String, Pedido> pedidosOficial = new HashMap<>();
+
     private BigDecimal valorVenda = BigDecimal.valueOf(0);
     String codigoLoja;
 
@@ -13,6 +17,13 @@ public class Vendedor extends Usuario {
     @Override
     public TipoUsuario getTipo() {
         return TipoUsuario.VENDEDOR;
+    }
+
+    public Map<String, Pedido> getPedidosOficial(){
+        return pedidosOficial;
+    }
+    public void setPedidosOficial(Map<String, Pedido> pedidos){
+        pedidosOficial = pedidos;
     }
 
     public BigDecimal getValorVenda(){

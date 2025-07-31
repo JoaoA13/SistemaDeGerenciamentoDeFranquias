@@ -5,6 +5,8 @@ import SistemaDeGerenciamentoDeFranquias.Exceptions.CadastroException;
 import SistemaDeGerenciamentoDeFranquias.Exceptions.EntradaException;
 import SistemaDeGerenciamentoDeFranquias.Exceptions.LoginException;
 import SistemaDeGerenciamentoDeFranquias.Model.Loja;
+import SistemaDeGerenciamentoDeFranquias.Model.Pedido;
+import SistemaDeGerenciamentoDeFranquias.Model.Produto;
 import SistemaDeGerenciamentoDeFranquias.Model.Vendedor;
 import SistemaDeGerenciamentoDeFranquias.Validadores.*;
 import SistemaDeGerenciamentoDeFranquias.Vision.IGAcoesVendedor;
@@ -12,10 +14,14 @@ import SistemaDeGerenciamentoDeFranquias.Vision.IGAcoesVendedor;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.LocalTime;
+import java.util.HashMap;
+import java.util.Map;
 
 import static SistemaDeGerenciamentoDeFranquias.Control.GerenciadorDeLojas.getVendedorGeral;
 
 public class GerenciadorSistemaVendedor extends GerenciadorSistema{
+
+    private Map<String, Pedido> pedidos = new HashMap<>();
 
     public String login(String cpf, String senha) throws LoginException {
         super.login(cpf,senha);
@@ -63,9 +69,21 @@ public class GerenciadorSistemaVendedor extends GerenciadorSistema{
             System.out.println("Erro: LoginException: " + e.getMessage());
             throw new EntradaException(e.getMessage());
         }
-        while(IGAcoesVendedor.maisProdutos()) {
-            IGAcoesVendedor.outrosProdutos(vendedor,loja);
-        }
+
+        Pedido pedido = new Pedido(codigo,nomeCliente,data,hora,formaDePagamento,taxaEntrega);
+        pedidos.put(codigo,pedido);
+
+        Produto produto = loja.getProduto(codigo);
+
+        pedidos.get(codigo).addProduto(codigo,produto);
+        pedidos.get(codigo).addQntProd(codigo,quant);
+
+        return "Produto adicionado ao pedido";
+    }
+
+    public String finalizaPedido(String cpf,Loja loja){
+        loja.getVendedor(cpf).setPedidosOficial(pedidos);
+        pedidos.clear();
         return "Pedido Cadastrado";
     }
 

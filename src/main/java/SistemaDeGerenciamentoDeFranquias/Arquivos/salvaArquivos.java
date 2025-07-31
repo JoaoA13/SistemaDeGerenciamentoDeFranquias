@@ -1,6 +1,7 @@
 package SistemaDeGerenciamentoDeFranquias.Arquivos;
 
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
 import SistemaDeGerenciamentoDeFranquias.Model.*;
 
@@ -8,10 +9,15 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.lang.reflect.Type;
+import java.time.LocalDate;
+import java.time.LocalTime;
 import java.util.*;
 
 public class salvaArquivos {
-    private static final Gson gson = new Gson();
+    private static final Gson gson = new GsonBuilder().registerTypeAdapter(LocalDate.class, new Adaptador.LocalDateAdapter())
+            .registerTypeAdapter(LocalTime.class, new Adaptador.LocalTimeAdapter())
+            .setPrettyPrinting()
+            .create();
 
     private static final String CAMINHO_DONO = "resources/dono.json";
     private static final String CAMINHO_GERENTES = "resources/gerentes.json";

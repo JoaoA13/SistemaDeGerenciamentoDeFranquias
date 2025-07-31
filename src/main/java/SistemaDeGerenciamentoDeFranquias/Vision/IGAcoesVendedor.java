@@ -1,10 +1,12 @@
 package SistemaDeGerenciamentoDeFranquias.Vision;
 
 import SistemaDeGerenciamentoDeFranquias.Control.GerenciadorDeLojas;
+import SistemaDeGerenciamentoDeFranquias.Control.GerenciadorSistemaDono;
 import SistemaDeGerenciamentoDeFranquias.Control.GerenciadorSistemaVendedor;
 import SistemaDeGerenciamentoDeFranquias.Exceptions.CadastroException;
 import SistemaDeGerenciamentoDeFranquias.Exceptions.EntradaException;
 import SistemaDeGerenciamentoDeFranquias.Model.Loja;
+import SistemaDeGerenciamentoDeFranquias.Model.Pedido;
 import SistemaDeGerenciamentoDeFranquias.Model.Produto;
 import SistemaDeGerenciamentoDeFranquias.Model.Vendedor;
 
@@ -16,6 +18,8 @@ import javax.swing.text.MaskFormatter;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.math.BigDecimal;
 import java.text.*;
 import java.time.LocalDate;
@@ -26,12 +30,15 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Locale;
 
+import static SistemaDeGerenciamentoDeFranquias.Control.GerenciadorDeLojas.getLoja;
+
 public class IGAcoesVendedor {
+    private InterfaceGrafica interfaceGrafica;
     static GerenciadorSistemaVendedor gerenciaVendedor = new GerenciadorSistemaVendedor();
     Loja loja;
 
-    IGAcoesVendedor(){
-
+    IGAcoesVendedor(InterfaceGrafica interfaceGrafica){
+        this.interfaceGrafica = interfaceGrafica;
     }
 
     JPanel lancarPedido(String cpfVendedor){
@@ -177,6 +184,7 @@ public class IGAcoesVendedor {
 
         JButton Sair = new JButton("Sair");
         JButton confirmar = new JButton("Confirmar");
+        JButton finalizar = new JButton("Finalizar");
 
         JPanel botoesPanel = new JPanel();
         botoesPanel.setLayout(new BoxLayout(botoesPanel, BoxLayout.X_AXIS));
@@ -200,12 +208,33 @@ public class IGAcoesVendedor {
         botoesPanel.add(Sair);
         botoesPanel.add(Box.createHorizontalGlue());
         botoesPanel.add(confirmar);
+        botoesPanel.add(finalizar);
         cadastro.add(botoesPanel);
 
         JFormattedTextField finalEscreveData2 = escreveData;
         JFormattedTextField finalEscreveHora1 = escreveHora;
         JFormattedTextField finalEscreveData3 = escreveData;
         JFormattedTextField finalEscreveHora2 = escreveHora;
+
+        finalizar.addActionListener(e -> {
+            System.out.println("Botão Confirmar clicado");
+            String cod = escreveCodigo.getText().trim();
+            String quantidade = escreveQuantidade.getText().trim();
+
+            //try {
+                String msg = gerenciaVendedor.finalizaPedido(cpfVendedor,loja);
+                JOptionPane.showMessageDialog(null, msg, "Sucesso", JOptionPane.INFORMATION_MESSAGE);
+                escreveCodigo.setText("");escreveQuantidade.setText("");escreveNome.setText("");finalEscreveData3.setText("");finalEscreveHora2.setText("");campoTaxaEntrega.setText("");
+
+//            } catch (CadastroException ex) {
+//                JOptionPane.showMessageDialog(null, "Erro ao registrar pedido: " + ex.getMessage(), "Erro", JOptionPane.ERROR_MESSAGE);
+//            } catch (EntradaException ex) {
+//                JOptionPane.showMessageDialog(null, "Erro nos dados inseridos: " + ex.getMessage(), "Erro", JOptionPane.ERROR_MESSAGE);
+//            }
+        });
+
+
+
         confirmar.addActionListener(e -> {
             System.out.println("Botão Confirmar clicado");
             String cod = escreveCodigo.getText().trim();
@@ -219,7 +248,7 @@ public class IGAcoesVendedor {
             try {
                 String msg = gerenciaVendedor.lancarPedido(cod, quantidade, nome, dataTexto, horaTexto,formaDePagamento, taxaEntrega, vendedor, loja);
                 JOptionPane.showMessageDialog(null, msg, "Sucesso", JOptionPane.INFORMATION_MESSAGE);
-                escreveCodigo.setText("");escreveQuantidade.setText("");escreveNome.setText("");finalEscreveData3.setText("");finalEscreveHora2.setText("");campoTaxaEntrega.setText("");
+                escreveCodigo.setText("");escreveQuantidade.setText("");
             } catch (CadastroException ex) {
                 JOptionPane.showMessageDialog(null, "Erro ao registrar pedido: " + ex.getMessage(), "Erro", JOptionPane.ERROR_MESSAGE);
             } catch (EntradaException ex) {
@@ -356,7 +385,100 @@ public class IGAcoesVendedor {
 
     }
 
-    JPanel listaDePedidos(){
-        return null;
+
+    JPanel listaDePedidos(String cpf){
+        JPanel lista = new JPanel();
+        lista.setLayout(new BoxLayout(lista, BoxLayout.Y_AXIS));
+        lista.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
+
+        JPanel botoesPanel = new JPanel();
+        botoesPanel.setLayout(new BoxLayout(botoesPanel, BoxLayout.X_AXIS));
+        botoesPanel.setAlignmentX(Component.LEFT_ALIGNMENT);
+
+        String[] colunas = {"Codigo", "Nome do cliente", "Valor total"};
+
+        String[][] dados = new String[GerenciadorDeLojas.getLojas().size()][3];
+        int i = 0;
+        if(loja != null)
+        for (Pedido pedido : loja.getVendedor(cpf).getPedidosOficial().values()) {
+            if (loja == null) break;
+            dados[i][0] = pedido.getCodigo();
+            dados[i][1] = pedido.getNomeCliente();
+            dados[i][2] = pedido.getValorTotal();
+            i++;
+        }
+
+        DefaultTableModel modelo = new DefaultTableModel(dados, colunas) {
+            public boolean isCellEditable(int row, int column) {
+                return false;
+            }
+        };
+
+        JTable tabela = new JTable(modelo); // <-- corrigido aqui
+        JScrollPane scroll = new JScrollPane(tabela);
+        lista.add(scroll, BorderLayout.CENTER);
+
+        JPopupMenu menuPopup = new JPopupMenu();
+        JMenuItem editarItem = new JMenuItem("Editar");
+        JMenuItem excluirItem = new JMenuItem("Excluir");
+        JMenuItem visualizarItem = new JMenuItem("Visualizar");
+        menuPopup.add(editarItem);
+        menuPopup.add(excluirItem);
+        menuPopup.add(visualizarItem);
+
+        tabela.addMouseListener(new MouseAdapter() {
+            public void mousePressed(MouseEvent e) {
+                if (e.isPopupTrigger() || SwingUtilities.isRightMouseButton(e)) {
+                    int linha = tabela.rowAtPoint(e.getPoint());
+                    if (linha >= 0 && linha < tabela.getRowCount()) {
+                        tabela.setRowSelectionInterval(linha, linha);
+                        String codigo = (String) tabela.getValueAt(linha, 2);
+                        String cpfGerente = (String) tabela.getValueAt(linha, 1);
+
+                        editarItem.addActionListener(ae -> {
+                        //    editarLoja(codigo);
+                        });
+
+                        excluirItem.addActionListener(ae -> {
+//                            int confirm = JOptionPane.showConfirmDialog(lista,
+//                                    "Tem certeza que deseja excluir a loja com o código: " + codigo + "?",
+//                                    "Confirmar exclusão",
+//                                    JOptionPane.YES_NO_OPTION);
+//                            if (confirm == JOptionPane.YES_OPTION) {
+//                                try {
+//                                    GerenciadorSistemaDono.excluirLoja(codigo);
+//                                } catch (EntradaException ex) {
+//                                    interfaceGrafica.exibeException(ex.getMessage(),"Exclusão falhou");
+//                                }
+//                                ((DefaultTableModel) tabela.getModel()).removeRow(linha);
+//                            }
+                        });
+
+                        visualizarItem.addActionListener(ae -> {
+                            //exibeLoja(codigo, getLoja(codigo));
+                        });
+
+                        menuPopup.show(tabela, e.getX(), e.getY());
+                    }
+                }
+            }
+        });
+
+        JButton voltar = new JButton("Voltar");
+        botoesPanel.add(voltar);
+        botoesPanel.add(Box.createHorizontalGlue());
+        lista.add(botoesPanel);
+
+        voltar.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                System.out.println("Botão 'voltar' clicado");
+                lista.setVisible(false);
+                interfaceGrafica.sistemaVendedor();
+            }
+        });
+
+        interfaceGrafica.atualizaFrame(lista);
+
+        return lista;
     }
 }

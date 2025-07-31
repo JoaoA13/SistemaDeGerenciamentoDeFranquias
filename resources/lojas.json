@@ -1,1 +1,104 @@
-{}
+{
+  "001": {
+    "codigo": "001",
+    "endereco": "dqwdadsd",
+    "gerenteDaUnidade": {
+      "nome": "j",
+      "cpf": "09876543211",
+      "email": "eita@gmail.com",
+      "senha": "senha123"
+    },
+    "armazenaVendedores": {
+      "78978978978": {
+        "valorVenda": 2,
+        "codigoLoja": "001",
+        "nome": "Ana",
+        "cpf": "78978978978",
+        "email": "Tome-lheForro@gmail.com",
+        "senha": "12345677"
+      },
+      "45645645645": {
+        "valorVenda": 10,
+        "codigoLoja": "001",
+        "nome": "Carlos",
+        "cpf": "45645645645",
+        "email": "eitanois@gmail.com",
+        "senha": "12345677"
+      },
+      "14714714714": {
+        "valorVenda": 1,
+        "codigoLoja": "001",
+        "nome": "Gleiph",
+        "cpf": "14714714714",
+        "email": "socorro@gmail.com",
+        "senha": "12345677"
+      }
+    },
+    "armazenaProdutos": {
+      "123": {
+        "nome": "proe",
+        "preco": 3,
+        "carac": "dsadasdasdasdasdasdas",
+        "quant": 5,
+        "codigo": "123"
+      }
+    }
+  },
+  "050": {
+    "codigo": "050",
+    "endereco": "rua tal",
+    "gerenteDaUnidade": {
+      "nome": "mano",
+      "cpf": "09809809809",
+      "email": "ma@gmail.com",
+      "senha": "12345678"
+    },
+    "armazenaVendedores": {
+      "23423423423": {
+        "pedidosOficial": {},
+        "valorVenda": 0,
+        "codigoLoja": "050",
+        "nome": "roberto",
+        "cpf": "23423423423",
+        "email": "rb@gmail.com",
+        "senha": "12345678"
+      },
+      "78978978978": {
+        "pedidosOficial": {},
+        "valorVenda": 2,
+        "codigoLoja": "050",
+        "nome": "Ana",
+        "cpf": "78978978978",
+        "email": "Tome-lheForro@gmail.com",
+        "senha": "12345677"
+      },
+      "45645645645": {
+        "pedidosOficial": {},
+        "valorVenda": 10,
+        "codigoLoja": "050",
+        "nome": "Carlos",
+        "cpf": "45645645645",
+        "email": "eitanois@gmail.com",
+        "senha": "12345677"
+      },
+      "14714714714": {
+        "pedidosOficial": {},
+        "valorVenda": 1,
+        "codigoLoja": "050",
+        "nome": "Gleiph",
+        "cpf": "14714714714",
+        "email": "socorro@gmail.com",
+        "senha": "12345677"
+      }
+    },
+    "armazenaProdutos": {
+      "001": {
+        "nome": "arroz",
+        "preco": 10,
+        "carac": "muito legal",
+        "quant": 20,
+        "codigo": "001"
+      }
+    }
+  }
+}

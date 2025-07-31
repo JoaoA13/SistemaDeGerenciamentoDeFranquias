@@ -100,6 +100,75 @@ public class TestesSistemaDono extends Testes{
         assertEquals(null,gerente);
     }
 
+    @Test
+    void testEditarLojaDadosValidos() throws EntradaException {
+        Gerente gerente = new Gerente("j","09876543211","eita@gmail.com","senha123");
+        GerenciadorDeLojas.cadastraGerente("09876543211",gerente);
+        Gerente gerente1 = new Gerente("g","67867867867","eita@gmail.com","senha123");
+        GerenciadorDeLojas.cadastraGerente("67867867867",gerente1);
+        sistemaDono.cadastroLoja("Rua jose", "080", "09876543211");
+
+        Loja loja = GerenciadorDeLojas.getLoja("080");
+        assertNotNull(loja);
+        assertEquals("Rua jose", loja.getEndereco());
+
+        //teste troca de enderço
+        sistemaDono.editarLoja("Rua maria","","","080");
+        assertEquals("Rua maria", loja.getEndereco());
+
+        //teste troca de gerente
+        sistemaDono.editarLoja("","67867867867","","080");
+        assertEquals("67867867867", loja.getCpfGerente());
+
+        //teste troca de código
+        sistemaDono.editarLoja("","","090","080");
+        assertEquals("090", loja.getCodigo());
+    }
+
+    @Test
+    void testEditarGerenteDadosValidos() throws EntradaException {
+        Gerente gerente = new Gerente("j","09876543211","eita@gmail.com","senha123");
+        GerenciadorDeLojas.cadastraGerente("09876543211",gerente);
+
+        //teste troca de nome
+        sistemaDono.editarGerente("maria","","","","09876543211");
+        assertEquals("maria", gerente.getNome());
+
+        //teste troca de email
+        sistemaDono.editarGerente("","","nossa@email.br","","09876543211");
+        assertEquals("nossa@email.br", gerente.getEmail());
+
+        //teste troca de senha
+        sistemaDono.editarGerente("","","","321ahnes","09876543211");
+        assertEquals("321ahnes", gerente.getSenha());
+
+        //teste troca de cpf
+        sistemaDono.editarGerente("","67867867867","","","09876543211");
+        assertEquals("67867867867", gerente.getCpf());
+    }
+
+    @Test
+    void testEditarDonoDadosValidos() throws EntradaException {
+        sistemaDono.cadastroDono("jos","78901234567","senha123","eita@gmail.com");
+        Dono dono = sistemaDono.getDono("78901234567");
+
+        //teste troca de nome
+        sistemaDono.editarDono("maria","","","","78901234567");
+        assertEquals("maria", dono.getNome());
+
+        //teste troca de email
+        sistemaDono.editarDono("","","nossa@email.br","","78901234567");
+        assertEquals("nossa@email.br", dono.getEmail());
+
+        //teste troca de senha
+        sistemaDono.editarDono("","","","321ahnes","78901234567");
+        assertEquals("321ahnes", dono.getSenha());
+
+        //teste troca de cpf
+        sistemaDono.editarDono("","67867867867","","","78901234567");
+        assertEquals("67867867867", dono.getCpf());
+    }
+
     // - TESTE SISTEMA DONO - dados incorretos
     @Test
     void testCadastroDonoComCpfRepetidoLancaExcecao() throws CadastroException {
