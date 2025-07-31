@@ -9,7 +9,6 @@ public class ValidadorCpf implements ValidadorLogin{
 
         if (cpf.length() != 11 || cpf.matches("(\\d)\\1{10}"))
             throw new CpfInvalidoException("Cpf inválido");
-        else
-            return;
+
     }
 }

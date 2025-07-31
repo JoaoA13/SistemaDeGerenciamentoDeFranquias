@@ -4,9 +4,7 @@ import SistemaDeGerenciamentoDeFranquias.Control.GerenciadorDeLojas;
 import SistemaDeGerenciamentoDeFranquias.Control.GerenciadorSistemaVendedor;
 import SistemaDeGerenciamentoDeFranquias.Exceptions.CadastroException;
 import SistemaDeGerenciamentoDeFranquias.Exceptions.EntradaException;
-import SistemaDeGerenciamentoDeFranquias.Model.Loja;
-import SistemaDeGerenciamentoDeFranquias.Model.Produto;
-import SistemaDeGerenciamentoDeFranquias.Model.Vendedor;
+import SistemaDeGerenciamentoDeFranquias.Model.*;
 
 import javax.swing.*;
 import javax.swing.event.DocumentEvent;
@@ -17,6 +15,10 @@ import javax.swing.table.TableCellEditor;
 import javax.swing.table.TableCellRenderer;
 import javax.swing.text.MaskFormatter;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.math.BigDecimal;
 import java.text.*;
 import java.util.Locale;
@@ -48,6 +50,15 @@ public class IGAcoesVendedor {
         escreveNome.setMaximumSize(new Dimension(Integer.MAX_VALUE, 25));
         escreveNome.setAlignmentX(Component.LEFT_ALIGNMENT);
         cadastro.add(escreveNome);
+
+        JLabel labelCpf = new JLabel("Digite o cpf do cliente:");
+        labelCpf.setAlignmentX(Component.LEFT_ALIGNMENT);
+        cadastro.add(labelCpf);
+
+        JTextField escreveCpf = new JTextField(20);
+        escreveCpf.setMaximumSize(new Dimension(Integer.MAX_VALUE, 25));
+        escreveCpf.setAlignmentX(Component.LEFT_ALIGNMENT);
+        cadastro.add(escreveCpf);
 
         JLabel labelData = new JLabel("Digite a data do pedido:");
         labelData.setAlignmentX(Component.LEFT_ALIGNMENT);
@@ -114,7 +125,8 @@ public class IGAcoesVendedor {
         botoesPanel.setMaximumSize(new Dimension(400, 30));
 
         JFormattedTextField finalEscreveData = escreveData;
-        escreveNome.addActionListener(e -> finalEscreveData.requestFocusInWindow());
+        escreveNome.addActionListener(e -> escreveCpf.requestFocusInWindow());
+        escreveCpf.addActionListener(e -> finalEscreveData.requestFocusInWindow());
 
         if (escreveData != null) {
             JFormattedTextField finalEscreveHora = escreveHora;
@@ -140,13 +152,14 @@ public class IGAcoesVendedor {
             String dataTexto = finalEscreveData2.getText();
             String horaTexto = finalEscreveHora1.getText();
             String formaDePagamento = (String) comboPagamento.getSelectedItem();
-            String  taxaEntrega = campoTaxaEntrega.getText().trim();
+            String taxaEntrega = campoTaxaEntrega.getText().trim();
+            String cpfCliente = escreveCpf.getText().trim();
 
             try {
-                String msg = gerenciaVendedor.lancarPedido(nome, dataTexto, horaTexto,formaDePagamento, taxaEntrega, vendedor, loja);
-                JOptionPane.showMessageDialog(null, msg, "Sucesso", JOptionPane.INFORMATION_MESSAGE);
+                Pedido pedido = gerenciaVendedor.lancarPedido(nome, dataTexto, horaTexto,formaDePagamento, taxaEntrega, cpfCliente, vendedor, loja);
+                JOptionPane.showMessageDialog(null, "Escolha a lista de produtos do pedido", "Sucesso", JOptionPane.INFORMATION_MESSAGE);
                 escreveNome.setText("");finalEscreveData3.setText("");finalEscreveHora2.setText("");campoTaxaEntrega.setText("");
-                produtosPedido(vendedor);
+                produtosPedido(vendedor, pedido, cpfCliente);
             } catch (CadastroException ex) {
                 JOptionPane.showMessageDialog(null, "Erro ao registrar pedido: " + ex.getMessage(), "Erro", JOptionPane.ERROR_MESSAGE);
             } catch (EntradaException ex) {
@@ -156,7 +169,7 @@ public class IGAcoesVendedor {
         return cadastro;
     }
 
-    public void produtosPedido(Vendedor vendedor) {
+    public void produtosPedido(Vendedor vendedor, Pedido pedido, String cpf) {
         String[] colunas = {"Selecionar", "Nome", "Preço", "Estoque", "Código", "Qtd. Desejada"};
 
         DecimalFormat formatadorPreco = new DecimalFormat("R$ #,##0.00", new DecimalFormatSymbols(new Locale("pt", "BR")));
@@ -238,15 +251,150 @@ public class IGAcoesVendedor {
 
         confirmar.addActionListener(e -> {
             System.out.println("Botão Confirmar clicado");
-            JOptionPane.showMessageDialog(null, "pedido feito", "Sucesso", JOptionPane.INFORMATION_MESSAGE);
-            InterfaceGrafica.trocarTela(lancarPedido(vendedor.getCpf()), 400, 300);
+
+            boolean houveErro = false;
+            boolean algumaSelecionada = false;
+
+            for (int row = 0; row < tabela.getRowCount(); row++) {
+                Boolean selecionado = (Boolean) tabela.getValueAt(row, 0);
+                if (selecionado != null && selecionado) {
+                    algumaSelecionada = true;
+                    String codigo = tabela.getValueAt(row, 4).toString();
+                    int qtdInt = (Integer) tabela.getValueAt(row, 5);
+                    BigDecimal quantidade = BigDecimal.valueOf(qtdInt);
+
+                    try {
+                        gerenciaVendedor.validarNovosProdutos(codigo, quantidade, loja);
+                    } catch (EntradaException ex) {
+                        JOptionPane.showMessageDialog(null, "Erro: " + ex.getMessage(), "Entrada inválida", JOptionPane.ERROR_MESSAGE);
+                        houveErro = true;
+                        break;
+                    }
+                }
+            }
+
+            if(!algumaSelecionada){
+                JOptionPane.showMessageDialog(null, "Erro: " + "Selecione um produto", "Entrada inválida", JOptionPane.ERROR_MESSAGE);
+            }
+
+            if (!houveErro && algumaSelecionada) {
+                Cliente cliente;
+                if (loja.getCliente(cpf) == null) {
+                    cliente = new Cliente(pedido.getNomeCliente(), cpf);
+                    loja.addCliente(cliente);
+                } else {
+                    cliente = loja.getCliente(cpf);
+                }
+
+                for (int row = 0; row < tabela.getRowCount(); row++) {
+                    Boolean selecionado = (Boolean) tabela.getValueAt(row, 0);
+                    if (selecionado != null && selecionado) {
+                        String codigo = tabela.getValueAt(row, 4).toString();
+                        int qtdInt = (Integer) tabela.getValueAt(row, 5);
+                        BigDecimal quantidade = BigDecimal.valueOf(qtdInt);
+                        gerenciaVendedor.adicionaoAoPedido(pedido, codigo, quantidade, loja, cliente);
+                    }
+                }
+                JOptionPane.showMessageDialog(null, "pedido feito", "Sucesso", JOptionPane.INFORMATION_MESSAGE);
+                InterfaceGrafica.trocarTela(lancarPedido(vendedor.getCpf()), 400, 350);
+                vendedor.setValorVenda(pedido.getValorTotal().subtract(pedido.getTaxaEntrega()));
+                vendedor.addPedido(pedido);
+                pedido.setCliente(cliente);
+            }
         });
 
         painelTabela.add(painelInferior, BorderLayout.SOUTH);
         InterfaceGrafica.trocarTela(painelTabela, 600, 400);
     }
 
-    JPanel listaDePedidos(){
-        return null;
+    JPanel listaDePedidos(String cpfVendedor){
+        JPanel lista = new JPanel();
+        lista.setLayout(new BoxLayout(lista, BoxLayout.Y_AXIS));
+        lista.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
+
+        JButton voltar = new JButton("Voltar");
+
+        JPanel botoesPanel = new JPanel();
+        botoesPanel.setLayout(new BoxLayout(botoesPanel, BoxLayout.X_AXIS));
+        botoesPanel.setAlignmentX(Component.LEFT_ALIGNMENT);
+
+        String[] colunas = {"Código", "CPF do cliente", "Data", "Hora", "Forma de Pagamento", "Valor total"};
+        Vendedor vendedor = (Vendedor) GerenciadorDeLojas.getVendedorGeral(cpfVendedor);
+        System.out.println(vendedor.getCodigoLoja() + " códogo da loja");
+        this.loja = GerenciadorDeLojas.getLoja(vendedor.getCodigoLoja());
+
+        String[][] dados = new String[loja.getArmazenaProdutos().size()][6];
+
+        DecimalFormat formatadorPreco = new DecimalFormat("R$ #,##0.00", new DecimalFormatSymbols(new Locale("pt", "BR")));
+        DecimalFormat formatadorQuant = new DecimalFormat("00");
+
+        int i = 0;
+        for (Pedido p : vendedor.getPedidosOficial().values()) {
+            dados[i][0] = p.getCodigo();
+            dados[i][1] = p.getCliente().getCpf();
+            dados[i][2] = String.valueOf(p.getData());
+            dados[i][3] = String.valueOf(p.getHora());
+            dados[i][4] = p.getFormaDePagamento();
+            dados[i][5] = formatadorPreco.format(p.getValorTotal());
+            i++;
+        }
+
+        DefaultTableModel modelo = new DefaultTableModel(dados, colunas) {
+            public boolean isCellEditable(int row, int column) {
+                return false;
+            }
+        };
+
+        JTable tabela = new JTable(modelo);
+
+        DefaultTableCellRenderer centralizado = new DefaultTableCellRenderer();
+        centralizado.setHorizontalAlignment(SwingConstants.CENTER);
+        for (int col = 0; col < tabela.getColumnCount(); col++) {
+            tabela.getColumnModel().getColumn(col).setCellRenderer(centralizado);
+        }
+
+        JScrollPane scroll = new JScrollPane(tabela);
+        lista.add(scroll, BorderLayout.CENTER);
+
+        JPopupMenu menuPopup = new JPopupMenu();
+        JMenuItem editarItem = new JMenuItem("Editar");
+        JMenuItem excluirItem = new JMenuItem("Excluir");
+        menuPopup.add(editarItem);
+        menuPopup.add(excluirItem);
+
+        /*tabela.addMouseListener(new MouseAdapter() {
+            public void mousePressed(MouseEvent e) {
+                if (e.isPopupTrigger() || SwingUtilities.isRightMouseButton(e)) {
+                    int linha = tabela.rowAtPoint(e.getPoint());
+                    if (linha >= 0 && linha < tabela.getRowCount()) {
+                        tabela.setRowSelectionInterval(linha, linha);
+                        String codigoSelecionado = (String) tabela.getValueAt(linha, 4);
+
+                        editarItem.addActionListener(ae -> {
+                            editarProd(cpfGerente, codigoSelecionado);
+                        });
+
+                        excluirItem.addActionListener(ae -> {
+                            int confirm = JOptionPane.showConfirmDialog(lista,
+                                    "Tem certeza que deseja excluir o produto com o " + codigoSelecionado + "?",
+                                    "Confirmar exclusão",
+                                    JOptionPane.YES_NO_OPTION);
+                            if (confirm == JOptionPane.YES_OPTION) {
+                                gerenciaGerente.excluirProdutos(codigoSelecionado, cpfGerente);
+                                ((DefaultTableModel) tabela.getModel()).removeRow(linha);
+                            }
+                        });
+
+                        menuPopup.show(tabela, e.getX(), e.getY());
+                    }
+                }
+            }
+        });*/
+
+        botoesPanel.add(voltar);
+        botoesPanel.add(Box.createHorizontalGlue());
+        lista.add(botoesPanel);
+
+        return lista;
     }
 }

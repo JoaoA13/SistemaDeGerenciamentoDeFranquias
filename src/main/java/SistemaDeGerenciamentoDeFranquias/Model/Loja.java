@@ -10,6 +10,7 @@ public class Loja {
     private Gerente gerenteDaUnidade;
     public Map<String, Vendedor> armazenaVendedores = new HashMap<>();
     public Map<String, Produto> armazenaProdutos = new HashMap<>();
+    public Map<String, Cliente> armazenaClientes = new HashMap<>();
 
     public Loja(String codigo, String endereco, Gerente gerenteDaUnidade){
         this.endereco = endereco;
@@ -21,9 +22,6 @@ public class Loja {
         armazenaVendedores.put("14714714714",vendedor1);
         armazenaVendedores.put("45645645645",vendedor2);
         armazenaVendedores.put("78978978978",vendedor3);
-        vendedor1.setValorVenda(BigDecimal.ONE);
-        vendedor2.setValorVenda(BigDecimal.TEN);
-        vendedor3.setValorVenda(BigDecimal.TWO);
     }
 
     /// Getters e Setters
@@ -74,6 +72,17 @@ public class Loja {
     public void addProdutoDireto(Produto produto){ armazenaProdutos.put(produto.getCodigoProd(), produto); }
 
     public void excluirProduto(String codigo){armazenaProdutos.remove(codigo);}
+
+    public void addCliente(Cliente cliente){ armazenaClientes.put(cliente.getCpf(), cliente); }
+
+    public void excluirCliente(String cpf){armazenaClientes.remove(cpf);}
+
+    public Cliente getCliente(String cpf) {
+        if (armazenaClientes == null) {
+            armazenaClientes = new HashMap<>();
+        }
+        return armazenaClientes.getOrDefault(cpf, null);
+    }
 
     public Produto getProduto(String codigo){
         return armazenaProdutos.getOrDefault(codigo,null);

@@ -20,6 +20,8 @@ public class Vendedor extends Usuario {
     }
 
     public Map<String, Pedido> getPedidosOficial(){
+        if(pedidosOficial == null)
+            pedidosOficial = new HashMap<>();
         return pedidosOficial;
     }
     public void setPedidosOficial(Map<String, Pedido> pedidos){
@@ -33,10 +35,12 @@ public class Vendedor extends Usuario {
             return null;
     }
 
+    public void addPedido(Pedido pedido){ pedidosOficial.put(pedido.getCodigo(), pedido); }
+
     public BigDecimal getValorVenda(){
         return valorVenda;
     }
-    protected void setValorVenda(BigDecimal venda){valorVenda = valorVenda.add(venda);}
+    public void setValorVenda(BigDecimal venda){valorVenda = valorVenda.add(venda);}
 
     public String getCodigoLoja(){ return codigoLoja; }
     public void setCodigoLoja(String codigoLoja) {

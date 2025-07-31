@@ -10,7 +10,7 @@
     },
     "armazenaVendedores": {
       "78978978978": {
-        "valorVenda": 2,
+        "valorVenda": 0,
         "codigoLoja": "001",
         "nome": "Ana",
         "cpf": "78978978978",
@@ -18,7 +18,7 @@
         "senha": "12345677"
       },
       "45645645645": {
-        "valorVenda": 10,
+        "valorVenda": 0,
         "codigoLoja": "001",
         "nome": "Carlos",
         "cpf": "45645645645",
@@ -26,7 +26,7 @@
         "senha": "12345677"
       },
       "14714714714": {
-        "valorVenda": 1,
+        "valorVenda": 0,
         "codigoLoja": "001",
         "nome": "Gleiph",
         "cpf": "14714714714",
@@ -72,7 +72,7 @@
       },
       "78978978978": {
         "pedidosOficial": {},
-        "valorVenda": 2,
+        "valorVenda": 0,
         "codigoLoja": "050",
         "nome": "Ana",
         "cpf": "78978978978",
@@ -81,7 +81,7 @@
       },
       "45645645645": {
         "pedidosOficial": {},
-        "valorVenda": 10,
+        "valorVenda": 0,
         "codigoLoja": "050",
         "nome": "Carlos",
         "cpf": "45645645645",
@@ -90,7 +90,7 @@
       },
       "14714714714": {
         "pedidosOficial": {},
-        "valorVenda": 1,
+        "valorVenda": 0,
         "codigoLoja": "050",
         "nome": "Gleiph",
         "cpf": "14714714714",

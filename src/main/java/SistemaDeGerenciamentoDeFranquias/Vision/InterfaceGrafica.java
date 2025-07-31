@@ -383,8 +383,8 @@ public class InterfaceGrafica {
         JMenuItem  menu1Item2 = new JMenuItem ("Lista de Pedidos", KeyEvent.VK_T);
         menu1.add(menu1Item2);
 
-        menu1Item1.addActionListener(e -> trocarTela(acoes.lancarPedido(cpf), 400, 300));
-        menu1Item2.addActionListener(e -> trocarTela(acoes.listaDePedidos(), 500, 500));
+        menu1Item1.addActionListener(e -> trocarTela(acoes.lancarPedido(cpf), 400, 350));
+        menu1Item2.addActionListener(e -> trocarTela(acoes.listaDePedidos(cpf), 500, 500));
 
         frame.pack();
         frame.setSize(520, 300);

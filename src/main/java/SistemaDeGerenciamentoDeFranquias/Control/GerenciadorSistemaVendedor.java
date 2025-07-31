@@ -4,9 +4,7 @@ import SistemaDeGerenciamentoDeFranquias.Exceptions.BancoDeDadosException;
 import SistemaDeGerenciamentoDeFranquias.Exceptions.CadastroException;
 import SistemaDeGerenciamentoDeFranquias.Exceptions.EntradaException;
 import SistemaDeGerenciamentoDeFranquias.Exceptions.LoginException;
-import SistemaDeGerenciamentoDeFranquias.Model.Loja;
-import SistemaDeGerenciamentoDeFranquias.Model.Produto;
-import SistemaDeGerenciamentoDeFranquias.Model.Vendedor;
+import SistemaDeGerenciamentoDeFranquias.Model.*;
 import SistemaDeGerenciamentoDeFranquias.Validadores.*;
 import SistemaDeGerenciamentoDeFranquias.Vision.IGAcoesVendedor;
 import SistemaDeGerenciamentoDeFranquias.Vision.InterfaceGrafica;
@@ -45,16 +43,17 @@ public class GerenciadorSistemaVendedor extends GerenciadorSistema{
         }
     }
 
-    public String lancarPedido(String nomeCliente, String dataTexto, String horaTexto, String formaDePagamento, String taxaEntregaTexto, Vendedor vendedor, Loja loja) throws EntradaException {
+    public Pedido lancarPedido(String nomeCliente, String dataTexto, String horaTexto, String formaDePagamento, String taxaEntregaTexto, String cpfCliente, Vendedor vendedor, Loja loja) throws EntradaException {
         LocalDate data;
         LocalTime hora;
-        BigDecimal quant;
         BigDecimal taxaEntrega;
         try {
             ValidadorCampoVazio.valida(nomeCliente);
             ValidadorCampoVazio.valida(taxaEntregaTexto);
+            ValidadorCampoVazio.valida(cpfCliente);
 
             ValidadorNome.validarNome(nomeCliente);
+            ValidadorCpf.validarCpf(cpfCliente);
             data = ValidadorData.validarData(dataTexto);
             hora = ValidadorHora.validarHora(horaTexto);
             taxaEntrega = ValidadorValorNaoNegativo.validarValorNaoNegativo(taxaEntregaTexto);
@@ -65,30 +64,29 @@ public class GerenciadorSistemaVendedor extends GerenciadorSistema{
             System.out.println("Erro: Entrada Exception: " + e.getMessage());
             throw new EntradaException(e.getMessage());
         }
+        Pedido pedido = new Pedido("001", nomeCliente, data, hora, formaDePagamento, taxaEntrega);
 
-        return "Escolha a lista de produtos do pedido";
+        return pedido;
     }
 
-
-    public String registraNovosProdutos(String codigo, String quantTexto, Vendedor vendedor, Loja loja) throws EntradaException {
-        BigDecimal quant;
+    public String validarNovosProdutos(String codigo, BigDecimal quantidade, Loja loja) throws EntradaException {
         try {
-            ValidadorCampoVazio.valida(codigo);
-            ValidadorCampoVazio.valida(quantTexto);
-
-            ValidadorCodigo.validarCodigo(codigo);
-            ValidadorCodigoProdutoBancoDeDadosTrue.valida(codigo, vendedor.getCodigoLoja());
-
-            quant = ValidadorPrecoPositivo.validarValorPositivo(quantTexto);
+            ValidadorPrecoPositivo.validarValorPositivo(String.valueOf(quantidade));
+            ValidadorQuantidadeValida.validar(quantidade, loja.getProduto(codigo));
         } catch (EntradaException e) {
-            System.out.println("Erro: LoginException: " + e.getMessage());
+            System.out.println("Erro: Quantidade inválida " + e.getMessage());
             throw new EntradaException(e.getMessage());
         }
-        catch (BancoDeDadosException e) {
-            System.out.println("Erro: Entrada Exception: " + e.getMessage());
-            throw new EntradaException(e.getMessage());
-        }
-
         return "Pedido Cadastrado";
+    }
+
+    public void adicionaoAoPedido (Pedido pedido, String codigo, BigDecimal quantidade, Loja loja, Cliente cliente){
+        Produto produto = loja.getProduto(codigo);
+        pedido.addProduto(codigo, produto);
+        pedido.addQntProd(codigo, quantidade);
+        produto.setQuant(produto.getQuant().subtract(quantidade));
+        cliente.setQuantidaCompras(quantidade);
+        if(produto.getQuant().compareTo(BigDecimal.ZERO) <= 0)
+            loja.excluirProduto(codigo);
     }
 }

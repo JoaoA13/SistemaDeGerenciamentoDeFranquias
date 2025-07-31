@@ -16,6 +16,7 @@ public class Pedido {
     private String formaDePagamento;
     private BigDecimal taxaEntrega;
     private BigDecimal valorTotal;
+    private Cliente cliente;
 
     public Pedido(String codigo, String nomeCliente,
                   LocalDate data, LocalTime hora, String formaDePagamento,
@@ -29,21 +30,13 @@ public class Pedido {
         valorTotal = taxaEntrega;
     }
 
-    public Map<String, Produto> getProdutos() {
-        return produtos;
-    }
+    public Map<String, Produto> getProdutos() { return produtos; }
 
-    public void setProdutos(Map<String, Produto> produtos) {
-        this.produtos = produtos;
-    }
+    public void setProdutos(Map<String, Produto> produtos) { this.produtos = produtos; }
 
-    public void addProduto(String codigo,Produto produto) {
-        produtos.put(codigo,produto);
-    }
+    public void addProduto(String codigo,Produto produto) { produtos.put(codigo,produto); }
 
-    public Map<String, BigDecimal> getQuantProdutos() {
-        return quantProdutos;
-    }
+    public Map<String, BigDecimal> getQuantProdutos() { return quantProdutos; }
 
     public void setQuantProdutos(Map<String, BigDecimal> quantProdutos) {
         this.quantProdutos = quantProdutos;
@@ -52,59 +45,37 @@ public class Pedido {
     public void addQntProd(String codigo,BigDecimal quantidade) {
         quantProdutos.put(codigo,quantidade);
 
-        BigDecimal preco = produtos.get(codigo).getPreco();
-        valorTotal.add(preco.multiply(quantidade));
+        BigDecimal preco = (produtos.get(codigo)).getPreco();
+        valorTotal = valorTotal.add(preco.multiply(quantidade));
     }
 
-    public String getCodigo() {
-        return codigo;
-    }
+    public String getCodigo() { return codigo; }
 
-    public void setCodigo(String codigo) {
-        this.codigo = codigo;
-    }
+    public void setCodigo(String codigo) { this.codigo = codigo; }
 
-    public String getNomeCliente() {
-        return nomeCliente;
-    }
+    public String getNomeCliente() { return nomeCliente; }
 
-    public void setNomeCliente(String nomeCliente) {
-        this.nomeCliente = nomeCliente;
-    }
+    public void setNomeCliente(String nomeCliente) { this.nomeCliente = nomeCliente; }
 
-    public LocalDate getData() {
-        return data;
-    }
+    public LocalDate getData() { return data; }
 
-    public void setData(LocalDate data) {
-        this.data = data;
-    }
+    public void setData(LocalDate data) { this.data = data; }
 
-    public LocalTime getHora() {
-        return hora;
-    }
+    public LocalTime getHora() { return hora; }
 
-    public void setHora(LocalTime hora) {
-        this.hora = hora;
-    }
+    public void setHora(LocalTime hora) { this.hora = hora; }
 
-    public String getFormaDePagamento() {
-        return formaDePagamento;
-    }
+    public String getFormaDePagamento() { return formaDePagamento; }
 
-    public void setFormaDePagamento(String formaDePagamento) {
-        this.formaDePagamento = formaDePagamento;
-    }
+    public void setFormaDePagamento(String formaDePagamento) { this.formaDePagamento = formaDePagamento; }
 
-    public BigDecimal getTaxaEntrega() {
-        return taxaEntrega;
-    }
+    public BigDecimal getTaxaEntrega() { return taxaEntrega; }
 
-    public void setTaxaEntrega(BigDecimal taxaEntrega) {
-        this.taxaEntrega = taxaEntrega;
-    }
+    public void setTaxaEntrega(BigDecimal taxaEntrega) { this.taxaEntrega = taxaEntrega; }
 
-    public String getValorTotal(){
-        return valorTotal.toString();
-    }
+    public BigDecimal getValorTotal(){ return valorTotal; }
+
+    public void setCliente(Cliente cliente){ this.cliente = cliente;}
+
+    public Cliente getCliente(){ return cliente;}
 }
