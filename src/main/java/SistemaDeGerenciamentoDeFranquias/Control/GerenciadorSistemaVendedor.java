@@ -20,26 +20,26 @@ import java.util.concurrent.atomic.AtomicBoolean;
 
 import static SistemaDeGerenciamentoDeFranquias.Control.GerenciadorDeLojas.getVendedorGeral;
 
-public class GerenciadorSistemaVendedor extends GerenciadorSistema {
+public class GerenciadorSistemaVendedor extends GerenciadorSistema{
 
     public String login(String cpf, String senha) throws LoginException {
-        super.login(cpf, senha);
+        super.login(cpf,senha);
 
         try {
             ValidadorCampoVazio.valida(cpf);
             ValidadorCampoVazio.valida(senha);
             ValidadorCpf.validarCpf(cpf);
             ValidadorSenha.valida(senha);
-        } catch (EntradaException e) {
+        }catch (EntradaException e){
             System.out.println("Erro: LoginException: " + e.getMessage());
             throw new LoginException(e.getMessage());
         }
 
         try {
             ValidadorCpfBancoDeDadosTrue.valida(cpf);
-            ValidadorLogin.valida(getVendedorGeral(cpf), cpf, senha);
+            ValidadorLogin.valida(getVendedorGeral(cpf),cpf,senha);
             return "CPF e senha corretos";
-        } catch (LoginException e) {
+        }catch (LoginException e){
             System.out.println("Erro: LoginException: " + e.getMessage());
             throw new LoginException(e.getMessage());
         }
@@ -69,6 +69,15 @@ public class GerenciadorSistemaVendedor extends GerenciadorSistema {
         return "Escolha a lista de produtos do pedido";
     }
 
+    public static void iniciarCadastro(Vendedor vendedor, Loja loja) {
+        IGAcoesVendedor.outrosProdutos(vendedor, loja);
+
+        boolean continuar = IGAcoesVendedor.maisProdutos();
+
+        if (continuar) {
+            iniciarCadastro(vendedor, loja);
+        }
+    }
 
     public String registraNovosProdutos(String codigo, String quantTexto, Vendedor vendedor, Loja loja) throws EntradaException {
         BigDecimal quant;
@@ -83,7 +92,8 @@ public class GerenciadorSistemaVendedor extends GerenciadorSistema {
         } catch (EntradaException e) {
             System.out.println("Erro: LoginException: " + e.getMessage());
             throw new EntradaException(e.getMessage());
-        } catch (BancoDeDadosException e) {
+        }
+        catch (BancoDeDadosException e) {
             System.out.println("Erro: Entrada Exception: " + e.getMessage());
             throw new EntradaException(e.getMessage());
         }

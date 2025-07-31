@@ -25,6 +25,13 @@ public class Vendedor extends Usuario {
     public void setPedidosOficial(Map<String, Pedido> pedidos){
         pedidosOficial = pedidos;
     }
+    public Pedido getPedido(String codigo){
+        Pedido pedido = pedidosOficial.get(codigo);
+        if(pedidosOficial.get(codigo) != null)
+            return pedido;
+        else
+            return null;
+    }
 
     public BigDecimal getValorVenda(){
         return valorVenda;
