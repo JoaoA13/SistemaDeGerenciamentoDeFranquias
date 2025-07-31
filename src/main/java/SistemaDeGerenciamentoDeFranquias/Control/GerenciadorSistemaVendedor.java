@@ -1,9 +1,11 @@
 package SistemaDeGerenciamentoDeFranquias.Control;
 
 import SistemaDeGerenciamentoDeFranquias.Exceptions.BancoDeDadosException;
+import SistemaDeGerenciamentoDeFranquias.Exceptions.CadastroException;
 import SistemaDeGerenciamentoDeFranquias.Exceptions.EntradaException;
 import SistemaDeGerenciamentoDeFranquias.Exceptions.LoginException;
 import SistemaDeGerenciamentoDeFranquias.Model.Loja;
+import SistemaDeGerenciamentoDeFranquias.Model.Produto;
 import SistemaDeGerenciamentoDeFranquias.Model.Vendedor;
 import SistemaDeGerenciamentoDeFranquias.Validadores.*;
 import SistemaDeGerenciamentoDeFranquias.Validadores.ValidadoresBancoDados.ValidadorCodigoPedidoBancoDeDadosFalse;
@@ -13,10 +15,14 @@ import SistemaDeGerenciamentoDeFranquias.Validadores.ValidadoresBancoDados.Valid
 import SistemaDeGerenciamentoDeFranquias.Validadores.ValidadoresNumericos.ValidadorPrecoPositivo;
 import SistemaDeGerenciamentoDeFranquias.Validadores.ValidadoresNumericos.ValidadorValorNaoNegativo;
 import SistemaDeGerenciamentoDeFranquias.Vision.IGAcoesVendedor;
+import SistemaDeGerenciamentoDeFranquias.Vision.InterfaceGrafica;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.LocalTime;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 import static SistemaDeGerenciamentoDeFranquias.Control.GerenciadorDeLojas.getVendedorGeral;
 
@@ -70,22 +76,12 @@ public class GerenciadorSistemaVendedor extends GerenciadorSistema{
         } catch (EntradaException e) {
             System.out.println("Erro: Entrada Exception: " + e.getMessage());
             throw new EntradaException(e.getMessage());
-        }
-        catch (BancoDeDadosException e) {
+        } catch (BancoDeDadosException e) {
             System.out.println("Erro: Entrada Exception: " + e.getMessage());
             throw new EntradaException(e.getMessage());
         }
 
-        boolean continuar = true;
-
-        while (continuar) {
-            continuar = IGAcoesVendedor.outrosProdutos(vendedor, loja);
-            if (continuar) {
-                continuar = IGAcoesVendedor.maisProdutos();
-            }
-        }
-
-        return "Pedido Cadastrado";
+        return "Escolha a lista de produtos do pedido";
     }
 
     public static void iniciarCadastro(Vendedor vendedor, Loja loja) {
@@ -98,7 +94,7 @@ public class GerenciadorSistemaVendedor extends GerenciadorSistema{
         }
     }
 
-    public void registraNovosProdutos(String codigo, String quantTexto, Vendedor vendedor, Loja loja) throws EntradaException{
+    public String registraNovosProdutos(String codigo, String quantTexto, Vendedor vendedor, Loja loja) throws EntradaException {
         BigDecimal quant;
         try {
             ValidadorCampoVazio.valida(codigo);
@@ -116,5 +112,7 @@ public class GerenciadorSistemaVendedor extends GerenciadorSistema{
             System.out.println("Erro: Entrada Exception: " + e.getMessage());
             throw new EntradaException(e.getMessage());
         }
+
+        return "Pedido Cadastrado";
     }
 }
