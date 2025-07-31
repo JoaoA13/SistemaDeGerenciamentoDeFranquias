@@ -48,7 +48,7 @@ public class GerenciadorDeLojas {
         else
             return armazenaLojas.getOrDefault(Codigo,null);//se nao for cpf vai pelo codigo
     }
-    protected static void cadastraLoja(String endereco,String codigo, Gerente gerente){
+    public static void cadastraLoja(String endereco, String codigo, Gerente gerente){
         Loja loja = new Loja(codigo,endereco,gerente);
         armazenaLojas.put(codigo,loja);
         codigoParaCpf.put(gerente.getCpf(),codigo);
@@ -94,7 +94,7 @@ public class GerenciadorDeLojas {
         cpf = cpf.replaceAll("[^\\d]", "");
         return armazenaGerentes.get(cpf);
     }
-    protected static void cadastraGerente(String cpf, Gerente gerente){
+    public static void cadastraGerente(String cpf, Gerente gerente){
         cpf = cpf.replaceAll("[^\\d]", "");
         armazenaGerentes.put(cpf,gerente);
         salvaArquivos.salvarGerentes(armazenaGerentes);

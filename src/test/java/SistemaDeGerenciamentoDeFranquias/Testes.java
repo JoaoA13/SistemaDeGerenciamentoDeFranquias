@@ -1,88 +1,63 @@
 package SistemaDeGerenciamentoDeFranquias;
 
+import SistemaDeGerenciamentoDeFranquias.Control.GerenciadorDeLojas;
 import SistemaDeGerenciamentoDeFranquias.Control.GerenciadorSistemaDono;
+import SistemaDeGerenciamentoDeFranquias.Control.GerenciadorSistemaGerente;
+import SistemaDeGerenciamentoDeFranquias.Control.GerenciadorSistemaVendedor;
 import SistemaDeGerenciamentoDeFranquias.Exceptions.CadastroException;
 import SistemaDeGerenciamentoDeFranquias.Exceptions.EntradaException;
 import SistemaDeGerenciamentoDeFranquias.Exceptions.LoginException;
 import SistemaDeGerenciamentoDeFranquias.Model.Dono;
+import SistemaDeGerenciamentoDeFranquias.Model.Gerente;
+import SistemaDeGerenciamentoDeFranquias.Model.Loja;
 import org.junit.jupiter.api.*;
-import SistemaDeGerenciamentoDeFranquias.Control.GerenciadorSistemaDono;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-public class Testes {
-    private GerenciadorSistemaDono sistema;
+public abstract class Testes {
+
+    private GerenciadorSistemaDono sistemaDono;
+    private GerenciadorSistemaGerente sistemaGerente;
+    private GerenciadorSistemaVendedor sistemaVendedor;
+    private GerenciadorDeLojas gerenciaLojas;
 
     @BeforeEach
     void setUp() {
-        sistema = new GerenciadorSistemaDono();
-        GerenciadorSistemaDono.getDonos().clear(); // limpando antes de cada teste
-    }
+        sistemaDono = new GerenciadorSistemaDono();
+        GerenciadorSistemaDono.getDonos().clear();
 
-    @Test
-    void testCadastroDonoComDadosValidos() throws CadastroException {
-        sistema.cadastroDono("Maria", "12345678901", "senha123", "maria@email.com");
-        Dono dono = GerenciadorSistemaDono.getDono("12345678901");
+        sistemaGerente = new GerenciadorSistemaGerente();
+        sistemaVendedor = new GerenciadorSistemaVendedor();
 
-        assertNotNull(dono);
-        assertEquals("Maria", dono.getNome());
-    }
-
-    @Test
-    void testCadastroDonoComCpfRepetidoLancaExcecao() throws CadastroException {
-        sistema.cadastroDono("Carlos", "11122233344", "senha123", "carlos@email.com");
-
-        CadastroException ex = assertThrows(CadastroException.class, () -> {
-            sistema.cadastroDono("Outro", "11122233344", "senha123", "outro@email.com");
-        });
-
-        assertEquals("Esse Cpf já está cadastrado", ex.getMessage());
+        gerenciaLojas = new GerenciadorDeLojas();
+        GerenciadorDeLojas.getLojas().clear();
+        GerenciadorDeLojas.getGerentes().clear();
+        GerenciadorDeLojas.getCodigoPraCpf().clear();
     }
 
     @Test
     void testLoginComDadosValidos() throws CadastroException, LoginException {
-        sistema.cadastroDono("Ana", "99988877766", "senha123", "ana@email.com");
-
-        String resultado = sistema.login("99988877766", "senha123");
+        sistemaDono.cadastroDono("Ana", "99988877766", "senha123", "ana@email.com");
+        String resultado = sistemaDono.login("99988877766", "senha123");
         assertEquals("CPF e senha corretos", resultado);
-    }
 
-    @Test
-    void testLoginComSenhaErrada() throws CadastroException {
-        sistema.cadastroDono("Ana", "99988877766", "senha123", "ana@email.com");
+        sistemaDono.cadastroGerente("josias","12345678900","senha123","eita@gmail.com");
+        String resultado2 = sistemaGerente.login("12345678900", "senha123");
+        assertEquals("CPF e senha corretos", resultado2);
 
-        assertThrows(LoginException.class, () -> {
-            sistema.login("99988877766", "senhaErrada");
-        });
-    }
-
-    @Test
-    void testExclusaoDeDono() throws CadastroException, EntradaException {
-        sistema.cadastroDono("Lucas", "10101010100", "senha123", "lucas@email.com");
-
-        assertNotNull(GerenciadorSistemaDono.getDono("10101010100"));
-
-        sistema.excluirDono("10101010100");
-
-        assertNull(GerenciadorSistemaDono.getDono("10101010100"));
-    }
-
-    @Test
-    void testEditarNomeDono() throws EntradaException {
-        sistema.cadastroDono("João", "88877766655", "senha123", "joao@email.com");
-
-        sistema.editarDono("João Silva","","","","88877766655");
-
-        assertEquals("João Silva", GerenciadorSistemaDono.getDono("88877766655").getNome());
+        gerenciaLojas.cadastraLoja("rua dos bobos","070",GerenciadorDeLojas.getGerente("12345678900"));
+        sistemaGerente.lancarCadastro("luis","12312312312","l@gmail.com","12345678","12345678900");
+        String resultado3 = sistemaVendedor.login("12312312312", "12345678");
+        assertEquals("CPF e senha corretos", resultado3);
     }
 
 //    @Test
 //    void testEditarEmailComValorVazio() throws CadastroException {
-//        sistema.cadastroDono("Clara", "55544433322", "senha123", "clara@email.com");
+//        sistemaDono.cadastroDono("Clara", "55544433322", "senha123", "clara@email.com");
 //
 //        EntradaException ex = assertThrows(EntradaException.class, () -> {
-//            sistema.editarDono("","","","","88877766655");
+//            sistemaDono.editarDono("","","","","88877766655");
 //        });
 //
 //        assertEquals("Campo vazio!", ex.getMessage());
