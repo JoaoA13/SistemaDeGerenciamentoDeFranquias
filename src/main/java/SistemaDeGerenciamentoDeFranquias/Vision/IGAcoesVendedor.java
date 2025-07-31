@@ -11,22 +11,11 @@ import SistemaDeGerenciamentoDeFranquias.Model.Vendedor;
 import javax.swing.*;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
-import javax.swing.table.DefaultTableModel;
 import javax.swing.text.MaskFormatter;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.math.BigDecimal;
 import java.text.*;
-import java.time.LocalDate;
-import java.time.LocalTime;
-import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
-import java.util.Locale;
-
-import static java.math.BigDecimal.*;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 public class IGAcoesVendedor {
     static GerenciadorSistemaVendedor gerenciaVendedor = new GerenciadorSistemaVendedor();
@@ -248,12 +237,12 @@ public class IGAcoesVendedor {
 
         if (resposta != JOptionPane.YES_OPTION) {
             JOptionPane.showMessageDialog(null, "Registro finalizado.");
-            return false;
+            return  false;
         }
         return true;
     }
 
-    public static void outrosProdutos(Vendedor vendedor, Loja loja){
+    public static boolean outrosProdutos(Vendedor vendedor, Loja loja){
         JPanel cadastro = new JPanel();
         cadastro.setLayout(new BoxLayout(cadastro, BoxLayout.Y_AXIS));
         cadastro.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
@@ -356,6 +345,7 @@ public class IGAcoesVendedor {
                 gerenciaVendedor.registraNovosProdutos(cod, quantidade, vendedor, loja);
                 JOptionPane.showMessageDialog(null, "", "Sucesso", JOptionPane.INFORMATION_MESSAGE);
                 escreveCodigo.setText("");escreveQuantidade.setText("");
+
             } catch (CadastroException ex) {
                 JOptionPane.showMessageDialog(null, "Erro ao registrar pedido: " + ex.getMessage(), "Erro", JOptionPane.ERROR_MESSAGE);
             } catch (EntradaException ex) {
@@ -363,14 +353,8 @@ public class IGAcoesVendedor {
             }
         });
 
-        JFrame frame = new JFrame();
-        frame.setSize(300, 200);
-        frame.setLocationRelativeTo(null);
-        frame.setContentPane(cadastro);
-        frame.revalidate();
-        frame.repaint();
-        frame.setVisible(true);
-
+        InterfaceGrafica.trocarTela(cadastro, 300, 210);
+        return true;
     }
 
     JPanel listaDePedidos(){

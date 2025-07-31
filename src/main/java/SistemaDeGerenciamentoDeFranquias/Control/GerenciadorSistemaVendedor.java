@@ -9,12 +9,14 @@ import SistemaDeGerenciamentoDeFranquias.Model.Produto;
 import SistemaDeGerenciamentoDeFranquias.Model.Vendedor;
 import SistemaDeGerenciamentoDeFranquias.Validadores.*;
 import SistemaDeGerenciamentoDeFranquias.Vision.IGAcoesVendedor;
+import SistemaDeGerenciamentoDeFranquias.Vision.InterfaceGrafica;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 import static SistemaDeGerenciamentoDeFranquias.Control.GerenciadorDeLojas.getVendedorGeral;
 
@@ -71,11 +73,26 @@ public class GerenciadorSistemaVendedor extends GerenciadorSistema{
             throw new EntradaException(e.getMessage());
         }
 
+        boolean continuar = true;
 
-        while(IGAcoesVendedor.maisProdutos()) {
-            IGAcoesVendedor.outrosProdutos(vendedor,loja);
+        while (continuar) {
+            continuar = IGAcoesVendedor.outrosProdutos(vendedor, loja);
+            if (continuar) {
+                continuar = IGAcoesVendedor.maisProdutos();
+            }
         }
+
         return "Pedido Cadastrado";
+    }
+
+    public static void iniciarCadastro(Vendedor vendedor, Loja loja) {
+        IGAcoesVendedor.outrosProdutos(vendedor, loja);
+
+        boolean continuar = IGAcoesVendedor.maisProdutos();
+
+        if (continuar) {
+            iniciarCadastro(vendedor, loja);
+        }
     }
 
     public void registraNovosProdutos(String codigo, String quantTexto, Vendedor vendedor, Loja loja) throws EntradaException{

@@ -29,6 +29,8 @@ public class InterfaceGrafica {
        frame.setVisible(true);
     }
 
+    public void setFrame(JFrame frame){this.frame = frame;}
+
     public JFrame getFrame(){return frame;}
 
     void menu1SelecionaCargo(){
