@@ -22,13 +22,15 @@ public class InterfaceGrafica {
     String cpf = "";
 
    public InterfaceGrafica(){
-       //menuLogin();
-       sistemaDono();
+       menuLogin();
+       //sistemaDono();
        frame.setSize(200, 200);
        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
        frame.setLocationRelativeTo(null);
        frame.setVisible(true);
     }
+
+    public void setFrame(JFrame frame){this.frame = frame;}
 
     public JFrame getFrame(){return frame;}
 
