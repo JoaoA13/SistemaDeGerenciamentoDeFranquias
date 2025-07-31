@@ -135,6 +135,15 @@ public class IGAcoesVendedor {
         valoresPanel.add(taxaEntregaPanel);
         cadastro.add(valoresPanel);
 
+        JLabel labelCodigoPedido = new JLabel("Digite o codigo do pedido:");
+        labelCodigoPedido.setAlignmentX(Component.LEFT_ALIGNMENT);
+        cadastro.add(labelCodigoPedido);
+
+        JTextField escreveCodPedido = new JTextField(10);
+        escreveCodPedido.setMaximumSize(new Dimension(100, 20));
+        escreveCodPedido.setAlignmentX(Component.LEFT_ALIGNMENT);
+        cadastro.add(escreveCodPedido);
+
         if (loja != null) {
             DocumentListener listener = new DocumentListener() {
                 public void insertUpdate(DocumentEvent e) {
@@ -193,7 +202,9 @@ public class IGAcoesVendedor {
         if (escreveHora != null) {
             escreveHora.addActionListener(e -> campoTaxaEntrega.requestFocusInWindow());
         }
-        campoTaxaEntrega.addActionListener(e -> confirmar.doClick());
+        campoTaxaEntrega.addActionListener(e -> escreveCodPedido.requestFocusInWindow());
+
+        escreveCodPedido.addActionListener(e -> confirmar.doClick());
 
         botoesPanel.add(Sair);
         botoesPanel.add(Box.createHorizontalGlue());
@@ -213,11 +224,12 @@ public class IGAcoesVendedor {
             String horaTexto = finalEscreveHora1.getText();
             String formaDePagamento = (String) comboPagamento.getSelectedItem();
             String  taxaEntrega = campoTaxaEntrega.getText().trim();
+            String  codigoPedido = escreveCodPedido.getText().trim();
 
             try {
-                String msg = gerenciaVendedor.lancarPedido(cod, quantidade, nome, dataTexto, horaTexto,formaDePagamento, taxaEntrega, vendedor, loja);
+                String msg = gerenciaVendedor.lancarPedido(cod, quantidade, nome, dataTexto, horaTexto,formaDePagamento, taxaEntrega, vendedor, loja,codigoPedido);
                 JOptionPane.showMessageDialog(null, msg, "Sucesso", JOptionPane.INFORMATION_MESSAGE);
-                escreveCodigo.setText("");escreveQuantidade.setText("");escreveNome.setText("");finalEscreveData3.setText("");finalEscreveHora2.setText("");campoTaxaEntrega.setText("");
+                escreveCodigo.setText("");escreveQuantidade.setText("");escreveNome.setText("");finalEscreveData3.setText("");finalEscreveHora2.setText("");campoTaxaEntrega.setText("");escreveCodPedido.setText("");
             } catch (CadastroException ex) {
                 JOptionPane.showMessageDialog(null, "Erro ao registrar pedido: " + ex.getMessage(), "Erro", JOptionPane.ERROR_MESSAGE);
             } catch (EntradaException ex) {

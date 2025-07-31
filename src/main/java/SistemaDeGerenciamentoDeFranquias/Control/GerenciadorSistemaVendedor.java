@@ -45,7 +45,7 @@ public class GerenciadorSistemaVendedor extends GerenciadorSistema{
         }
     }
 
-    public String lancarPedido(String codigo, String quantTexto, String nomeCliente, String dataTexto, String horaTexto,String formaDePagamento, String taxaEntregaTexto, Vendedor vendedor, Loja loja) throws EntradaException {
+    public String lancarPedido(String codigo, String quantTexto, String nomeCliente, String dataTexto, String horaTexto,String formaDePagamento, String taxaEntregaTexto, Vendedor vendedor, Loja loja,String codigoPedido) throws EntradaException {
         LocalDate data;
         LocalTime hora;
         BigDecimal quant;
@@ -55,9 +55,12 @@ public class GerenciadorSistemaVendedor extends GerenciadorSistema{
             ValidadorCampoVazio.valida(quantTexto);
             ValidadorCampoVazio.valida(nomeCliente);
             ValidadorCampoVazio.valida(taxaEntregaTexto);
+            ValidadorCampoVazio.valida(codigoPedido);
 
             ValidadorCodigo.validarCodigo(codigo);
             ValidadorCodigoProdutoBancoDeDadosTrue.valida(codigo, vendedor.getCodigoLoja());
+            ValidadorCodigo.validarCodigo(codigoPedido);
+            ValidadorCodigoPedidoBancoDeDadosFalse.valida(codigoPedido);
 
             quant = ValidadorPrecoPositivo.validarValorPositivo(quantTexto);
             ValidadorNome.validarNome(nomeCliente);
