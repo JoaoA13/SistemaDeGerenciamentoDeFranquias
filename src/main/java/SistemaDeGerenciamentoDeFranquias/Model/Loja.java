@@ -1,9 +1,11 @@
 package SistemaDeGerenciamentoDeFranquias.Model;
 
 import java.math.BigDecimal;
+import java.time.LocalDate;
+import java.time.LocalTime;
 import java.util.*;
 
-public class Loja {
+public class Loja<T> {
 
     private String codigo;
     private String endereco;
@@ -12,6 +14,7 @@ public class Loja {
     public Map<String, Produto> armazenaProdutos = new HashMap<>();
     public Map<String, Cliente> armazenaClientes = new HashMap<>();
     public Map<String, Pedido> armazenaPedidosAltera = new HashMap<>();
+    public Map<String, T> armazenaAlteracao = new HashMap<>();
 
     public Loja(String codigo, String endereco, Gerente gerenteDaUnidade){
         this.endereco = endereco;
@@ -146,13 +149,30 @@ public class Loja {
         return armazenaPedidosAltera.getOrDefault(codigo, null);
     }
 
+    public Map<String, T> getArmazenaAlteracao() {
+        if (armazenaPedidosAltera != null)
+            return armazenaAlteracao;
+        return null;
+    }
+
+    /*public Pedido getArmazenaAlteracao (String codigo) {
+        if (armazenaPedidosAltera == null) {
+            armazenaPedidosAltera = new HashMap<>();
+        }
+        return armazenaPedidosAltera.getOrDefault(codigo, null);
+    }*/
+
     public Map<String, Pedido> getArmazenaPedidosAltera() {
         if (armazenaPedidosAltera != null)
             return armazenaPedidosAltera;
         return null;
     }
 
-    public void addPedidosAltera(Pedido pedido){
+    public void addPedidosAltera(Pedido pedido, T texto, int escolha){
+        if (armazenaPedidosAltera == null) {
+            armazenaPedidosAltera = new HashMap<>();
+        }
         armazenaPedidosAltera.put(pedido.getCodigo(),pedido);
+        armazenaAlteracao.put(pedido.getCodigo(), texto);
     }
 }

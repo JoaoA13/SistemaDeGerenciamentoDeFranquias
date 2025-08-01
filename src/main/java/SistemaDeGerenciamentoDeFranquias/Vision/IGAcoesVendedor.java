@@ -44,7 +44,7 @@ public class IGAcoesVendedor {
 
         Vendedor vendedor = (Vendedor) GerenciadorDeLojas.getVendedorGeral(cpfVendedor);
         System.out.println(vendedor.getCodigoLoja() + " códogo da loja");
-        this.loja = GerenciadorDeLojas.getLoja(vendedor.getCodigoLoja());
+        this.loja = getLoja(vendedor.getCodigoLoja());
 
         JLabel labelNome = new JLabel("Digite o nome do cliente:");
         labelNome.setAlignmentX(Component.LEFT_ALIGNMENT);
@@ -338,7 +338,7 @@ public class IGAcoesVendedor {
         String[] colunas = {"Código", "CPF do cliente", "Data", "Hora", "Forma de Pagamento", "Taxa de entrega", "Valor total"};
         Vendedor vendedor = (Vendedor) GerenciadorDeLojas.getVendedorGeral(cpfVendedor);
         System.out.println(vendedor.getCodigoLoja() + " códogo da loja");
-        this.loja = GerenciadorDeLojas.getLoja(vendedor.getCodigoLoja());
+        this.loja = getLoja(vendedor.getCodigoLoja());
 
         String[][] dados = new String[vendedor.getPedidosOficial().size()][7];
 
@@ -392,7 +392,7 @@ public class IGAcoesVendedor {
                         String codigoSelecionado = (String) tabela.getValueAt(linha, 4);
 
                         editarItem.addActionListener(ae -> {
-                            editarProd(vendedor.getPedido(codigoPedido));
+                            editarProd(vendedor, vendedor.getPedido(codigoPedido));
                         });
 
                         excluirItem.addActionListener(ae -> {
@@ -557,7 +557,7 @@ public class IGAcoesVendedor {
         });
     }
 
-    public void editarProd(Pedido pedido){
+    public void editarProd(Vendedor vendedor, Pedido pedido){
         JPanel edicao = new JPanel();
         edicao.setLayout(new BoxLayout(edicao, BoxLayout.Y_AXIS));
         edicao.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
@@ -586,11 +586,11 @@ public class IGAcoesVendedor {
         JButton confirmar = new JButton("Confirmar");
 
         final String[] texto2 = {""};
-        JTextField escreveTexto;
+        JTextField escreveTexto = null;
         String[] opcoesPagamento = { "Dinheiro Físico", "Pix", "Cartão" };
         JComboBox<String> comboPagamento = new JComboBox<>(opcoesPagamento);
         edicao.add(criarJLabel(texto));
-        if(escolha != 4) {
+        if(escolha != 4 && escolha != 2 && escolha != 3) {
             escreveTexto = new JTextField(20);
             escreveTexto.setMaximumSize(new Dimension(Integer.MAX_VALUE, 25));
             escreveTexto.setAlignmentX(Component.LEFT_ALIGNMENT);
@@ -598,13 +598,45 @@ public class IGAcoesVendedor {
             escreveTexto.addActionListener(e -> confirmar.doClick());
             escreveTexto.setText("");
         }
-        else{
+        else if(escolha == 4){
             escreveTexto = null;
             comboPagamento.setSelectedIndex(0);
             comboPagamento.setMaximumSize(new Dimension(200, 25));
             comboPagamento.setAlignmentX(Component.LEFT_ALIGNMENT);
             edicao.add(new JLabel("Forma de Pagamento:"));
             edicao.add(comboPagamento);
+        }
+        else if(escolha == 2){
+            try {
+                MaskFormatter mascaraData = new MaskFormatter("##/##/####");
+                mascaraData.setPlaceholderCharacter('_');
+                escreveTexto = new JFormattedTextField(mascaraData);
+                escreveTexto.setMaximumSize(new Dimension(Integer.MAX_VALUE, 25));
+                escreveTexto.setAlignmentX(Component.LEFT_ALIGNMENT);
+                escreveTexto.setColumns(10);
+                escreveTexto.setBorder(BorderFactory.createEmptyBorder());
+                escreveTexto.setOpaque(false);
+                edicao.add(escreveTexto);
+                escreveTexto.addActionListener(e -> confirmar.doClick());
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
+        }
+        else if(escolha == 3){
+            try {
+                MaskFormatter mascaraHora = new MaskFormatter("##:##");
+                mascaraHora.setPlaceholderCharacter('_');
+                escreveTexto = new JFormattedTextField(mascaraHora);
+                escreveTexto.setMaximumSize(new Dimension(Integer.MAX_VALUE, 25));
+                escreveTexto.setAlignmentX(Component.LEFT_ALIGNMENT);
+                escreveTexto.setColumns(5);
+                escreveTexto.setBorder(BorderFactory.createEmptyBorder());
+                escreveTexto.setOpaque(false);
+                edicao.add(escreveTexto);
+                escreveTexto.addActionListener(e -> confirmar.doClick());
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
         }
 
         edicao.setLayout(new BoxLayout(edicao, BoxLayout.Y_AXIS));
@@ -613,15 +645,17 @@ public class IGAcoesVendedor {
         edicao.add(confirmar);
 
 
+        JTextField finalEscreveTexto = escreveTexto;
         confirmar.addActionListener(e -> {
             System.out.println("Botão Confirmar clicado");
             if(escolha == 4)
                 texto2[0] = (String) comboPagamento.getSelectedItem();
             else
-                texto2[0] = escreveTexto.getText().trim();
+                texto2[0] = finalEscreveTexto.getText().trim();
             try {
-                String msg = gerenciaVendedor.solicitarEdicao(texto2[0], escolha,pedido);
+                String msg = gerenciaVendedor.solicitarEdicao(texto2[0], escolha, pedido, vendedor);
                 JOptionPane.showMessageDialog(null, msg, "Sucesso", JOptionPane.INFORMATION_MESSAGE);
+                InterfaceGrafica.trocarTela(listaDePedidos(vendedor.getCpf()), 700, 600);
             } catch (EntradaException ex) {
                 JOptionPane.showMessageDialog(null, "Erro ao editar: " + ex.getMessage(), "Erro", JOptionPane.ERROR_MESSAGE);
             }
