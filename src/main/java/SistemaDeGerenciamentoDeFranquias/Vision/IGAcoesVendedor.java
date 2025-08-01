@@ -519,7 +519,7 @@ public class IGAcoesVendedor {
                         String codigoSelecionado = (String) tabela1.getValueAt(linha, 4);
 
                         editarItem.addActionListener(ae -> {
-                            editarProd();
+                            //editarProd();
                         });
 
                         excluirItem.addActionListener(ae -> {
@@ -653,7 +653,7 @@ public class IGAcoesVendedor {
             else
                 texto2[0] = finalEscreveTexto.getText().trim();
             try {
-                String msg = gerenciaVendedor.solicitarEdicao(texto2[0], escolha, pedido);
+                String msg = gerenciaVendedor.solicitarEdicao(texto2[0], escolha, pedido, vendedor);
                 JOptionPane.showMessageDialog(null, msg, "Sucesso", JOptionPane.INFORMATION_MESSAGE);
                 InterfaceGrafica.trocarTela(listaDePedidos(vendedor.getCpf()), 700, 600);
             } catch (EntradaException ex) {

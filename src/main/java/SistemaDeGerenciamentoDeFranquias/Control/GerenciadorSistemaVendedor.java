@@ -102,7 +102,7 @@ public class GerenciadorSistemaVendedor extends GerenciadorSistema{
             loja.excluirProduto(codigo);
     }
 
-    public String solicitarEdicao(String texto, int escolha, Pedido pedido) throws EntradaException {
+    public String solicitarEdicao(String texto, int escolha, Pedido pedido, Vendedor vendedor) throws EntradaException {
         LocalDate data = null;
         LocalTime hora = null;
         BigDecimal taxaEntrega = null;
@@ -135,8 +135,15 @@ public class GerenciadorSistemaVendedor extends GerenciadorSistema{
             System.out.println("Erro: EntradaException: " + e.getMessage());
             throw new EntradaException(e.getMessage());
             }
-
-        //Loja.addPedidosAltera(pedido);
+        Loja loja = GerenciadorDeLojas.getLoja(vendedor.getCpf());
+        if(escolha != 2 && escolha != 3 && escolha != 5)
+            loja.addPedidosAltera(pedido, texto, escolha);
+        else if(escolha == 2)
+            loja.addPedidosAltera(pedido, data, escolha);
+        else if(escolha == 3)
+            loja.addPedidosAltera(pedido, hora, escolha);
+        else
+            loja.addPedidosAltera(pedido, taxaEntrega, escolha);
         IGAcoesGerente.listaMudarPedidos();
         //GerenciadorSistemaGerente.listaDePedidos(texto, data, hora, taxaEntrega, pedido, escolha);
 
