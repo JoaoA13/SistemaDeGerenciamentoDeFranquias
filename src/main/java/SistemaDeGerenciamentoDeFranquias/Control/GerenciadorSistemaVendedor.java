@@ -137,7 +137,7 @@ public class GerenciadorSistemaVendedor extends GerenciadorSistema{
             }
 
         //Loja.addPedidosAltera(pedido);
-        IGAcoesGerente.listaMudarPedidos();
+        //IGAcoesGerente.listaMudarPedidos();
         //GerenciadorSistemaGerente.listaDePedidos(texto, data, hora, taxaEntrega, pedido, escolha);
 
             return "Edição solicitada";

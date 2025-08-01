@@ -23,7 +23,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
 
 import static SistemaDeGerenciamentoDeFranquias.Control.GerenciadorDeLojas.getLoja;
 
-public class IGAcoesVendedor extends InterfaceBase{
+public class IGAcoesVendedor {
     private InterfaceGrafica interfaceGrafica;
     static GerenciadorSistemaVendedor gerenciaVendedor = new GerenciadorSistemaVendedor();
     Loja loja;
@@ -32,7 +32,6 @@ public class IGAcoesVendedor extends InterfaceBase{
     DecimalFormat formatadorPreco = new DecimalFormat("R$ #,##0.00", new DecimalFormatSymbols(new Locale("pt", "BR")));
 
     IGAcoesVendedor(InterfaceGrafica interfaceGrafica){
-        super(interfaceGrafica);
         this.interfaceGrafica = interfaceGrafica;
 
     }
@@ -45,7 +44,7 @@ public class IGAcoesVendedor extends InterfaceBase{
 
         Vendedor vendedor = (Vendedor) GerenciadorDeLojas.getVendedorGeral(cpfVendedor);
         System.out.println(vendedor.getCodigoLoja() + " códogo da loja");
-        this.loja = getLoja(vendedor.getCodigoLoja());
+        this.loja = GerenciadorDeLojas.getLoja(vendedor.getCodigoLoja());
 
         JLabel labelNome = new JLabel("Digite o nome do cliente:");
         labelNome.setAlignmentX(Component.LEFT_ALIGNMENT);
@@ -130,8 +129,7 @@ public class IGAcoesVendedor extends InterfaceBase{
         escreveCodigo.setAlignmentX(Component.LEFT_ALIGNMENT);
         cadastro.add(escreveCodigo);
 
-        JButton voltar = new JButton("Voltar");
-
+        JButton Sair = new JButton("Sair");
         JButton confirmar = new JButton("Confirmar");
 
         JPanel botoesPanel = new JPanel();
@@ -153,8 +151,8 @@ public class IGAcoesVendedor extends InterfaceBase{
         campoTaxaEntrega.addActionListener(e -> escreveCodigo.requestFocusInWindow());
         escreveCodigo.addActionListener(e -> confirmar.doClick());
 
+        botoesPanel.add(Sair);
         botoesPanel.add(Box.createHorizontalGlue());
-        botoesPanel.add(voltar);
         botoesPanel.add(confirmar);
         cadastro.add(botoesPanel);
 
@@ -183,19 +181,6 @@ public class IGAcoesVendedor extends InterfaceBase{
                 JOptionPane.showMessageDialog(null, "Erro nos dados inseridos: " + ex.getMessage(), "Erro", JOptionPane.ERROR_MESSAGE);
             }
         });
-
-
-
-        voltar.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                System.out.println("Botão 'voltar' clicado");
-                cadastro.setVisible(false);
-                interfaceGrafica.sistemaVendedor();
-            }
-        });
-
-        atualizaFrame(cadastro,500,300);
-
         return cadastro;
     }
 
@@ -353,7 +338,7 @@ public class IGAcoesVendedor extends InterfaceBase{
         String[] colunas = {"Código", "CPF do cliente", "Data", "Hora", "Forma de Pagamento", "Taxa de entrega", "Valor total"};
         Vendedor vendedor = (Vendedor) GerenciadorDeLojas.getVendedorGeral(cpfVendedor);
         System.out.println(vendedor.getCodigoLoja() + " códogo da loja");
-        this.loja = getLoja(vendedor.getCodigoLoja());
+        this.loja = GerenciadorDeLojas.getLoja(vendedor.getCodigoLoja());
 
         String[][] dados = new String[vendedor.getPedidosOficial().size()][7];
 
@@ -363,7 +348,7 @@ public class IGAcoesVendedor extends InterfaceBase{
         int i = 0;
         for (Pedido p : vendedor.getPedidosOficial().values()) {
             dados[i][0] = p.getCodigo();
-            dados[i][1] = formatarCPF(p.getCliente().getCpf());
+            dados[i][1] = interfaceGrafica.formatarCPF(p.getCliente().getCpf());
             dados[i][2] = String.valueOf(p.getData());
             dados[i][3] = String.valueOf(p.getHora());
             dados[i][4] = p.getFormaDePagamento();
@@ -407,7 +392,7 @@ public class IGAcoesVendedor extends InterfaceBase{
                         String codigoSelecionado = (String) tabela.getValueAt(linha, 4);
 
                         editarItem.addActionListener(ae -> {
-                            editarProd(vendedor, vendedor.getPedido(codigoPedido));
+                            editarProd(vendedor.getPedido(codigoPedido));
                         });
 
                         excluirItem.addActionListener(ae -> {
@@ -438,16 +423,6 @@ public class IGAcoesVendedor extends InterfaceBase{
         botoesPanel.add(Box.createHorizontalGlue());
         lista.add(botoesPanel);
 
-        voltar.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                System.out.println("Botão 'voltar' clicado");
-                lista.setVisible(false);
-                interfaceGrafica.sistemaVendedor();
-            }
-        });
-
-        atualizaFrame(lista,500,300);
-
         return lista;
     }
 
@@ -466,32 +441,32 @@ public class IGAcoesVendedor extends InterfaceBase{
 
         JPanel tabela = new JPanel(new GridLayout(9, 2, 10, 10));
 
-        tabela.add(criaCelula("Código do pedido: "));
-        tabela.add(criaCelula(pedido.getCodigo()));
+        tabela.add(interfaceGrafica.criaCelula("Código do pedido: "));
+        tabela.add(interfaceGrafica.criaCelula(pedido.getCodigo()));
 
-        tabela.add(criaCelula("Cpf do vendedor: "));
-        tabela.add(criaCelula(formatarCPF(pedido.getCpfVendedor())));
+        tabela.add(interfaceGrafica.criaCelula("Cpf do vendedor: "));
+        tabela.add(interfaceGrafica.criaCelula(interfaceGrafica.formatarCPF(pedido.getCpfVendedor())));
 
-        tabela.add(criaCelula("CPF do cliente: "));
-        tabela.add(criaCelula(formatarCPF(pedido.getCliente().getCpf())));
+        tabela.add(interfaceGrafica.criaCelula("CPF do cliente: "));
+        tabela.add(interfaceGrafica.criaCelula(interfaceGrafica.formatarCPF(pedido.getCliente().getCpf())));
 
-        tabela.add(criaCelula("Data: "));
-        tabela.add(criaCelula(String.valueOf(pedido.getData())));
+        tabela.add(interfaceGrafica.criaCelula("Data: "));
+        tabela.add(interfaceGrafica.criaCelula(String.valueOf(pedido.getData())));
 
-        tabela.add(criaCelula("Hora: "));
-        tabela.add(criaCelula(String.valueOf(pedido.getHora())));
+        tabela.add(interfaceGrafica.criaCelula("Hora: "));
+        tabela.add(interfaceGrafica.criaCelula(String.valueOf(pedido.getHora())));
 
-        tabela.add(criaCelula("Forma de pagamente: "));
-        tabela.add(criaCelula(pedido.getFormaDePagamento()));
+        tabela.add(interfaceGrafica.criaCelula("Forma de pagamente: "));
+        tabela.add(interfaceGrafica.criaCelula(pedido.getFormaDePagamento()));
 
-        tabela.add(criaCelula("Taxa de entrega: "));
-        tabela.add(criaCelula(formatadorPreco.format(pedido.getTaxaEntrega())));
+        tabela.add(interfaceGrafica.criaCelula("Taxa de entrega: "));
+        tabela.add(interfaceGrafica.criaCelula(formatadorPreco.format(pedido.getTaxaEntrega())));
 
-        tabela.add(criaCelula("Valor total pago: "));
-        tabela.add(criaCelula(formatadorPreco.format(pedido.getValorTotal())));
+        tabela.add(interfaceGrafica.criaCelula("Valor total pago: "));
+        tabela.add(interfaceGrafica.criaCelula(formatadorPreco.format(pedido.getValorTotal())));
 
-        tabela.add(criaCelula("Valor total recebido pela loja: "));
-        tabela.add(criaCelula(formatadorPreco.format(pedido.getValorTotal().subtract(pedido.getTaxaEntrega()))));
+        tabela.add(interfaceGrafica.criaCelula("Valor total recebido pela loja: "));
+        tabela.add(interfaceGrafica.criaCelula(formatadorPreco.format(pedido.getValorTotal().subtract(pedido.getTaxaEntrega()))));
 
         String[] colunas = {"Nome", "preço", "características", "quantidade", "código"};
 
@@ -544,7 +519,7 @@ public class IGAcoesVendedor extends InterfaceBase{
                         String codigoSelecionado = (String) tabela1.getValueAt(linha, 4);
 
                         editarItem.addActionListener(ae -> {
-                            editarProd();
+                            //editarProd();
                         });
 
                         excluirItem.addActionListener(ae -> {
@@ -582,7 +557,7 @@ public class IGAcoesVendedor extends InterfaceBase{
         });
     }
 
-    public void editarProd(Vendedor vendedor, Pedido pedido){
+    public void editarProd(Pedido pedido){
         JPanel edicao = new JPanel();
         edicao.setLayout(new BoxLayout(edicao, BoxLayout.Y_AXIS));
         edicao.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
@@ -611,11 +586,11 @@ public class IGAcoesVendedor extends InterfaceBase{
         JButton confirmar = new JButton("Confirmar");
 
         final String[] texto2 = {""};
-        JTextField escreveTexto = null;
+        JTextField escreveTexto;
         String[] opcoesPagamento = { "Dinheiro Físico", "Pix", "Cartão" };
         JComboBox<String> comboPagamento = new JComboBox<>(opcoesPagamento);
         edicao.add(criarJLabel(texto));
-        if(escolha != 4 && escolha != 2 && escolha != 3) {
+        if(escolha != 4) {
             escreveTexto = new JTextField(20);
             escreveTexto.setMaximumSize(new Dimension(Integer.MAX_VALUE, 25));
             escreveTexto.setAlignmentX(Component.LEFT_ALIGNMENT);
@@ -623,45 +598,13 @@ public class IGAcoesVendedor extends InterfaceBase{
             escreveTexto.addActionListener(e -> confirmar.doClick());
             escreveTexto.setText("");
         }
-        else if(escolha == 4){
+        else{
             escreveTexto = null;
             comboPagamento.setSelectedIndex(0);
             comboPagamento.setMaximumSize(new Dimension(200, 25));
             comboPagamento.setAlignmentX(Component.LEFT_ALIGNMENT);
             edicao.add(new JLabel("Forma de Pagamento:"));
             edicao.add(comboPagamento);
-        }
-        else if(escolha == 2){
-            try {
-                MaskFormatter mascaraData = new MaskFormatter("##/##/####");
-                mascaraData.setPlaceholderCharacter('_');
-                escreveTexto = new JFormattedTextField(mascaraData);
-                escreveTexto.setMaximumSize(new Dimension(Integer.MAX_VALUE, 25));
-                escreveTexto.setAlignmentX(Component.LEFT_ALIGNMENT);
-                escreveTexto.setColumns(10);
-                escreveTexto.setBorder(BorderFactory.createEmptyBorder());
-                escreveTexto.setOpaque(false);
-                edicao.add(escreveTexto);
-                escreveTexto.addActionListener(e -> confirmar.doClick());
-            } catch (ParseException e) {
-                e.printStackTrace();
-            }
-        }
-        else if(escolha == 3){
-            try {
-                MaskFormatter mascaraHora = new MaskFormatter("##:##");
-                mascaraHora.setPlaceholderCharacter('_');
-                escreveTexto = new JFormattedTextField(mascaraHora);
-                escreveTexto.setMaximumSize(new Dimension(Integer.MAX_VALUE, 25));
-                escreveTexto.setAlignmentX(Component.LEFT_ALIGNMENT);
-                escreveTexto.setColumns(5);
-                escreveTexto.setBorder(BorderFactory.createEmptyBorder());
-                escreveTexto.setOpaque(false);
-                edicao.add(escreveTexto);
-                escreveTexto.addActionListener(e -> confirmar.doClick());
-            } catch (ParseException e) {
-                e.printStackTrace();
-            }
         }
 
         edicao.setLayout(new BoxLayout(edicao, BoxLayout.Y_AXIS));
@@ -670,17 +613,15 @@ public class IGAcoesVendedor extends InterfaceBase{
         edicao.add(confirmar);
 
 
-        JTextField finalEscreveTexto = escreveTexto;
         confirmar.addActionListener(e -> {
             System.out.println("Botão Confirmar clicado");
             if(escolha == 4)
                 texto2[0] = (String) comboPagamento.getSelectedItem();
             else
-                texto2[0] = finalEscreveTexto.getText().trim();
+                texto2[0] = escreveTexto.getText().trim();
             try {
-                String msg = gerenciaVendedor.solicitarEdicao(texto2[0], escolha, pedido);
+                String msg = gerenciaVendedor.solicitarEdicao(texto2[0], escolha,pedido);
                 JOptionPane.showMessageDialog(null, msg, "Sucesso", JOptionPane.INFORMATION_MESSAGE);
-                InterfaceGrafica.trocarTela(listaDePedidos(vendedor.getCpf()), 700, 600);
             } catch (EntradaException ex) {
                 JOptionPane.showMessageDialog(null, "Erro ao editar: " + ex.getMessage(), "Erro", JOptionPane.ERROR_MESSAGE);
             }
@@ -693,6 +634,7 @@ public class IGAcoesVendedor extends InterfaceBase{
         label.setAlignmentX(Component.LEFT_ALIGNMENT);
         return label;
     }
+
 
     public void excluirProd(){
         JPanel edicao = new JPanel();

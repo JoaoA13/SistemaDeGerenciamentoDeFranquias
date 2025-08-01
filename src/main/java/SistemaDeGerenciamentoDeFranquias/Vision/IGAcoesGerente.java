@@ -19,7 +19,7 @@ import java.util.Locale;
 
 import static SistemaDeGerenciamentoDeFranquias.Control.GerenciadorDeLojas.getLoja;
 
-public class IGAcoesGerente extends InterfaceBase{
+public class IGAcoesGerente {
     private InterfaceGrafica interfaceGrafica;
     private String cpf;
     private GerenciadorDeLojas gerenciaDeLojas;
@@ -30,7 +30,6 @@ public class IGAcoesGerente extends InterfaceBase{
 
 
     public IGAcoesGerente(InterfaceGrafica interfaceGrafica,GerenciadorDeLojas gerenciaDeLojas, String cpf) {
-        super(interfaceGrafica);
         this.interfaceGrafica = interfaceGrafica;
         this.gerenciaDeLojas = gerenciaDeLojas;
         this.cpf = cpf;
@@ -373,7 +372,7 @@ public class IGAcoesGerente extends InterfaceBase{
                                 try {
                                     gerenciaGerente.excluirVendedor(cpfSelecionado, cpfGerente);
                                 } catch (EntradaException ex) {
-                                    exibeException(ex.getMessage(),"Exclusão falhou");
+                                    interfaceGrafica.exibeException(ex.getMessage(),"Exclusão falhou");
                                 }
                                 ((DefaultTableModel) tabela.getModel()).removeRow(linha);
                             }
@@ -397,7 +396,7 @@ public class IGAcoesGerente extends InterfaceBase{
             }
         });
 
-        atualizaFrame(lista,500,300);
+        interfaceGrafica.atualizaFrame(lista,500,300);
 
         return lista;
 
@@ -477,7 +476,7 @@ public class IGAcoesGerente extends InterfaceBase{
 //                                try {
 //                                    gerenciaGerente.excluirVendedor(cpfSelecionado, cpf);
 //                                } catch (EntradaException ex) {
-//                                    exibeException(ex.getMessage(),"Exclusão falhou");
+//                                    interfaceGrafica.exibeException(ex.getMessage(),"Exclusão falhou");
 //                                }
 //                                ((DefaultTableModel) tabela.getModel()).removeRow(linha);
 //                            }
@@ -752,7 +751,7 @@ public class IGAcoesGerente extends InterfaceBase{
             }
         });
 
-        atualizaFrame(lista,500,300);
+        interfaceGrafica.atualizaFrame(lista,500,300);
 
         return lista;
     }
@@ -944,8 +943,8 @@ public class IGAcoesGerente extends InterfaceBase{
         for (Vendedor vendedor: loja.getArmazenaVendedores().values())
             for (Pedido p : vendedor.getPedidosOficial().values()) {
                 dados[i][0] = p.getCodigo();
-                dados[i][1] = formatarCPF(vendedor.getCpf());
-                dados[i][2] = formatarCPF(p.getCliente().getCpf());
+                dados[i][1] = interfaceGrafica.formatarCPF(vendedor.getCpf());
+                dados[i][2] = interfaceGrafica.formatarCPF(p.getCliente().getCpf());
                 dados[i][3] = String.valueOf(p.getData());
                 dados[i][4] = String.valueOf(p.getHora());
                 dados[i][5] = p.getFormaDePagamento();
@@ -1021,32 +1020,32 @@ public class IGAcoesGerente extends InterfaceBase{
 
         JPanel tabela = new JPanel(new GridLayout(9, 2, 10, 10));
 
-        tabela.add(criaCelula("Código do pedido: "));
-        tabela.add(criaCelula(pedido.getCodigo()));
+        tabela.add(interfaceGrafica.criaCelula("Código do pedido: "));
+        tabela.add(interfaceGrafica.criaCelula(pedido.getCodigo()));
 
-        tabela.add(criaCelula("Cpf do vendedor: "));
-        tabela.add(criaCelula(formatarCPF(pedido.getCpfVendedor())));
+        tabela.add(interfaceGrafica.criaCelula("Cpf do vendedor: "));
+        tabela.add(interfaceGrafica.criaCelula(interfaceGrafica.formatarCPF(pedido.getCpfVendedor())));
 
-        tabela.add(criaCelula("CPF do cliente: "));
-        tabela.add(criaCelula(formatarCPF(pedido.getCliente().getCpf())));
+        tabela.add(interfaceGrafica.criaCelula("CPF do cliente: "));
+        tabela.add(interfaceGrafica.criaCelula(interfaceGrafica.formatarCPF(pedido.getCliente().getCpf())));
 
-        tabela.add(criaCelula("Data: "));
-        tabela.add(criaCelula(String.valueOf(pedido.getData())));
+        tabela.add(interfaceGrafica.criaCelula("Data: "));
+        tabela.add(interfaceGrafica.criaCelula(String.valueOf(pedido.getData())));
 
-        tabela.add(criaCelula("Hora: "));
-        tabela.add(criaCelula(String.valueOf(pedido.getHora())));
+        tabela.add(interfaceGrafica.criaCelula("Hora: "));
+        tabela.add(interfaceGrafica.criaCelula(String.valueOf(pedido.getHora())));
 
-        tabela.add(criaCelula("Forma de pagamente: "));
-        tabela.add(criaCelula(pedido.getFormaDePagamento()));
+        tabela.add(interfaceGrafica.criaCelula("Forma de pagamente: "));
+        tabela.add(interfaceGrafica.criaCelula(pedido.getFormaDePagamento()));
 
-        tabela.add(criaCelula("Taxa de entrega: "));
-        tabela.add(criaCelula(formatadorPreco.format(pedido.getTaxaEntrega())));
+        tabela.add(interfaceGrafica.criaCelula("Taxa de entrega: "));
+        tabela.add(interfaceGrafica.criaCelula(formatadorPreco.format(pedido.getTaxaEntrega())));
 
-        tabela.add(criaCelula("Valor total pago: "));
-        tabela.add(criaCelula(formatadorPreco.format(pedido.getValorTotal())));
+        tabela.add(interfaceGrafica.criaCelula("Valor total pago: "));
+        tabela.add(interfaceGrafica.criaCelula(formatadorPreco.format(pedido.getValorTotal())));
 
-        tabela.add(criaCelula("Valor total recebido pela loja: "));
-        tabela.add(criaCelula(formatadorPreco.format(pedido.getValorTotal().subtract(pedido.getTaxaEntrega()))));
+        tabela.add(interfaceGrafica.criaCelula("Valor total recebido pela loja: "));
+        tabela.add(interfaceGrafica.criaCelula(formatadorPreco.format(pedido.getValorTotal().subtract(pedido.getTaxaEntrega()))));
 
         String[] colunas = {"Nome", "preço", "características", "quantidade", "código"};
         Loja loja = getLoja(cpf);
@@ -1161,97 +1160,5 @@ public class IGAcoesGerente extends InterfaceBase{
         });
 
         return listaClientes;
-    }
-
-    public static void listaMudarPedidos(){
-        /*JPanel lista = new JPanel();
-        lista.setLayout(new BoxLayout(lista, BoxLayout.Y_AXIS));
-        lista.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
-
-        JButton voltar = new JButton("Voltar");
-
-        JPanel botoesPanel = new JPanel();
-        botoesPanel.setLayout(new BoxLayout(botoesPanel, BoxLayout.X_AXIS));
-        botoesPanel.setAlignmentX(Component.LEFT_ALIGNMENT);
-
-        String[] colunas = {"Nome", "CPF", "e-mail","Valor total de vendas","Volume de vendas"};
-
-        Loja loja = getLoja(cpfGerente);
-        String[][] dados = new String[loja.getArmazenaVendedores().size()][5];
-        Vendedor[] v = loja.vendedoresVolume();
-        int i = 0;
-        for (int j = 0; j < loja.getArmazenaVendedores().size();j++ ) {
-            dados[i][0] = v[j].getNome();
-            dados[i][1] = v[j].getCpf();
-            dados[i][2] = v[j].getEmail();
-            dados[i][3] = formatadorReais.format(v[j].getValorVenda());
-            dados[i][4] = Integer.toString(v[j].getPedidosOficial().size());
-            i++;
-        }
-
-        DefaultTableModel modelo = new DefaultTableModel(dados, colunas) {
-            public boolean isCellEditable(int row, int column) {
-                return false;
-            }
-        };
-
-        JTable tabela = new JTable(modelo); // <-- corrigido aqui
-        JScrollPane scroll = new JScrollPane(tabela);
-        lista.add(scroll, BorderLayout.CENTER);
-
-        JPopupMenu menuPopup = new JPopupMenu();
-        JMenuItem editarItem = new JMenuItem("Editar");
-        JMenuItem excluirItem = new JMenuItem("Excluir");
-        menuPopup.add(editarItem);
-        menuPopup.add(excluirItem);
-
-        tabela.addMouseListener(new MouseAdapter() {
-            public void mousePressed(MouseEvent e) {
-                if (e.isPopupTrigger() || SwingUtilities.isRightMouseButton(e)) {
-                    int linha = tabela.rowAtPoint(e.getPoint());
-                    if (linha >= 0 && linha < tabela.getRowCount()) {
-                        tabela.setRowSelectionInterval(linha, linha);
-                        String cpfSelecionado = (String) tabela.getValueAt(linha, 1);
-
-                        editarItem.addActionListener(ae -> {
-                            editar(cpfGerente, cpfSelecionado);
-                        });
-
-                        excluirItem.addActionListener(ae -> {
-                            int confirm = JOptionPane.showConfirmDialog(lista,
-                                    "Tem certeza que deseja excluir o vendedor com CPF " + cpfSelecionado + "?",
-                                    "Confirmar exclusão",
-                                    JOptionPane.YES_NO_OPTION);
-                            if (confirm == JOptionPane.YES_OPTION) {
-                                try {
-                                    gerenciaGerente.excluirVendedor(cpfSelecionado, cpfGerente);
-                                } catch (EntradaException ex) {
-                                    interfaceGrafica.exibeException(ex.getMessage(),"Exclusão falhou");
-                                }
-                                ((DefaultTableModel) tabela.getModel()).removeRow(linha);
-                            }
-                        });
-
-                        menuPopup.show(tabela, e.getX(), e.getY());
-                    }
-                }
-            }
-        });
-
-        botoesPanel.add(voltar);
-        botoesPanel.add(Box.createHorizontalGlue());
-        lista.add(botoesPanel);
-
-        voltar.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                System.out.println("Botão 'voltar' clicado");
-                lista.setVisible(false);
-                interfaceGrafica.sistemaGerente();
-            }
-        });
-
-        interfaceGrafica.atualizaFrame(lista,500,300);
-
-        return lista;*/
     }
 }
