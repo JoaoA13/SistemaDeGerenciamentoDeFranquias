@@ -492,6 +492,12 @@ public class IGAcoesVendedor {
 
         JTable tabela1 = new JTable(modelo);
 
+        JPopupMenu menuPopup = new JPopupMenu();
+        JMenuItem editarItem = new JMenuItem("Editar");
+        JMenuItem excluirItem = new JMenuItem("Excluir");
+        menuPopup.add(editarItem);
+        menuPopup.add(excluirItem);
+
         DefaultTableCellRenderer centralizado = new DefaultTableCellRenderer();
         centralizado.setHorizontalAlignment(SwingConstants.CENTER);
         for (int col = 0; col < tabela1.getColumnCount(); col++) {
@@ -502,6 +508,36 @@ public class IGAcoesVendedor {
         exibeInformacaoLoja.add(scroll, BorderLayout.CENTER);
 
         exibeInformacaoLoja.add(tabela, BorderLayout.NORTH);
+
+        tabela1.addMouseListener(new MouseAdapter() {
+            public void mousePressed(MouseEvent e) {
+                if (e.isPopupTrigger() || SwingUtilities.isRightMouseButton(e)) {
+                    int linha = tabela1.rowAtPoint(e.getPoint());
+                    if (linha >= 0 && linha < tabela1.getRowCount()) {
+                        tabela1.setRowSelectionInterval(linha, linha);
+                        String codigoPedido = (String) tabela1.getValueAt(linha, 0);
+                        String codigoSelecionado = (String) tabela1.getValueAt(linha, 4);
+
+                        editarItem.addActionListener(ae -> {
+                            editarProd();
+                        });
+
+                        excluirItem.addActionListener(ae -> {
+                            int confirm = JOptionPane.showConfirmDialog(exibeInformacaoLoja,
+                                    "Tem certeza que deseja solicitar a exclusão do produto?",
+                                    "Confirmar exclusão",
+                                    JOptionPane.YES_NO_OPTION);
+                            if (confirm == JOptionPane.YES_OPTION) {
+                                //excluirProd();
+                                //((DefaultTableModel) tabela1.getModel()).removeRow(linha);
+                            }
+                        });
+
+                        menuPopup.show(tabela1, e.getX(), e.getY());
+                    }
+                }
+            }
+        });
 
         JPanel painelBotao = new JPanel();
         JButton sair = new JButton("Fechar");
