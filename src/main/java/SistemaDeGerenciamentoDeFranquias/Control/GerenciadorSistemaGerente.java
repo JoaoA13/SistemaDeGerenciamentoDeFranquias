@@ -6,6 +6,7 @@ import SistemaDeGerenciamentoDeFranquias.Exceptions.CadastroException;
 import SistemaDeGerenciamentoDeFranquias.Exceptions.EntradaException;
 import SistemaDeGerenciamentoDeFranquias.Exceptions.LoginException;
 import SistemaDeGerenciamentoDeFranquias.Model.Loja;
+import SistemaDeGerenciamentoDeFranquias.Model.Pedido;
 import SistemaDeGerenciamentoDeFranquias.Model.Produto;
 import SistemaDeGerenciamentoDeFranquias.Model.Vendedor;
 import SistemaDeGerenciamentoDeFranquias.Validadores.*;
@@ -14,6 +15,8 @@ import SistemaDeGerenciamentoDeFranquias.Validadores.ValidadoresNumericos.Valida
 import SistemaDeGerenciamentoDeFranquias.Validadores.ValidadoresNumericos.ValidadorPrecoPositivo;
 
 import java.math.BigDecimal;
+import java.time.LocalDate;
+import java.time.LocalTime;
 
 public class GerenciadorSistemaGerente extends GerenciadorSistema{
 
@@ -306,6 +309,12 @@ public class GerenciadorSistemaGerente extends GerenciadorSistema{
         loja.excluirProduto(codigo);
 
         salvaArquivos.salvarLojas(GerenciadorDeLojas.getLojas());
+    }
+
+    static void listaDePedidos(String texto, LocalDate data, LocalTime hora, BigDecimal taxaExtra, Pedido pedido, int escolha){
+        switch (escolha){
+            case 0 :
+        }
     }
 
     public void listaDeVendedores(String cpfGerente){

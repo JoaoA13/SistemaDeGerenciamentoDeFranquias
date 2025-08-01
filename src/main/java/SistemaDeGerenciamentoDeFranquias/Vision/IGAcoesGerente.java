@@ -1162,4 +1162,96 @@ public class IGAcoesGerente extends InterfaceBase{
 
         return listaClientes;
     }
+
+    public static void listaMudarPedidos(){
+        /*JPanel lista = new JPanel();
+        lista.setLayout(new BoxLayout(lista, BoxLayout.Y_AXIS));
+        lista.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
+
+        JButton voltar = new JButton("Voltar");
+
+        JPanel botoesPanel = new JPanel();
+        botoesPanel.setLayout(new BoxLayout(botoesPanel, BoxLayout.X_AXIS));
+        botoesPanel.setAlignmentX(Component.LEFT_ALIGNMENT);
+
+        String[] colunas = {"Nome", "CPF", "e-mail","Valor total de vendas","Volume de vendas"};
+
+        Loja loja = getLoja(cpfGerente);
+        String[][] dados = new String[loja.getArmazenaVendedores().size()][5];
+        Vendedor[] v = loja.vendedoresVolume();
+        int i = 0;
+        for (int j = 0; j < loja.getArmazenaVendedores().size();j++ ) {
+            dados[i][0] = v[j].getNome();
+            dados[i][1] = v[j].getCpf();
+            dados[i][2] = v[j].getEmail();
+            dados[i][3] = formatadorReais.format(v[j].getValorVenda());
+            dados[i][4] = Integer.toString(v[j].getPedidosOficial().size());
+            i++;
+        }
+
+        DefaultTableModel modelo = new DefaultTableModel(dados, colunas) {
+            public boolean isCellEditable(int row, int column) {
+                return false;
+            }
+        };
+
+        JTable tabela = new JTable(modelo); // <-- corrigido aqui
+        JScrollPane scroll = new JScrollPane(tabela);
+        lista.add(scroll, BorderLayout.CENTER);
+
+        JPopupMenu menuPopup = new JPopupMenu();
+        JMenuItem editarItem = new JMenuItem("Editar");
+        JMenuItem excluirItem = new JMenuItem("Excluir");
+        menuPopup.add(editarItem);
+        menuPopup.add(excluirItem);
+
+        tabela.addMouseListener(new MouseAdapter() {
+            public void mousePressed(MouseEvent e) {
+                if (e.isPopupTrigger() || SwingUtilities.isRightMouseButton(e)) {
+                    int linha = tabela.rowAtPoint(e.getPoint());
+                    if (linha >= 0 && linha < tabela.getRowCount()) {
+                        tabela.setRowSelectionInterval(linha, linha);
+                        String cpfSelecionado = (String) tabela.getValueAt(linha, 1);
+
+                        editarItem.addActionListener(ae -> {
+                            editar(cpfGerente, cpfSelecionado);
+                        });
+
+                        excluirItem.addActionListener(ae -> {
+                            int confirm = JOptionPane.showConfirmDialog(lista,
+                                    "Tem certeza que deseja excluir o vendedor com CPF " + cpfSelecionado + "?",
+                                    "Confirmar exclusão",
+                                    JOptionPane.YES_NO_OPTION);
+                            if (confirm == JOptionPane.YES_OPTION) {
+                                try {
+                                    gerenciaGerente.excluirVendedor(cpfSelecionado, cpfGerente);
+                                } catch (EntradaException ex) {
+                                    interfaceGrafica.exibeException(ex.getMessage(),"Exclusão falhou");
+                                }
+                                ((DefaultTableModel) tabela.getModel()).removeRow(linha);
+                            }
+                        });
+
+                        menuPopup.show(tabela, e.getX(), e.getY());
+                    }
+                }
+            }
+        });
+
+        botoesPanel.add(voltar);
+        botoesPanel.add(Box.createHorizontalGlue());
+        lista.add(botoesPanel);
+
+        voltar.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                System.out.println("Botão 'voltar' clicado");
+                lista.setVisible(false);
+                interfaceGrafica.sistemaGerente();
+            }
+        });
+
+        interfaceGrafica.atualizaFrame(lista,500,300);
+
+        return lista;*/
+    }
 }

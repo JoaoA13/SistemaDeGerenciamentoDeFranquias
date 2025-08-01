@@ -12,6 +12,7 @@ import SistemaDeGerenciamentoDeFranquias.Validadores.ValidadorCpf;
 import SistemaDeGerenciamentoDeFranquias.Validadores.ValidadoresBancoDados.ValidadorCpfBancoDeDadosTrue;
 import SistemaDeGerenciamentoDeFranquias.Validadores.ValidadoresNumericos.ValidadorPrecoPositivo;
 import SistemaDeGerenciamentoDeFranquias.Validadores.ValidadoresNumericos.ValidadorValorNaoNegativo;
+import SistemaDeGerenciamentoDeFranquias.Vision.IGAcoesGerente;
 import SistemaDeGerenciamentoDeFranquias.Vision.IGAcoesVendedor;
 import SistemaDeGerenciamentoDeFranquias.Vision.InterfaceGrafica;
 
@@ -101,10 +102,10 @@ public class GerenciadorSistemaVendedor extends GerenciadorSistema{
             loja.excluirProduto(codigo);
     }
 
-    public String solicitarEdicao(String texto, int escolha) throws EntradaException {
-        LocalDate data;
-        LocalTime hora;
-        BigDecimal taxaEntrega;
+    public String solicitarEdicao(String texto, int escolha, Pedido pedido) throws EntradaException {
+        LocalDate data = null;
+        LocalTime hora = null;
+        BigDecimal taxaEntrega = null;
         try {
             if(escolha !=2 && escolha !=3)
                 ValidadorCampoVazio.valida(texto);
@@ -130,6 +131,15 @@ public class GerenciadorSistemaVendedor extends GerenciadorSistema{
             System.out.println("Erro: EntradaException: " + e.getMessage());
             throw new EntradaException(e.getMessage());
         }
-        return "Edição solicitada";
+        catch (BancoDeDadosException e) {
+            System.out.println("Erro: EntradaException: " + e.getMessage());
+            throw new EntradaException(e.getMessage());
+            }
+
+        //Loja.addPedidosAltera(pedido);
+        IGAcoesGerente.listaMudarPedidos();
+        //GerenciadorSistemaGerente.listaDePedidos(texto, data, hora, taxaEntrega, pedido, escolha);
+
+            return "Edição solicitada";
     }
 }
