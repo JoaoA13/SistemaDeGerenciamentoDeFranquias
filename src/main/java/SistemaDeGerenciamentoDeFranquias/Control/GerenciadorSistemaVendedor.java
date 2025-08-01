@@ -15,6 +15,7 @@ import SistemaDeGerenciamentoDeFranquias.Validadores.ValidadoresNumericos.Valida
 import SistemaDeGerenciamentoDeFranquias.Vision.IGAcoesVendedor;
 import SistemaDeGerenciamentoDeFranquias.Vision.InterfaceGrafica;
 
+import javax.swing.*;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.LocalTime;
@@ -98,5 +99,37 @@ public class GerenciadorSistemaVendedor extends GerenciadorSistema{
         cliente.setQuantidaCompras(BigDecimal.ONE);
         if(produto.getQuant().compareTo(BigDecimal.ZERO) <= 0)
             loja.excluirProduto(codigo);
+    }
+
+    public String solicitarEdicao(String texto, int escolha) throws EntradaException {
+        LocalDate data;
+        LocalTime hora;
+        BigDecimal taxaEntrega;
+        try {
+            if(escolha !=2 && escolha !=3)
+                ValidadorCampoVazio.valida(texto);
+            switch (escolha){
+                case 0: {
+                    ValidadorCodigo.validarCodigo(texto);
+                    ValidadorCodigoPedidoBancoDeDadosFalse.valida(texto);
+                    break; }
+                case 1: {
+                    ValidadorCpf.validarCpf(texto);
+                    break; }
+                case 2: {
+                    data = ValidadorData.validarData(texto);
+                    break; }
+                case 3: {
+                    hora = ValidadorHora.validarHora(texto);
+                    break; }
+                case 5: {
+                    taxaEntrega = ValidadorValorNaoNegativo.validarValorNaoNegativo(texto);
+                    break; }
+            }
+            } catch (EntradaException e) {
+            System.out.println("Erro: EntradaException: " + e.getMessage());
+            throw new EntradaException(e.getMessage());
+        }
+        return "Edição solicitada";
     }
 }
