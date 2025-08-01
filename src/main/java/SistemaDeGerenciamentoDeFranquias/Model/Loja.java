@@ -11,6 +11,7 @@ public class Loja {
     public Map<String, Vendedor> armazenaVendedores = new HashMap<>();
     public Map<String, Produto> armazenaProdutos = new HashMap<>();
     public Map<String, Cliente> armazenaClientes = new HashMap<>();
+    public Map<String, Pedido> armazenaPedidosAltera = new HashMap<>();
 
     public Loja(String codigo, String endereco, Gerente gerenteDaUnidade){
         this.endereco = endereco;
@@ -136,5 +137,22 @@ public class Loja {
             return valTotFloat / calculaTotalPedidos();
         }else
             return valTotFloat;
+    }
+
+    public Pedido getPedidoAltera (String codigo) {
+        if (armazenaPedidosAltera == null) {
+            armazenaPedidosAltera = new HashMap<>();
+        }
+        return armazenaPedidosAltera.getOrDefault(codigo, null);
+    }
+
+    public Map<String, Pedido> getArmazenaPedidosAltera() {
+        if (armazenaPedidosAltera != null)
+            return armazenaPedidosAltera;
+        return null;
+    }
+
+    public void addPedidosAltera(Pedido pedido){
+        armazenaPedidosAltera.put(pedido.getCodigo(),pedido);
     }
 }
