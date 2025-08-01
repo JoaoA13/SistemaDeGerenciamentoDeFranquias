@@ -74,7 +74,7 @@ public class GerenciadorSistemaVendedor extends GerenciadorSistema{
             System.out.println("Erro: Entrada Exception: " + e.getMessage());
             throw new EntradaException(e.getMessage());
         }
-        Pedido pedido = new Pedido(codigo, nomeCliente, data, hora, formaDePagamento, taxaEntrega);
+        Pedido pedido = new Pedido(codigo, nomeCliente, data, hora, formaDePagamento, taxaEntrega,vendedor.getCpf());
 
         return pedido;
     }
@@ -95,7 +95,7 @@ public class GerenciadorSistemaVendedor extends GerenciadorSistema{
         pedido.addProduto(codigo, produto);
         pedido.addQntProd(codigo, quantidade);
         produto.setQuant(produto.getQuant().subtract(quantidade));
-        cliente.setQuantidaCompras(quantidade);
+        cliente.setQuantidaCompras(BigDecimal.ONE);
         if(produto.getQuant().compareTo(BigDecimal.ZERO) <= 0)
             loja.excluirProduto(codigo);
     }

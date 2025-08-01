@@ -17,10 +17,11 @@ public class Pedido {
     private BigDecimal taxaEntrega;
     private BigDecimal valorTotal;
     private Cliente cliente;
+    private String cpfVendedor;
 
     public Pedido(String codigo, String nomeCliente,
                   LocalDate data, LocalTime hora, String formaDePagamento,
-                  BigDecimal taxaEntrega) {
+                  BigDecimal taxaEntrega,String cpfVendedor) {
         this.codigo = codigo;
         this.nomeCliente = nomeCliente;
         this.data = data;
@@ -28,6 +29,7 @@ public class Pedido {
         this.formaDePagamento = formaDePagamento;
         this.taxaEntrega = taxaEntrega;
         valorTotal = taxaEntrega;
+        this.cpfVendedor = cpfVendedor;
     }
 
     public Map<String, Produto> getProdutos() { return produtos; }
@@ -78,4 +80,12 @@ public class Pedido {
     public void setCliente(Cliente cliente){ this.cliente = cliente;}
 
     public Cliente getCliente(){ return cliente;}
+
+    public String getCpfVendedor() {
+        return cpfVendedor;
+    }
+
+    public void setCpfVendedor(String cpfVendedor) {
+        this.cpfVendedor = cpfVendedor;
+    }
 }

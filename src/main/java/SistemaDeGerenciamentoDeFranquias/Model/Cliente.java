@@ -25,6 +25,10 @@ public class Cliente {
         this.quantidadeCompras = this.quantidadeCompras.add(quantidadeCompras);
     }
 
+    public BigDecimal getQuantidadeCompras() {
+        return quantidadeCompras;
+    }
+
     public BigDecimal getValorGasto() {
         return valorGasto;
     }

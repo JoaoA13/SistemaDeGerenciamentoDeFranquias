@@ -295,7 +295,7 @@ public class InterfaceGrafica {
         JMenuItem  menu3Item2 = new JMenuItem ("Solicitações de Alteração", KeyEvent.VK_T);
         menu3.add(menu3Item2);
 
-        menu3Item1.addActionListener(e -> trocarTela(acoes.visualizarPedidos(), 400, 300));
+        menu3Item1.addActionListener(e -> trocarTela(acoes.visualizarPedidos(cpf), 800, 300));
         menu3Item2.addActionListener(e -> trocarTela(acoes.solicitacoesDeAlteracao(), 400, 300));
 
 
@@ -318,7 +318,7 @@ public class InterfaceGrafica {
         menu5.add(menu5Item2);
 
         menu5Item1.addActionListener(e -> trocarTela(acoes.historicoDeVendas(), 400, 300));
-        menu5Item2.addActionListener(e -> trocarTela(acoes.listaDeClientesRecorrentes(), 400, 300));
+        menu5Item2.addActionListener(e -> trocarTela(acoes.listaDeClientesRecorrentes(cpf), 400, 300));
 
 
         frame.pack();
@@ -445,10 +445,10 @@ public class InterfaceGrafica {
         return label;
     }
 
-    protected void atualizaFrame(JPanel painel){
+    protected void atualizaFrame(JPanel painel,int larg,int alt){
         getFrame().pack();
         getFrame().setContentPane(painel);
-        getFrame().setSize(500, 300);
+        getFrame().setSize(larg, alt);
         getFrame().setLocationRelativeTo(null);
         getFrame().setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         getFrame().setVisible(true);

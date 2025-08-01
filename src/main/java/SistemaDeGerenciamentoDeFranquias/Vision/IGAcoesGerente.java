@@ -5,22 +5,19 @@ import SistemaDeGerenciamentoDeFranquias.Control.GerenciadorSistema;
 import SistemaDeGerenciamentoDeFranquias.Exceptions.CadastroException;
 import SistemaDeGerenciamentoDeFranquias.Control.GerenciadorSistemaGerente;
 import SistemaDeGerenciamentoDeFranquias.Exceptions.EntradaException;
-import SistemaDeGerenciamentoDeFranquias.Model.Loja;
-import SistemaDeGerenciamentoDeFranquias.Model.Produto;
-import SistemaDeGerenciamentoDeFranquias.Model.Vendedor;
+import SistemaDeGerenciamentoDeFranquias.Model.*;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
+import java.awt.event.*;
 import java.math.BigDecimal;
 import java.text.DecimalFormat;
 import java.text.DecimalFormatSymbols;
 import java.util.Locale;
+
+import static SistemaDeGerenciamentoDeFranquias.Control.GerenciadorDeLojas.getLoja;
 
 public class IGAcoesGerente {
     private InterfaceGrafica interfaceGrafica;
@@ -29,6 +26,7 @@ public class IGAcoesGerente {
 
     GerenciadorSistemaGerente gerenciaGerente = new GerenciadorSistemaGerente();
     DecimalFormat formatadorReais = new DecimalFormat("R$ #,##0.00", new DecimalFormatSymbols(new Locale("pt", "BR")));
+    DecimalFormat formatadorPreco = new DecimalFormat("R$ #,##0.00", new DecimalFormatSymbols(new Locale("pt", "BR")));
 
 
     public IGAcoesGerente(InterfaceGrafica interfaceGrafica,GerenciadorDeLojas gerenciaDeLojas, String cpf) {
@@ -323,21 +321,9 @@ public class IGAcoesGerente {
         botoesPanel.setLayout(new BoxLayout(botoesPanel, BoxLayout.X_AXIS));
         botoesPanel.setAlignmentX(Component.LEFT_ALIGNMENT);
 
-//        String[] colunas = {"Nome", "CPF", "e-mail"};
-//        Loja loja = gerenciaDeLojas.getLoja(cpfGerente);
-//
-//        String[][] dados = new String[loja.getArmazenaVendedores().size()][3];
-//        int i = 0;
-//        for (Vendedor v : loja.getArmazenaVendedores().values()) {
-//            dados[i][0] = v.getNome();
-//            dados[i][1] = v.getCpf();
-//            dados[i][2] = v.getEmail();
-//            i++;
-//        }
-
         String[] colunas = {"Nome", "CPF", "e-mail","Valor total de vendas","Volume de vendas"};
 
-        Loja loja = gerenciaDeLojas.getLoja(cpfGerente);
+        Loja loja = getLoja(cpfGerente);
         String[][] dados = new String[loja.getArmazenaVendedores().size()][5];
         Vendedor[] v = loja.vendedoresVolume();
         int i = 0;
@@ -411,13 +397,13 @@ public class IGAcoesGerente {
             }
         });
 
-        interfaceGrafica.atualizaFrame(lista);
+        interfaceGrafica.atualizaFrame(lista,500,300);
 
         return lista;
 
     }
 
-    JPanel visualizarPedidos(){
+    JPanel visualizarPedidos(String cpf){
         JPanel visualizacao = new JPanel();
         visualizacao.setLayout(new BoxLayout(visualizacao, BoxLayout.Y_AXIS));
         visualizacao.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
@@ -427,6 +413,81 @@ public class IGAcoesGerente {
         JPanel botoesPanel = new JPanel();
         botoesPanel.setLayout(new BoxLayout(botoesPanel, BoxLayout.X_AXIS));
         botoesPanel.setAlignmentX(Component.LEFT_ALIGNMENT);
+        Loja loja = getLoja(cpf);
+        int tamanho= 0;
+        if(getLoja(cpf) != null) {
+            for (Vendedor vendedor : loja.getArmazenaVendedores().values())
+                tamanho += vendedor.getPedidosOficial().size();
+        }
+        String[] colunas = {"Código", "CPF do vendedor" , "CPF do cliente", "Data", "Hora", "Forma de Pagamento","Taxa de entrega", "Valor total"};
+
+        String[][] dados = new String[tamanho][8];
+
+        DecimalFormat formatadorPreco = new DecimalFormat("R$ #,##0.00", new DecimalFormatSymbols(new Locale("pt", "BR")));
+        DecimalFormat formatadorQuant = new DecimalFormat("00");
+
+        int i = 0;
+        for (Vendedor vendedor: loja.getArmazenaVendedores().values())
+            for (Pedido p : vendedor.getPedidosOficial().values()) {
+                dados[i][0] = p.getCodigo();
+                dados[i][1] = vendedor.getCpf();
+                dados[i][2] = p.getCliente().getCpf();
+                dados[i][3] = String.valueOf(p.getData());
+                dados[i][4] = String.valueOf(p.getHora());
+                dados[i][5] = p.getFormaDePagamento();
+                dados[i][6] = formatadorPreco.format(p.getTaxaEntrega());
+                dados[i][7] = formatadorPreco.format(p.getValorTotal());
+                i++;
+            }
+
+        DefaultTableModel modelo = new DefaultTableModel(dados, colunas) {
+            public boolean isCellEditable(int row, int column) {
+                return false;
+            }
+        };
+
+        JTable tabela = new JTable(modelo);
+        JScrollPane scroll = new JScrollPane(tabela);
+        visualizacao.add(scroll, BorderLayout.CENTER);
+
+        JPopupMenu menuPopup = new JPopupMenu();
+        JMenuItem editarItem = new JMenuItem("Editar");
+        JMenuItem excluirItem = new JMenuItem("Excluir");
+        menuPopup.add(editarItem);
+        menuPopup.add(excluirItem);
+
+        tabela.addMouseListener(new MouseAdapter() {
+            public void mousePressed(MouseEvent e) {
+                if (e.isPopupTrigger() || SwingUtilities.isRightMouseButton(e)) {
+                    int linha = tabela.rowAtPoint(e.getPoint());
+                    if (linha >= 0 && linha < tabela.getRowCount()) {
+                        tabela.setRowSelectionInterval(linha, linha);
+                        String cpfSelecionado = (String) tabela.getValueAt(linha, 1);
+
+                        editarItem.addActionListener(ae -> {
+                            //editar( cpf, cpfSelecionado);
+                        });
+
+                        excluirItem.addActionListener(ae -> {
+//                            int confirm = JOptionPane.showConfirmDialog(visualizacao,
+//                                    "Tem certeza que deseja excluir o vendedor com CPF " + cpfSelecionado + "?",
+//                                    "Confirmar exclusão",
+//                                    JOptionPane.YES_NO_OPTION);
+//                            if (confirm == JOptionPane.YES_OPTION) {
+//                                try {
+//                                    gerenciaGerente.excluirVendedor(cpfSelecionado, cpf);
+//                                } catch (EntradaException ex) {
+//                                    interfaceGrafica.exibeException(ex.getMessage(),"Exclusão falhou");
+//                                }
+//                                ((DefaultTableModel) tabela.getModel()).removeRow(linha);
+//                            }
+                        });
+
+                        menuPopup.show(tabela, e.getX(), e.getY());
+                    }
+                }
+            }
+        });
 
         botoesPanel.add(voltar);
         botoesPanel.add(Box.createHorizontalGlue());
@@ -439,6 +500,7 @@ public class IGAcoesGerente {
                 interfaceGrafica.sistemaGerente();
             }
         });
+
 
         return visualizacao;
     }
@@ -577,7 +639,7 @@ public class IGAcoesGerente {
         botoesPanel.setAlignmentX(Component.LEFT_ALIGNMENT);
 
         String[] colunas = {"Nome", "preço", "características", "quantidade", "código"};
-        Loja loja = gerenciaDeLojas.getLoja(cpfGerente);
+        Loja loja = getLoja(cpfGerente);
 
         String[][] dados = new String[loja.getArmazenaProdutos().size()][5];
 
@@ -689,7 +751,7 @@ public class IGAcoesGerente {
             }
         });
 
-        interfaceGrafica.atualizaFrame(lista);
+        interfaceGrafica.atualizaFrame(lista,500,300);
 
         return lista;
     }
@@ -865,6 +927,65 @@ public class IGAcoesGerente {
         botoesPanel.setLayout(new BoxLayout(botoesPanel, BoxLayout.X_AXIS));
         botoesPanel.setAlignmentX(Component.LEFT_ALIGNMENT);
 
+        Loja loja = getLoja(cpf);
+        int tamanho= 0;
+        if(getLoja(cpf) != null) {
+            for (Vendedor vendedor : loja.getArmazenaVendedores().values())
+                tamanho += vendedor.getPedidosOficial().size();
+        }
+        String[] colunas = {"Código de pedido", "CPF do vendedor" , "CPF do cliente", "Data", "Hora", "Forma de Pagamento","Taxa de entrega", "Valor total"};
+
+        String[][] dados = new String[tamanho][8];
+
+        DecimalFormat formatadorQuant = new DecimalFormat("00");
+
+        int i = 0;
+        for (Vendedor vendedor: loja.getArmazenaVendedores().values())
+            for (Pedido p : vendedor.getPedidosOficial().values()) {
+                dados[i][0] = p.getCodigo();
+                dados[i][1] = vendedor.getCpf();
+                dados[i][2] = p.getCliente().getCpf();
+                dados[i][3] = String.valueOf(p.getData());
+                dados[i][4] = String.valueOf(p.getHora());
+                dados[i][5] = p.getFormaDePagamento();
+                dados[i][6] = formatadorPreco.format(p.getTaxaEntrega());
+                dados[i][7] = formatadorPreco.format(p.getValorTotal());
+                i++;
+            }
+
+        DefaultTableModel modelo = new DefaultTableModel(dados, colunas) {
+            public boolean isCellEditable(int row, int column) {
+                return false;
+            }
+        };
+
+        JTable tabela = new JTable(modelo);
+        JScrollPane scroll = new JScrollPane(tabela);
+        historico.add(scroll, BorderLayout.CENTER);
+
+        JPopupMenu menuPopup = new JPopupMenu();
+        JMenuItem visualizar = new JMenuItem("Visualizar");
+        menuPopup.add(visualizar);
+
+        tabela.addMouseListener(new MouseAdapter() {
+            public void mousePressed(MouseEvent e) {
+                if (e.isPopupTrigger() || SwingUtilities.isRightMouseButton(e)) {
+                    int linha = tabela.rowAtPoint(e.getPoint());
+                    if (linha >= 0 && linha < tabela.getRowCount()) {
+                        tabela.setRowSelectionInterval(linha, linha);
+                        String codigo = (String) tabela.getValueAt(linha, 0);
+                        String cpfVendedor = (String) tabela.getValueAt(linha, 1);
+
+                        visualizar.addActionListener(ae -> {
+                            exibeVenda(codigo,cpfVendedor);
+                        });
+
+                        menuPopup.show(tabela, e.getX(), e.getY());
+                    }
+                }
+            }
+        });
+
         botoesPanel.add(voltar);
         botoesPanel.add(Box.createHorizontalGlue());
         historico.add(botoesPanel);
@@ -880,7 +1001,108 @@ public class IGAcoesGerente {
         return historico;
     }
 
-    JPanel listaDeClientesRecorrentes(){
+    protected void exibeVenda(String codigo,String cpfVendedor) {
+        Pedido pedido = getLoja(cpf).getVendedor(cpfVendedor).getPedido(codigo);
+
+        JFrame exibe = new JFrame("Informações da venda de pedido: " + codigo);
+        exibe.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+        exibe.setSize(450, 600);
+        exibe.setLocationRelativeTo(null);
+
+        JPanel exibeInformacaoLoja = new JPanel(new BorderLayout(10, 10));
+        exibeInformacaoLoja.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
+
+        JLabel titulo = new JLabel("Informações de venda", SwingConstants.CENTER);
+        exibeInformacaoLoja.add(titulo, BorderLayout.NORTH);
+
+        JPanel tabela = new JPanel(new GridLayout(9, 2, 10, 10));
+
+        tabela.add(interfaceGrafica.criaCelula("Código do pedido: "));
+        tabela.add(interfaceGrafica.criaCelula(pedido.getCodigo()));
+
+        tabela.add(interfaceGrafica.criaCelula("Cpf do vendedor: "));
+        tabela.add(interfaceGrafica.criaCelula(pedido.getCpfVendedor()));
+
+        tabela.add(interfaceGrafica.criaCelula("CPF do cliente: "));
+        tabela.add(interfaceGrafica.criaCelula(pedido.getCliente().getCpf()));
+
+        tabela.add(interfaceGrafica.criaCelula("Data: "));
+        tabela.add(interfaceGrafica.criaCelula(String.valueOf(pedido.getData())));
+
+        tabela.add(interfaceGrafica.criaCelula("Hora: "));
+        tabela.add(interfaceGrafica.criaCelula(String.valueOf(pedido.getHora())));
+
+        tabela.add(interfaceGrafica.criaCelula("Forma de pagamente: "));
+        tabela.add(interfaceGrafica.criaCelula(pedido.getFormaDePagamento()));
+
+        tabela.add(interfaceGrafica.criaCelula("Taxa de entrega: "));
+        tabela.add(interfaceGrafica.criaCelula(formatadorPreco.format(pedido.getTaxaEntrega())));
+
+        tabela.add(interfaceGrafica.criaCelula("Valor total pago: "));
+        tabela.add(interfaceGrafica.criaCelula(formatadorPreco.format(pedido.getValorTotal())));
+
+        tabela.add(interfaceGrafica.criaCelula("Valor total recebido pela loja: "));
+        tabela.add(interfaceGrafica.criaCelula(formatadorPreco.format(pedido.getValorTotal().subtract(pedido.getTaxaEntrega()))));
+
+        String[] colunas = {"Nome", "preço", "características", "quantidade", "código"};
+        Loja loja = getLoja(cpf);
+
+        String[][] dados = new String[pedido.getProdutos().size()][5];
+
+       //DecimalFormat formatadorPreco = new DecimalFormat("R$ #,##0.00", new DecimalFormatSymbols(new Locale("pt", "BR")));
+       DecimalFormat formatadorQuant = new DecimalFormat("00");
+
+        int i = 0;
+        for (Produto p : pedido.getProdutos().values()) {
+            dados[i][0] = p.getNomeProd();
+            dados[i][1] = formatadorPreco.format(p.getPreco()); // Ex: R$ 12,34
+            dados[i][2] = p.getCarac();
+            dados[i][3] = formatadorQuant.format(p.getQuant()); // Ex: 3.000
+            dados[i][4] = p.getCodigoProd();
+            i++;
+        }
+        DefaultTableModel modelo = new DefaultTableModel(dados, colunas) {
+            public boolean isCellEditable(int row, int column) {
+                return false;
+            }
+        };
+
+        JTable tabela1 = new JTable(modelo);
+
+        DefaultTableCellRenderer centralizado = new DefaultTableCellRenderer();
+        centralizado.setHorizontalAlignment(SwingConstants.CENTER);
+        for (int col = 0; col < tabela1.getColumnCount(); col++) {
+            tabela1.getColumnModel().getColumn(col).setCellRenderer(centralizado);
+        }
+
+        JScrollPane scroll = new JScrollPane(tabela1);
+        exibeInformacaoLoja.add(scroll, BorderLayout.CENTER);
+
+        exibeInformacaoLoja.add(tabela, BorderLayout.NORTH);
+
+        JPanel painelBotao = new JPanel();
+        JButton sair = new JButton("Fechar");
+        sair.addActionListener(e -> exibe.dispose());
+        sair.addActionListener(e -> exibe.removeAll());
+        painelBotao.add(sair);
+
+//        JTable tabela2 = new JTable(modelo); // <-- corrigido aqui
+//        JScrollPane scroll = new JScrollPane(tabela2);
+//        exibeInformacaoLoja.add(scroll, BorderLayout.CENTER);
+
+        exibeInformacaoLoja.add(painelBotao, BorderLayout.SOUTH);
+
+        exibe.setContentPane(exibeInformacaoLoja);
+        exibe.setVisible(true);
+        exibe.addWindowListener(new WindowAdapter() {
+            @Override
+            public void windowClosed(WindowEvent e) {
+                System.out.println("Janela foi fechada");
+            }
+        });
+    }
+
+    JPanel listaDeClientesRecorrentes(String cpfGerente){
         JPanel listaClientes = new JPanel();
         listaClientes.setLayout(new BoxLayout(listaClientes, BoxLayout.Y_AXIS));
         listaClientes.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
@@ -890,6 +1112,76 @@ public class IGAcoesGerente {
         JPanel botoesPanel = new JPanel();
         botoesPanel.setLayout(new BoxLayout(botoesPanel, BoxLayout.X_AXIS));
         botoesPanel.setAlignmentX(Component.LEFT_ALIGNMENT);
+
+
+        String[] colunas = {"Nome", "CPF", "Quantidade de compras","Valor total de compras"};
+
+        int tamanho = 0;
+        Loja loja = getLoja(cpfGerente);
+        if(loja != null && loja.getArmazenaClientes() != null)
+            tamanho = loja.getArmazenaClientes().size();
+
+        String[][] dados = new String[tamanho][4];
+        Cliente[] c = loja.ordenaClientes();
+        int i = 0;
+        for (int j = 0; j < tamanho;j++ ) {
+            dados[i][0] = c[j].getNome();
+            dados[i][1] = c[j].getCpf();
+            dados[i][2] = String.valueOf(c[j].getQuantidadeCompras());
+            dados[i][3] = formatadorReais.format(c[j].getValorGasto());
+            i++;
+        }
+
+        DefaultTableModel modelo = new DefaultTableModel(dados, colunas) {
+            public boolean isCellEditable(int row, int column) {
+                return false;
+            }
+        };
+
+        JTable tabela = new JTable(modelo); // <-- corrigido aqui
+        JScrollPane scroll = new JScrollPane(tabela);
+        listaClientes.add(scroll, BorderLayout.CENTER);
+
+        JPopupMenu menuPopup = new JPopupMenu();
+        JMenuItem editarItem = new JMenuItem("Editar");
+        JMenuItem excluirItem = new JMenuItem("Excluir");
+        menuPopup.add(editarItem);
+        menuPopup.add(excluirItem);
+
+        tabela.addMouseListener(new MouseAdapter() {
+            public void mousePressed(MouseEvent e) {
+                if (e.isPopupTrigger() || SwingUtilities.isRightMouseButton(e)) {
+                    int linha = tabela.rowAtPoint(e.getPoint());
+                    if (linha >= 0 && linha < tabela.getRowCount()) {
+                        tabela.setRowSelectionInterval(linha, linha);
+                        String cpfSelecionado = (String) tabela.getValueAt(linha, 1);
+
+                        editarItem.addActionListener(ae -> {
+                            //editar(cpfGerente, cpfSelecionado);
+                        });
+
+                        excluirItem.addActionListener(ae -> {
+//                            int confirm = JOptionPane.showConfirmDialog(lista,
+//                                    "Tem certeza que deseja excluir o vendedor com CPF " + cpfSelecionado + "?",
+//                                    "Confirmar exclusão",
+//                                    JOptionPane.YES_NO_OPTION);
+//                            if (confirm == JOptionPane.YES_OPTION) {
+//                                try {
+//                                    gerenciaGerente.excluirVendedor(cpfSelecionado, cpfGerente);
+//                                } catch (EntradaException ex) {
+//                                    interfaceGrafica.exibeException(ex.getMessage(),"Exclusão falhou");
+//                                }
+//                                ((DefaultTableModel) tabela.getModel()).removeRow(linha);
+//                            }
+                        });
+
+                        menuPopup.show(tabela, e.getX(), e.getY());
+                    }
+                }
+            }
+        });
+
+
 
         botoesPanel.add(voltar);
         botoesPanel.add(Box.createHorizontalGlue());

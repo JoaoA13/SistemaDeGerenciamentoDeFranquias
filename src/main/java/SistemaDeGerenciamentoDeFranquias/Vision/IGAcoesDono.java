@@ -220,7 +220,7 @@ public class IGAcoesDono {
             }
         });
 
-        interfaceGrafica.atualizaFrame(lista);
+        interfaceGrafica.atualizaFrame(lista,500,300);
 
         return lista;
     }
@@ -610,7 +610,7 @@ public class IGAcoesDono {
             }
         });
 
-        interfaceGrafica.atualizaFrame(lista);
+        interfaceGrafica.atualizaFrame(lista,500,300);
 
         return lista;
     }
@@ -958,7 +958,7 @@ public class IGAcoesDono {
             }
         });
 
-        interfaceGrafica.atualizaFrame(lista);
+        interfaceGrafica.atualizaFrame(lista,500,300);
 
         return lista;
     }

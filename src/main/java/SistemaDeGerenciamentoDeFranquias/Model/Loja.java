@@ -101,6 +101,20 @@ public class Loja {
         return armazenaClientes.getOrDefault(cpf, null);
     }
 
+    public Map<String, Cliente> getArmazenaClientes() {
+        if (armazenaClientes != null)
+            return armazenaClientes;
+        return null;
+    }
+
+    public Cliente[] ordenaClientes(){
+        if (getArmazenaClientes()==null)
+            return null;
+        List<Cliente> lista = new ArrayList<>(getArmazenaClientes().values());
+        Collections.sort(lista, (v1, v2) -> v2.getQuantidadeCompras().compareTo(v1.getQuantidadeCompras()));
+        return lista.toArray(new Cliente[0]);
+    }
+
     public Produto getProduto(String codigo){
         return armazenaProdutos.getOrDefault(codigo,null);
     }
