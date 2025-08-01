@@ -35,7 +35,6 @@ public class IGAcoesGerente {
         this.cpf = cpf;
     }
 
-
     JPanel cadastrar(String cpfGerente){
         JPanel cadastro = new JPanel();
         cadastro.setLayout(new BoxLayout(cadastro, BoxLayout.Y_AXIS));
@@ -516,6 +515,8 @@ public class IGAcoesGerente {
         botoesPanel.setLayout(new BoxLayout(botoesPanel, BoxLayout.X_AXIS));
         botoesPanel.setAlignmentX(Component.LEFT_ALIGNMENT);
 
+        //conteudo do painel
+
         botoesPanel.add(voltar);
         botoesPanel.add(Box.createHorizontalGlue());
         solicitacoes.add(botoesPanel);
@@ -527,7 +528,6 @@ public class IGAcoesGerente {
                 interfaceGrafica.sistemaGerente();
             }
         });
-
         return solicitacoes;
     }
 
@@ -976,6 +976,9 @@ public class IGAcoesGerente {
                         String codigo = (String) tabela.getValueAt(linha, 0);
                         String cpfVendedor = (String) tabela.getValueAt(linha, 1);
 
+                        for (ActionListener al : visualizar.getActionListeners()) {
+                            visualizar.removeActionListener(al);
+                        }
                         visualizar.addActionListener(ae -> {
                             exibeVenda(codigo,cpfVendedor);
                         });
@@ -1086,10 +1089,6 @@ public class IGAcoesGerente {
         sair.addActionListener(e -> exibe.removeAll());
         painelBotao.add(sair);
 
-//        JTable tabela2 = new JTable(modelo); // <-- corrigido aqui
-//        JScrollPane scroll = new JScrollPane(tabela2);
-//        exibeInformacaoLoja.add(scroll, BorderLayout.CENTER);
-
         exibeInformacaoLoja.add(painelBotao, BorderLayout.SOUTH);
 
         exibe.setContentPane(exibeInformacaoLoja);
@@ -1148,41 +1147,6 @@ public class IGAcoesGerente {
         menuPopup.add(editarItem);
         menuPopup.add(excluirItem);
 
-        tabela.addMouseListener(new MouseAdapter() {
-            public void mousePressed(MouseEvent e) {
-                if (e.isPopupTrigger() || SwingUtilities.isRightMouseButton(e)) {
-                    int linha = tabela.rowAtPoint(e.getPoint());
-                    if (linha >= 0 && linha < tabela.getRowCount()) {
-                        tabela.setRowSelectionInterval(linha, linha);
-                        String cpfSelecionado = (String) tabela.getValueAt(linha, 1);
-
-                        editarItem.addActionListener(ae -> {
-                            //editar(cpfGerente, cpfSelecionado);
-                        });
-
-                        excluirItem.addActionListener(ae -> {
-//                            int confirm = JOptionPane.showConfirmDialog(lista,
-//                                    "Tem certeza que deseja excluir o vendedor com CPF " + cpfSelecionado + "?",
-//                                    "Confirmar exclusão",
-//                                    JOptionPane.YES_NO_OPTION);
-//                            if (confirm == JOptionPane.YES_OPTION) {
-//                                try {
-//                                    gerenciaGerente.excluirVendedor(cpfSelecionado, cpfGerente);
-//                                } catch (EntradaException ex) {
-//                                    interfaceGrafica.exibeException(ex.getMessage(),"Exclusão falhou");
-//                                }
-//                                ((DefaultTableModel) tabela.getModel()).removeRow(linha);
-//                            }
-                        });
-
-                        menuPopup.show(tabela, e.getX(), e.getY());
-                    }
-                }
-            }
-        });
-
-
-
         botoesPanel.add(voltar);
         botoesPanel.add(Box.createHorizontalGlue());
         listaClientes.add(botoesPanel);
@@ -1198,6 +1162,3 @@ public class IGAcoesGerente {
         return listaClientes;
     }
 }
-
-
-

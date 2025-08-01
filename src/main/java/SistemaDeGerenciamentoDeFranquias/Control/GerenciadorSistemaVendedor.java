@@ -26,28 +26,28 @@ import static SistemaDeGerenciamentoDeFranquias.Control.GerenciadorDeLojas.getVe
 
 public class GerenciadorSistemaVendedor extends GerenciadorSistema{
 
-    public String login(String cpf, String senha) throws LoginException {
-        super.login(cpf,senha);
-
-        try {
-            ValidadorCampoVazio.valida(cpf);
-            ValidadorCampoVazio.valida(senha);
-            ValidadorCpf.validarCpf(cpf);
-            ValidadorSenha.valida(senha);
-        }catch (EntradaException e){
-            System.out.println("Erro: LoginException: " + e.getMessage());
-            throw new LoginException(e.getMessage());
-        }
-
-        try {
-            ValidadorCpfBancoDeDadosTrue.valida(cpf);
-            ValidadorLogin.valida(getVendedorGeral(cpf),cpf,senha);
-            return "CPF e senha corretos";
-        }catch (LoginException e){
-            System.out.println("Erro: LoginException: " + e.getMessage());
-            throw new LoginException(e.getMessage());
-        }
-    }
+//    public String login(String cpf, String senha) throws LoginException {
+//        super.login(cpf,senha);
+//
+//        try {
+//            ValidadorCampoVazio.valida(cpf);
+//            ValidadorCampoVazio.valida(senha);
+//            ValidadorCpf.validarCpf(cpf);
+//            ValidadorSenha.valida(senha);
+//        }catch (EntradaException e){
+//            System.out.println("Erro: LoginException: " + e.getMessage());
+//            throw new LoginException(e.getMessage());
+//        }
+//
+//        try {
+//            ValidadorCpfBancoDeDadosTrue.valida(cpf);
+//            ValidadorLogin.valida(getVendedorGeral(cpf),cpf,senha);
+//            return "CPF e senha corretos";
+//        }catch (LoginException e){
+//            System.out.println("Erro: LoginException: " + e.getMessage());
+//            throw new LoginException(e.getMessage());
+//        }
+//    }
 
     public Pedido lancarPedido(String nomeCliente, String dataTexto, String horaTexto, String formaDePagamento, String taxaEntregaTexto, String cpfCliente, String codigo, Vendedor vendedor, Loja loja) throws EntradaException {
         LocalDate data;

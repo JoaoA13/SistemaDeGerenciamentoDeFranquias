@@ -1,12 +1,10 @@
 package SistemaDeGerenciamentoDeFranquias.Vision;
 
+import SistemaDeGerenciamentoDeFranquias.Control.*;
 import SistemaDeGerenciamentoDeFranquias.Exceptions.CadastroException;
 import SistemaDeGerenciamentoDeFranquias.Exceptions.LoginException;
-import SistemaDeGerenciamentoDeFranquias.Control.GerenciadorDeLojas;
-import SistemaDeGerenciamentoDeFranquias.Control.GerenciadorSistemaDono;
-import SistemaDeGerenciamentoDeFranquias.Control.GerenciadorSistemaGerente;
-import SistemaDeGerenciamentoDeFranquias.Control.GerenciadorSistemaVendedor;
 import SistemaDeGerenciamentoDeFranquias.Model.Loja;
+import SistemaDeGerenciamentoDeFranquias.Model.TipoUsuario;
 
 import javax.swing.*;
 import java.awt.event.*;
@@ -24,7 +22,7 @@ public class InterfaceGrafica {
    public InterfaceGrafica(){
        menuLogin();
        //sistemaDono();
-       frame.setSize(200, 200);
+       frame.setSize(400, 400);
        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
        frame.setLocationRelativeTo(null);
        frame.setVisible(true);
@@ -65,28 +63,39 @@ public class InterfaceGrafica {
     public void menuLogin(){
         JPanel menuLogin = new JPanel();
         menuLogin.setLayout(new BoxLayout(menuLogin, BoxLayout.Y_AXIS));
+        menuLogin.setBorder(BorderFactory.createEmptyBorder(20, 40, 20, 40));
 
-        JRadioButton Dono = new JRadioButton("Dono");
-        JRadioButton Gerente = new JRadioButton("Gerente");
-        JRadioButton Vendedor = new JRadioButton("Vendedor");
-        ButtonGroup group = new ButtonGroup();
-        group.add(Dono);
-        group.add(Gerente);
-        group.add(Vendedor);
+        JLabel titulo = new JLabel("Login");
+        titulo.setFont(new Font("Arial", Font.BOLD, 20));
+        titulo.setForeground(new Color(34, 139, 34));
+        titulo.setAlignmentX(Component.CENTER_ALIGNMENT);
+        titulo.setBorder(BorderFactory.createEmptyBorder(10, 0, 20, 0));
+        menuLogin.add(titulo);
 
-        menuLogin.add(Dono);
-        menuLogin.add(Gerente);
-        menuLogin.add(Vendedor);
-
-        JTextField escreveCpf = new JTextField(20);// Campo de entrada de 20 colunas
+        JLabel labelCpf = new JLabel("Cpf");
+        labelCpf.setAlignmentX(Component.CENTER_ALIGNMENT);
+        menuLogin.add(labelCpf);
+        JTextField escreveCpf = new JTextField(20);
         escreveCpf.setMaximumSize(new Dimension(400, 25));
-        menuLogin.add(new JLabel("Cpf:"));
         menuLogin.add(escreveCpf);
+        menuLogin.add(Box.createRigidArea(new Dimension(0, 10)));
 
-        JTextField escreveSenha = new JTextField(20); // Campo de entrada de 20 colunas
+        JLabel labelSenha = new JLabel("Senha");
+        labelSenha.setAlignmentX(Component.CENTER_ALIGNMENT);
+        menuLogin.add(labelSenha);
+        JTextField escreveSenha = new JTextField(20);
         escreveSenha.setMaximumSize(new Dimension(400, 25));
-        menuLogin.add(new JLabel("Senha:"));
         menuLogin.add(escreveSenha);
+        menuLogin.add(Box.createRigidArea(new Dimension(0, 20)));
+
+        JButton botaoLogin = new JButton("Fazer Login");
+        botaoLogin.setBackground(new Color(34, 139, 34));
+        botaoLogin.setForeground(Color.WHITE);
+        botaoLogin.setFocusPainted(false);
+        botaoLogin.setFont(new Font("Arial", Font.BOLD, 14));
+        botaoLogin.setMaximumSize(new Dimension(200, 30));
+        botaoLogin.setAlignmentX(Component.CENTER_ALIGNMENT);
+        menuLogin.add(botaoLogin);
 
         escreveCpf.addKeyListener(new KeyAdapter() {
             public void keyPressed(KeyEvent e) {
@@ -100,39 +109,44 @@ public class InterfaceGrafica {
         escreveSenha.addKeyListener(new KeyAdapter() {
             public void keyPressed(KeyEvent e) {
                 if (e.getKeyCode() == KeyEvent.VK_ENTER) {
-                    System.out.println("Tecla Enter pressionada");
-                    cpf = escreveCpf.getText();
-                    String senha = escreveSenha.getText();
-                    System.out.println(cpf + " " + senha);
-                    try{
-                        String validaLog = null;
-                        if(Dono.isSelected()) {
-                            validaLog = gerenciaDono.login(cpf,senha);
-                            exibeInformacao(validaLog, "Login feito com sucesso");
-                            menuLogin.setVisible(false);
-                            sistemaDono();
-                        } else if (Gerente.isSelected()) {
-                            validaLog = gerenciaGerente.login(cpf,senha);
-                            exibeInformacao(validaLog, "Login feito com sucesso");
-                            menuLogin.setVisible(false);
-                            sistemaGerente();
-                        } else if (Vendedor.isSelected()) {
-                            validaLog = gerenciaVendedor.login(cpf,senha);
-                            exibeInformacao(validaLog, "Login feito com sucesso");
-                            menuLogin.setVisible(false);
-                            sistemaVendedor();
-                        }else
-                            exibeException("Deve selecionar seu cargo!", "Login falhou");
-                    }catch (LoginException mes) {
-                        exibeException(mes.getMessage(),"Login falhou");
-                    }
+                    botaoLogin.doClick();
                 }
             }
         });
 
+        botaoLogin.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                    System.out.println("Tecla Enter pressionada");
+                    cpf = escreveCpf.getText();
+                    String senha = escreveSenha.getText();
+                    System.out.println(cpf + " " + senha);
+
+                    try{
+                        String validaLog = null;
+                        validaLog = GerenciadorSistema.login(cpf,senha);
+                        if(GerenciadorSistema.identificaTipoUsuario(cpf).getTipo() == TipoUsuario.DONO) {
+                            sistemaDono();
+                            exibeInformacao(validaLog, "Login feito com sucesso");
+                            menuLogin.setVisible(false);
+                        }else if(GerenciadorSistema.identificaTipoUsuario(cpf).getTipo() == TipoUsuario.GERENTE) {
+                            sistemaGerente();
+                            exibeInformacao(validaLog, "Login feito com sucesso");
+                            menuLogin.setVisible(false);
+                        }else if(GerenciadorSistema.identificaTipoUsuario(cpf).getTipo() == TipoUsuario.VENDEDOR){
+                            sistemaVendedor();
+                            exibeInformacao(validaLog, "Login feito com sucesso");
+                            menuLogin.setVisible(false);
+                        }
+                    }catch (LoginException mes) {
+                        exibeException(mes.getMessage(),"Login falhou");
+                    }
+                }
+
+        });
+
         frame.pack();
         frame.setContentPane(menuLogin);
-        frame.setSize(200, 200);
+        frame.setSize(400, 600);
         frame.setLocationRelativeTo(null);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setVisible(true);
@@ -340,7 +354,7 @@ public class InterfaceGrafica {
 
     void sistemaVendedor(){
         JPanel sistemaVendedor = new JPanel();
-        IGAcoesVendedor acoes = new IGAcoesVendedor();
+        IGAcoesVendedor acoes = new IGAcoesVendedor(this);
 
         JLabel titulo = new JLabel("Menu Inicial", SwingConstants.CENTER);
         titulo.setFont(new Font("SansSerif", Font.BOLD, 20));

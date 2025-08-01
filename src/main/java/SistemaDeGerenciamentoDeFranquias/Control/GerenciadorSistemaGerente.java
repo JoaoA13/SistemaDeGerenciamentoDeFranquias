@@ -19,28 +19,28 @@ public class GerenciadorSistemaGerente extends GerenciadorSistema{
 
     static GerenciadorDeLojas listaLojas = new GerenciadorDeLojas();
 
-    public String login(String cpf, String senha) throws LoginException {
-        super.login(cpf, senha);
-
-        try {
-            ValidadorCampoVazio.valida(cpf);
-            ValidadorCampoVazio.valida(senha);
-            ValidadorCpf.validarCpf(cpf);
-            ValidadorSenha.valida(senha);
-        } catch (EntradaException e) {
-            System.out.println("Erro: LoginException: " + e.getMessage());
-            throw new LoginException(e.getMessage());
-        }
-
-        try {
-            buscaCpfExiste(cpf);
-            ValidadorLogin.valida(GerenciadorDeLojas.getGerente(cpf),cpf,senha);
-            return "CPF e senha corretos";
-        }catch (LoginException e){
-            System.out.println("Erro: LoginException: " + e.getMessage());
-            throw new LoginException(e.getMessage());
-        }
-    }
+//    public String login(String cpf, String senha) throws LoginException {
+//        super.login(cpf, senha);
+//
+//        try {
+//            ValidadorCampoVazio.valida(cpf);
+//            ValidadorCampoVazio.valida(senha);
+//            ValidadorCpf.validarCpf(cpf);
+//            ValidadorSenha.valida(senha);
+//        } catch (EntradaException e) {
+//            System.out.println("Erro: LoginException: " + e.getMessage());
+//            throw new LoginException(e.getMessage());
+//        }
+//
+//        try {
+//            buscaCpfExiste(cpf);
+//            ValidadorLogin.valida(GerenciadorDeLojas.getGerente(cpf),cpf,senha);
+//            return "CPF e senha corretos";
+//        }catch (LoginException e){
+//            System.out.println("Erro: LoginException: " + e.getMessage());
+//            throw new LoginException(e.getMessage());
+//        }
+//    }
 
     public String lancarCadastro(String nome, String cpf,String email, String senha, String cpfGerente) throws CadastroException {
         try {

@@ -15,20 +15,24 @@ import javax.swing.table.TableCellEditor;
 import javax.swing.table.TableCellRenderer;
 import javax.swing.text.MaskFormatter;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
+import java.awt.event.*;
 import java.math.BigDecimal;
 import java.text.*;
 import java.util.Locale;
 import java.util.concurrent.atomic.AtomicBoolean;
 
+import static SistemaDeGerenciamentoDeFranquias.Control.GerenciadorDeLojas.getLoja;
+
 public class IGAcoesVendedor {
+    private InterfaceGrafica interfaceGrafica;
     static GerenciadorSistemaVendedor gerenciaVendedor = new GerenciadorSistemaVendedor();
     Loja loja;
 
-    IGAcoesVendedor(){
+    DecimalFormat formatadorReais = new DecimalFormat("R$ #,##0.00", new DecimalFormatSymbols(new Locale("pt", "BR")));
+    DecimalFormat formatadorPreco = new DecimalFormat("R$ #,##0.00", new DecimalFormatSymbols(new Locale("pt", "BR")));
+
+    IGAcoesVendedor(InterfaceGrafica interfaceGrafica){
+        this.interfaceGrafica = interfaceGrafica;
 
     }
 
@@ -320,7 +324,7 @@ public class IGAcoesVendedor {
         InterfaceGrafica.trocarTela(painelTabela, 600, 400);
     }
 
-    JPanel listaDePedidos(String cpfVendedor){
+    JPanel listaDePedidos(String cpfVendedor) {
         JPanel lista = new JPanel();
         lista.setLayout(new BoxLayout(lista, BoxLayout.Y_AXIS));
         lista.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
@@ -331,7 +335,7 @@ public class IGAcoesVendedor {
         botoesPanel.setLayout(new BoxLayout(botoesPanel, BoxLayout.X_AXIS));
         botoesPanel.setAlignmentX(Component.LEFT_ALIGNMENT);
 
-        String[] colunas = {"Código", "CPF do cliente", "Data", "Hora", "Forma de Pagamento","Taxa de entrega", "Valor total"};
+        String[] colunas = {"Código", "CPF do cliente", "Data", "Hora", "Forma de Pagamento", "Taxa de entrega", "Valor total"};
         Vendedor vendedor = (Vendedor) GerenciadorDeLojas.getVendedorGeral(cpfVendedor);
         System.out.println(vendedor.getCodigoLoja() + " códogo da loja");
         this.loja = GerenciadorDeLojas.getLoja(vendedor.getCodigoLoja());
@@ -371,6 +375,7 @@ public class IGAcoesVendedor {
         lista.add(scroll, BorderLayout.CENTER);
 
         JPopupMenu menuPopup = new JPopupMenu();
+        JMenuItem visualizar = new JMenuItem("Visualizar");
         JMenuItem editarItem = new JMenuItem("Editar");
         JMenuItem excluirItem = new JMenuItem("Excluir");
         menuPopup.add(editarItem);
@@ -382,6 +387,7 @@ public class IGAcoesVendedor {
                     int linha = tabela.rowAtPoint(e.getPoint());
                     if (linha >= 0 && linha < tabela.getRowCount()) {
                         tabela.setRowSelectionInterval(linha, linha);
+                        String codigoPedido = (String) tabela.getValueAt(linha, 0);
                         String codigoSelecionado = (String) tabela.getValueAt(linha, 4);
 
                         editarItem.addActionListener(ae -> {
@@ -399,6 +405,13 @@ public class IGAcoesVendedor {
                             }
                         });
 
+                        for (ActionListener al : visualizar.getActionListeners()) {
+                            visualizar.removeActionListener(al);
+                        }
+                        visualizar.addActionListener(ae -> {
+                            exibeVenda(codigoPedido,vendedor);
+                        });
+
                         menuPopup.show(tabela, e.getX(), e.getY());
                     }
                 }
@@ -410,6 +423,101 @@ public class IGAcoesVendedor {
         lista.add(botoesPanel);
 
         return lista;
+    }
+
+    protected void exibeVenda(String codigo,Vendedor vendedor) {
+        Pedido pedido = vendedor.getPedido(codigo);
+        JFrame exibe = new JFrame("Informações da venda de pedido: " + codigo);
+        exibe.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+        exibe.setSize(450, 600);
+        exibe.setLocationRelativeTo(null);
+
+        JPanel exibeInformacaoLoja = new JPanel(new BorderLayout(10, 10));
+        exibeInformacaoLoja.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
+
+        JLabel titulo = new JLabel("Informações de venda", SwingConstants.CENTER);
+        exibeInformacaoLoja.add(titulo, BorderLayout.NORTH);
+
+        JPanel tabela = new JPanel(new GridLayout(9, 2, 10, 10));
+
+        tabela.add(interfaceGrafica.criaCelula("Código do pedido: "));
+        tabela.add(interfaceGrafica.criaCelula(pedido.getCodigo()));
+
+        tabela.add(interfaceGrafica.criaCelula("Cpf do vendedor: "));
+        tabela.add(interfaceGrafica.criaCelula(pedido.getCpfVendedor()));
+
+        tabela.add(interfaceGrafica.criaCelula("CPF do cliente: "));
+        tabela.add(interfaceGrafica.criaCelula(pedido.getCliente().getCpf()));
+
+        tabela.add(interfaceGrafica.criaCelula("Data: "));
+        tabela.add(interfaceGrafica.criaCelula(String.valueOf(pedido.getData())));
+
+        tabela.add(interfaceGrafica.criaCelula("Hora: "));
+        tabela.add(interfaceGrafica.criaCelula(String.valueOf(pedido.getHora())));
+
+        tabela.add(interfaceGrafica.criaCelula("Forma de pagamente: "));
+        tabela.add(interfaceGrafica.criaCelula(pedido.getFormaDePagamento()));
+
+        tabela.add(interfaceGrafica.criaCelula("Taxa de entrega: "));
+        tabela.add(interfaceGrafica.criaCelula(formatadorPreco.format(pedido.getTaxaEntrega())));
+
+        tabela.add(interfaceGrafica.criaCelula("Valor total pago: "));
+        tabela.add(interfaceGrafica.criaCelula(formatadorPreco.format(pedido.getValorTotal())));
+
+        tabela.add(interfaceGrafica.criaCelula("Valor total recebido pela loja: "));
+        tabela.add(interfaceGrafica.criaCelula(formatadorPreco.format(pedido.getValorTotal().subtract(pedido.getTaxaEntrega()))));
+
+        String[] colunas = {"Nome", "preço", "características", "quantidade", "código"};
+
+        String[][] dados = new String[pedido.getProdutos().size()][5];
+
+        //DecimalFormat formatadorPreco = new DecimalFormat("R$ #,##0.00", new DecimalFormatSymbols(new Locale("pt", "BR")));
+        DecimalFormat formatadorQuant = new DecimalFormat("00");
+
+        int i = 0;
+        for (Produto p : pedido.getProdutos().values()) {
+            dados[i][0] = p.getNomeProd();
+            dados[i][1] = formatadorPreco.format(p.getPreco()); // Ex: R$ 12,34
+            dados[i][2] = p.getCarac();
+            dados[i][3] = formatadorQuant.format(p.getQuant()); // Ex: 3.000
+            dados[i][4] = p.getCodigoProd();
+            i++;
+        }
+        DefaultTableModel modelo = new DefaultTableModel(dados, colunas) {
+            public boolean isCellEditable(int row, int column) {
+                return false;
+            }
+        };
+
+        JTable tabela1 = new JTable(modelo);
+
+        DefaultTableCellRenderer centralizado = new DefaultTableCellRenderer();
+        centralizado.setHorizontalAlignment(SwingConstants.CENTER);
+        for (int col = 0; col < tabela1.getColumnCount(); col++) {
+            tabela1.getColumnModel().getColumn(col).setCellRenderer(centralizado);
+        }
+
+        JScrollPane scroll = new JScrollPane(tabela1);
+        exibeInformacaoLoja.add(scroll, BorderLayout.CENTER);
+
+        exibeInformacaoLoja.add(tabela, BorderLayout.NORTH);
+
+        JPanel painelBotao = new JPanel();
+        JButton sair = new JButton("Fechar");
+        sair.addActionListener(e -> exibe.dispose());
+        sair.addActionListener(e -> exibe.removeAll());
+        painelBotao.add(sair);
+
+        exibeInformacaoLoja.add(painelBotao, BorderLayout.SOUTH);
+
+        exibe.setContentPane(exibeInformacaoLoja);
+        exibe.setVisible(true);
+        exibe.addWindowListener(new WindowAdapter() {
+            @Override
+            public void windowClosed(WindowEvent e) {
+                System.out.println("Janela foi fechada");
+            }
+        });
     }
 
     public void editarProd(){

@@ -5,6 +5,7 @@ import SistemaDeGerenciamentoDeFranquias.Exceptions.*;
 import SistemaDeGerenciamentoDeFranquias.Model.Dono;
 import SistemaDeGerenciamentoDeFranquias.Model.Gerente;
 import SistemaDeGerenciamentoDeFranquias.Model.Loja;
+import SistemaDeGerenciamentoDeFranquias.Model.Usuario;
 import SistemaDeGerenciamentoDeFranquias.Validadores.*;
 import SistemaDeGerenciamentoDeFranquias.Validadores.ValidadoresBancoDados.ValidadorCodigoLojaBancoDeDadosFalse;
 import SistemaDeGerenciamentoDeFranquias.Validadores.ValidadorCpf;
@@ -39,28 +40,37 @@ public class GerenciadorSistemaDono extends GerenciadorSistema {
         return Donos;
     }
 
-    @Override
-    public String login(String cpf, String senha) throws LoginException {
-        super.login(cpf, senha);
-
-        try {
-            ValidadorCampoVazio.valida(cpf);
-            ValidadorCampoVazio.valida(senha);
-            ValidadorCpf.validarCpf(cpf);
-            ValidadorSenha.valida(senha);
-        } catch (EntradaException e) {
-            System.out.println("Erro: EntradaException: " + e.getMessage());
-            throw new LoginException(e.getMessage());
-        }
-
-        try {
-            ValidadorLogin.valida(armazenaDonos.get(cpf), cpf, senha);
-            return "CPF e senha corretos";
-        } catch (LoginException e) {
-            System.out.println("Erro: LoginException: " + e.getMessage());
-            throw new LoginException(e.getMessage());
-        }
-    }
+//    @Override
+//    public String login(String cpf, String senha) throws LoginException {
+//        super.login(cpf, senha);
+//
+//        try {
+//            ValidadorCampoVazio.valida(cpf);
+//            ValidadorCampoVazio.valida(senha);
+//            ValidadorCpf.validarCpf(cpf);
+//            ValidadorSenha.valida(senha);
+//        } catch (EntradaException e) {
+//            System.out.println("Erro: EntradaException: " + e.getMessage());
+//            throw new LoginException(e.getMessage());
+//        }
+//
+//        Usuario usuario = null;
+//
+//        try {
+//            usuario = identificaTipoUsuario(cpf);
+//        }catch (BancoDeDadosException e){
+//            System.out.println("Erro: LoginException: " + e.getMessage());
+//            throw new LoginException(e.getMessage());
+//        }
+//
+//        try {
+//            ValidadorLogin.valida(usuario, cpf, senha);
+//            return "CPF e senha corretos";
+//        } catch (LoginException e) {
+//            System.out.println("Erro: LoginException: " + e.getMessage());
+//            throw new LoginException(e.getMessage());
+//        }
+//    }
 
     public void cadastroLoja(String endereco,String codigo, String cpfGerente) throws CadastroException {
         try {
