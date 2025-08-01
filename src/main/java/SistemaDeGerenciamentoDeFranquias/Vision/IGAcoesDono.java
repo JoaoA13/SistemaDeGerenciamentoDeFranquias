@@ -13,6 +13,9 @@ import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import java.awt.*;
 import java.awt.event.*;
+import java.text.DecimalFormat;
+import java.text.DecimalFormatSymbols;
+import java.util.Locale;
 
 import static SistemaDeGerenciamentoDeFranquias.Control.GerenciadorDeLojas.getCpfPorCodigo;
 import static SistemaDeGerenciamentoDeFranquias.Control.GerenciadorDeLojas.getLoja;
@@ -20,6 +23,8 @@ import static SistemaDeGerenciamentoDeFranquias.Control.GerenciadorDeLojas.getLo
 public class IGAcoesDono {
     private InterfaceGrafica interfaceGrafica;
     private GerenciadorDeLojas gerenciaDeLojas;
+
+    DecimalFormat formatadorReais = new DecimalFormat("R$ #,##0.00", new DecimalFormatSymbols(new Locale("pt", "BR")));
 
     IGAcoesDono(InterfaceGrafica interfaceGrafica,GerenciadorDeLojas gerenciaDeLojas){
         this.interfaceGrafica = interfaceGrafica;
@@ -189,7 +194,9 @@ public class IGAcoesDono {
                                 ((DefaultTableModel) tabela.getModel()).removeRow(linha);
                             }
                         });
-
+                        for (ActionListener al : visualizarItem.getActionListeners()) {
+                            visualizarItem.removeActionListener(al);
+                        }
                         visualizarItem.addActionListener(ae -> {
                             exibeLoja(codigo, getLoja(codigo));
                         });
@@ -222,7 +229,7 @@ public class IGAcoesDono {
 
         JFrame exibe = new JFrame("Informações da Loja: " + codigo);
         exibe.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-        exibe.setSize(450, 250);
+        exibe.setSize(450, 600);
         exibe.setLocationRelativeTo(null);
 
         JPanel exibeInformacaoLoja = new JPanel(new BorderLayout(10, 10));
@@ -231,7 +238,7 @@ public class IGAcoesDono {
         JLabel titulo = new JLabel("Informações de loja", SwingConstants.CENTER);
         exibeInformacaoLoja.add(titulo, BorderLayout.NORTH);
 
-        JPanel tabela = new JPanel(new GridLayout(3, 2, 10, 10));
+        JPanel tabela = new JPanel(new GridLayout(6, 2, 10, 10));
 
         tabela.add(interfaceGrafica.criaCelula("Código da loja: "));
         tabela.add(interfaceGrafica.criaCelula(loja.getCodigo()));
@@ -242,6 +249,15 @@ public class IGAcoesDono {
         tabela.add(interfaceGrafica.criaCelula("CPF do gerente: "));
         tabela.add(interfaceGrafica.criaCelula(loja.getCpfGerente()));
 
+        tabela.add(interfaceGrafica.criaCelula("Faturamento bruto: "));
+        tabela.add(interfaceGrafica.criaCelula(formatadorReais.format(loja.calculaFaturamentoBruto())));
+
+        tabela.add(interfaceGrafica.criaCelula("Total de pedidos: "));
+        tabela.add(interfaceGrafica.criaCelula(loja.calculaTotalPedidos()));
+
+        tabela.add(interfaceGrafica.criaCelula("Valor médio por cliente: "));
+        tabela.add(interfaceGrafica.criaCelula(formatadorReais.format(loja.calculaValorMedioCliente())));
+
         String[] colunas = {"Nome", "CPF", "e-mail","Valor atual de vendas"};
 
         String[][] dados = new String[loja.getArmazenaVendedores().size()][4];
@@ -251,7 +267,7 @@ public class IGAcoesDono {
             dados[i][0] = v[j].getNome();
             dados[i][1] = v[j].getCpf();
             dados[i][2] = v[j].getEmail();
-            dados[i][3] = String.valueOf(v[j].getValorVenda());
+            dados[i][3] = formatadorReais.format(v[j].getValorVenda());
             i++;
         }
 
@@ -266,6 +282,7 @@ public class IGAcoesDono {
         JPanel painelBotao = new JPanel();
         JButton sair = new JButton("Fechar");
         sair.addActionListener(e -> exibe.dispose());
+        sair.addActionListener(e -> exibe.removeAll());
         painelBotao.add(sair);
 
         JTable tabela2 = new JTable(modelo); // <-- corrigido aqui
@@ -276,6 +293,12 @@ public class IGAcoesDono {
 
         exibe.setContentPane(exibeInformacaoLoja);
         exibe.setVisible(true);
+        exibe.addWindowListener(new WindowAdapter() {
+            @Override
+            public void windowClosed(WindowEvent e) {
+                System.out.println("Janela foi fechada");
+            }
+        });
     }
 
     void editarLoja(String codigo) {

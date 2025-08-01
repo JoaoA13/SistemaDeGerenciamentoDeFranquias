@@ -4,8 +4,10 @@ import java.math.BigDecimal;
 
 public class Cliente {
     private String nome;
-    private BigDecimal quantidadeCompras = BigDecimal.valueOf(0);///CIRA ELE QUANDO ELE FAZ UM PEDIDO, ENTÃO JÁ COMEÇA COM 1 PEDIDO///
+    private BigDecimal quantidadeCompras = BigDecimal.ZERO;///CIRA ELE QUANDO ELE FAZ UM PEDIDO, ENTÃO JÁ COMEÇA COM 1 PEDIDO///
+    private BigDecimal valorGasto = BigDecimal.ZERO;
     private String cpf;
+
 
     public Cliente(String nome, String cpf){
         this.nome = nome;
@@ -21,5 +23,14 @@ public class Cliente {
 
     public void setQuantidaCompras(BigDecimal quantidadeCompras){
         this.quantidadeCompras = this.quantidadeCompras.add(quantidadeCompras);
+    }
+
+    public BigDecimal getValorGasto() {
+        return valorGasto;
+    }
+
+    public void setValorGasto(BigDecimal valor) {
+        valorGasto = valorGasto.add(valor);
+        System.out.println("Valor gasto: " + valorGasto);
     }
 }

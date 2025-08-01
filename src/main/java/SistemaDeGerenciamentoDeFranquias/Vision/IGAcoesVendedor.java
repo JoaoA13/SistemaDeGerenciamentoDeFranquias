@@ -311,6 +311,8 @@ public class IGAcoesVendedor {
                 vendedor.setValorVenda(pedido.getValorTotal().subtract(pedido.getTaxaEntrega()));
                 vendedor.addPedido(pedido);
                 pedido.setCliente(cliente);
+                BigDecimal valorPago = pedido.getValorTotal().subtract(pedido.getTaxaEntrega());
+                cliente.setValorGasto(valorPago);
             }
         });
 

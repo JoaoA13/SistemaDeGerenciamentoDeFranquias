@@ -7,7 +7,7 @@ import java.util.Map;
 public class Vendedor extends Usuario {
     private Map<String, Pedido> pedidosOficial = new HashMap<>();
 
-    private BigDecimal valorVenda = BigDecimal.valueOf(0);
+    private BigDecimal valorVenda =  BigDecimal.ZERO;
     String codigoLoja;
 
     protected Vendedor(String nome,String cpf, String email, String senha, String codigoLoja){
@@ -43,6 +43,7 @@ public class Vendedor extends Usuario {
         return valorVenda;
     }
     public void setValorVenda(BigDecimal venda){valorVenda = valorVenda.add(venda);}
+
 
     public String getCodigoLoja(){ return codigoLoja; }
     public void setCodigoLoja(String codigoLoja) {

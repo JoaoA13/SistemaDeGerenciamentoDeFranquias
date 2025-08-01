@@ -62,6 +62,17 @@ public class Loja {
         return lista.toArray(new Vendedor[0]);
     }
 
+    public BigDecimal calculaFaturamentoBruto(){
+       BigDecimal faturamentoBruto = BigDecimal.ZERO;
+        for(Vendedor vendedor : armazenaVendedores.values()){
+            if (faturamentoBruto!=null)
+                faturamentoBruto = faturamentoBruto.add(vendedor.getValorVenda());
+            if (faturamentoBruto==null)
+                System.out.println(faturamentoBruto + "aqui"+vendedor.getValorVenda());
+        };
+        return faturamentoBruto;
+    }
+
     public Map<String, Produto> getArmazenaProdutos() { return armazenaProdutos; }
 
     public void addProduto(String nome, BigDecimal preco, String carac, BigDecimal quant, String codigo){
@@ -86,5 +97,26 @@ public class Loja {
 
     public Produto getProduto(String codigo){
         return armazenaProdutos.getOrDefault(codigo,null);
+    }
+
+    public String calculaTotalPedidos(){
+        int totPedidos = 0;
+        for(Vendedor vendedor : armazenaVendedores.values()){
+            totPedidos = totPedidos + vendedor.getPedidosOficial().size();
+        };
+        return Integer.toString(totPedidos);
+    }
+    public Float calculaValorMedioCliente(){
+        BigDecimal valorTotal = BigDecimal.ZERO;
+        float valTotFloat = valorTotal.floatValue();
+        if(armazenaClientes != null) {
+            for (Cliente cliente : armazenaClientes.values()) {
+                valorTotal = valorTotal.add(cliente.getValorGasto());
+            }
+            valTotFloat = valorTotal.floatValue();
+
+            return valTotFloat / armazenaClientes.size();
+        }else
+            return valTotFloat;
     }
 }
