@@ -416,7 +416,7 @@ public class IGAcoesVendedor {
         JPanel edicao = new JPanel();
         edicao.setLayout(new BoxLayout(edicao, BoxLayout.Y_AXIS));
         edicao.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
-
+        String texto = "";
         String[] opcoes = {"Código", "CPF do Cliente", "data", "hora", "Forma de Pagamento", "Taxa de Entrega"};
         int escolha = JOptionPane.showOptionDialog(
                 null,
@@ -428,7 +428,68 @@ public class IGAcoesVendedor {
                 opcoes,
                 opcoes[0]
         );
+
+        switch (escolha){
+            case 0: texto = "Código"; break;
+            case 1: texto = "CPF do Cliente"; break;
+            case 2: texto = "data"; break;
+            case 3: texto = "hora"; break;
+            case 4: texto = "Forma de Pagamento"; break;
+            case 5: texto = "Taxa de Entrega"; break;
+        }
+
+        JButton confirmar = new JButton("Confirmar");
+
+        final String[] texto2 = {""};
+        JTextField escreveTexto;
+        String[] opcoesPagamento = { "Dinheiro Físico", "Pix", "Cartão" };
+        JComboBox<String> comboPagamento = new JComboBox<>(opcoesPagamento);
+        edicao.add(criarJLabel(texto));
+        if(escolha != 4) {
+            escreveTexto = new JTextField(20);
+            escreveTexto.setMaximumSize(new Dimension(Integer.MAX_VALUE, 25));
+            escreveTexto.setAlignmentX(Component.LEFT_ALIGNMENT);
+            edicao.add(escreveTexto);
+            escreveTexto.addActionListener(e -> confirmar.doClick());
+            escreveTexto.setText("");
+        }
+        else{
+            escreveTexto = null;
+            comboPagamento.setSelectedIndex(0);
+            comboPagamento.setMaximumSize(new Dimension(200, 25));
+            comboPagamento.setAlignmentX(Component.LEFT_ALIGNMENT);
+            edicao.add(new JLabel("Forma de Pagamento:"));
+            edicao.add(comboPagamento);
+        }
+
+        edicao.setLayout(new BoxLayout(edicao, BoxLayout.Y_AXIS));
+
+        edicao.add(Box.createVerticalStrut(10));
+        edicao.add(confirmar);
+
+
+        confirmar.addActionListener(e -> {
+            System.out.println("Botão Confirmar clicado");
+            if(escolha == 4)
+                texto2[0] = (String) comboPagamento.getSelectedItem();
+            else
+                texto2[0] = escreveTexto.getText().trim();
+            try {
+                String msg = gerenciaVendedor.solicitarEdicao(texto2[0], escolha);
+                JOptionPane.showMessageDialog(null, msg, "Sucesso", JOptionPane.INFORMATION_MESSAGE);
+            } catch (EntradaException ex) {
+                JOptionPane.showMessageDialog(null, "Erro ao editar: " + ex.getMessage(), "Erro", JOptionPane.ERROR_MESSAGE);
+            }
+        });
+        InterfaceGrafica.trocarTela(edicao, 400, 200);
     }
+
+    public JLabel criarJLabel(String texto) {
+        JLabel label = new JLabel("Digite o(a) novo(a) " + texto);
+        label.setAlignmentX(Component.LEFT_ALIGNMENT);
+        return label;
+    }
+
 
     public void excluirProd(){
         JPanel edicao = new JPanel();
