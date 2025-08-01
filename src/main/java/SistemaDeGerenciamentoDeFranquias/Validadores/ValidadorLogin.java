@@ -6,7 +6,7 @@ import SistemaDeGerenciamentoDeFranquias.Model.Usuario;
 public interface ValidadorLogin {
     static public boolean valida(Usuario usuario, String cpfDigitado, String senhaDigitada)  throws LoginException {
         if(usuario == null)
-            throw new LoginException("CPF, senha ou cargo incorretos, digite novamente!");
+            throw new LoginException("CPF ou senha incorretos, digite novamente!");
 
         String cpfUsuario = usuario.getCpf().replaceAll("[^\\d]", "");
         cpfDigitado = cpfDigitado.replaceAll("[^\\d]", "");
