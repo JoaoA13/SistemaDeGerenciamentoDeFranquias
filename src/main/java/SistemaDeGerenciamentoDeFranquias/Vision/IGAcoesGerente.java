@@ -335,17 +335,18 @@ public class IGAcoesGerente {
 //            i++;
 //        }
 
-        String[] colunas = {"Nome", "CPF", "e-mail","Valor atual de vendas"};
+        String[] colunas = {"Nome", "CPF", "e-mail","Valor total de vendas","Volume de vendas"};
 
         Loja loja = gerenciaDeLojas.getLoja(cpfGerente);
-        String[][] dados = new String[loja.getArmazenaVendedores().size()][4];
-        Vendedor[] v = loja.rankVendedores();
+        String[][] dados = new String[loja.getArmazenaVendedores().size()][5];
+        Vendedor[] v = loja.vendedoresVolume();
         int i = 0;
         for (int j = 0; j < loja.getArmazenaVendedores().size();j++ ) {
             dados[i][0] = v[j].getNome();
             dados[i][1] = v[j].getCpf();
             dados[i][2] = v[j].getEmail();
             dados[i][3] = formatadorReais.format(v[j].getValorVenda());
+            dados[i][4] = Integer.toString(v[j].getPedidosOficial().size());
             i++;
         }
 

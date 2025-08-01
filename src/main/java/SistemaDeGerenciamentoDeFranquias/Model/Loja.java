@@ -62,6 +62,12 @@ public class Loja {
         return lista.toArray(new Vendedor[0]);
     }
 
+    public Vendedor[] vendedoresVolume(){
+        List<Vendedor> lista = new ArrayList<>(getArmazenaVendedores().values());
+        lista.sort(Comparator.comparingInt((Vendedor v) -> v.getPedidosOficial().size()).reversed());;
+        return lista.toArray(new Vendedor[0]);
+    }
+
     public BigDecimal calculaFaturamentoBruto(){
        BigDecimal faturamentoBruto = BigDecimal.ZERO;
         for(Vendedor vendedor : armazenaVendedores.values()){
