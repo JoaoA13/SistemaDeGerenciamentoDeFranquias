@@ -99,23 +99,21 @@ public class Loja {
         return armazenaProdutos.getOrDefault(codigo,null);
     }
 
-    public String calculaTotalPedidos(){
+    public int calculaTotalPedidos(){
         int totPedidos = 0;
         for(Vendedor vendedor : armazenaVendedores.values()){
             totPedidos = totPedidos + vendedor.getPedidosOficial().size();
         };
-        return Integer.toString(totPedidos);
+        return totPedidos;
     }
-    public Float calculaValorMedioCliente(){
+    public Float calculaTicketMedio(){
         BigDecimal valorTotal = BigDecimal.ZERO;
         float valTotFloat = valorTotal.floatValue();
         if(armazenaClientes != null) {
-            for (Cliente cliente : armazenaClientes.values()) {
-                valorTotal = valorTotal.add(cliente.getValorGasto());
-            }
+            valorTotal = calculaFaturamentoBruto();
             valTotFloat = valorTotal.floatValue();
 
-            return valTotFloat / armazenaClientes.size();
+            return valTotFloat / calculaTotalPedidos();
         }else
             return valTotFloat;
     }

@@ -253,10 +253,10 @@ public class IGAcoesDono {
         tabela.add(interfaceGrafica.criaCelula(formatadorReais.format(loja.calculaFaturamentoBruto())));
 
         tabela.add(interfaceGrafica.criaCelula("Total de pedidos: "));
-        tabela.add(interfaceGrafica.criaCelula(loja.calculaTotalPedidos()));
+        tabela.add(interfaceGrafica.criaCelula(Integer.toString(loja.calculaTotalPedidos())));
 
-        tabela.add(interfaceGrafica.criaCelula("Valor médio por cliente: "));
-        tabela.add(interfaceGrafica.criaCelula(formatadorReais.format(loja.calculaValorMedioCliente())));
+        tabela.add(interfaceGrafica.criaCelula("Ticket médio: "));
+        tabela.add(interfaceGrafica.criaCelula(formatadorReais.format(loja.calculaTicketMedio())));
 
         String[] colunas = {"Nome", "CPF", "e-mail","Valor atual de vendas"};
 

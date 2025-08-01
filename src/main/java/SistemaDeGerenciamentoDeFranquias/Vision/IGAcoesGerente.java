@@ -28,6 +28,8 @@ public class IGAcoesGerente {
     private GerenciadorDeLojas gerenciaDeLojas;
 
     GerenciadorSistemaGerente gerenciaGerente = new GerenciadorSistemaGerente();
+    DecimalFormat formatadorReais = new DecimalFormat("R$ #,##0.00", new DecimalFormatSymbols(new Locale("pt", "BR")));
+
 
     public IGAcoesGerente(InterfaceGrafica interfaceGrafica,GerenciadorDeLojas gerenciaDeLojas, String cpf) {
         this.interfaceGrafica = interfaceGrafica;
@@ -321,15 +323,29 @@ public class IGAcoesGerente {
         botoesPanel.setLayout(new BoxLayout(botoesPanel, BoxLayout.X_AXIS));
         botoesPanel.setAlignmentX(Component.LEFT_ALIGNMENT);
 
-        String[] colunas = {"Nome", "CPF", "e-mail"};
-        Loja loja = gerenciaDeLojas.getLoja(cpfGerente);
+//        String[] colunas = {"Nome", "CPF", "e-mail"};
+//        Loja loja = gerenciaDeLojas.getLoja(cpfGerente);
+//
+//        String[][] dados = new String[loja.getArmazenaVendedores().size()][3];
+//        int i = 0;
+//        for (Vendedor v : loja.getArmazenaVendedores().values()) {
+//            dados[i][0] = v.getNome();
+//            dados[i][1] = v.getCpf();
+//            dados[i][2] = v.getEmail();
+//            i++;
+//        }
 
-        String[][] dados = new String[loja.getArmazenaVendedores().size()][3];
+        String[] colunas = {"Nome", "CPF", "e-mail","Valor atual de vendas"};
+
+        Loja loja = gerenciaDeLojas.getLoja(cpfGerente);
+        String[][] dados = new String[loja.getArmazenaVendedores().size()][4];
+        Vendedor[] v = loja.rankVendedores();
         int i = 0;
-        for (Vendedor v : loja.getArmazenaVendedores().values()) {
-            dados[i][0] = v.getNome();
-            dados[i][1] = v.getCpf();
-            dados[i][2] = v.getEmail();
+        for (int j = 0; j < loja.getArmazenaVendedores().size();j++ ) {
+            dados[i][0] = v[j].getNome();
+            dados[i][1] = v[j].getCpf();
+            dados[i][2] = v[j].getEmail();
+            dados[i][3] = formatadorReais.format(v[j].getValorVenda());
             i++;
         }
 
