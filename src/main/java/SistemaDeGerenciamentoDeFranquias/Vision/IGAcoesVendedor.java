@@ -23,7 +23,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
 
 import static SistemaDeGerenciamentoDeFranquias.Control.GerenciadorDeLojas.getLoja;
 
-public class IGAcoesVendedor {
+public class IGAcoesVendedor extends InterfaceBase{
     private InterfaceGrafica interfaceGrafica;
     static GerenciadorSistemaVendedor gerenciaVendedor = new GerenciadorSistemaVendedor();
     Loja loja;
@@ -32,6 +32,7 @@ public class IGAcoesVendedor {
     DecimalFormat formatadorPreco = new DecimalFormat("R$ #,##0.00", new DecimalFormatSymbols(new Locale("pt", "BR")));
 
     IGAcoesVendedor(InterfaceGrafica interfaceGrafica){
+        super(interfaceGrafica);
         this.interfaceGrafica = interfaceGrafica;
 
     }
@@ -129,7 +130,8 @@ public class IGAcoesVendedor {
         escreveCodigo.setAlignmentX(Component.LEFT_ALIGNMENT);
         cadastro.add(escreveCodigo);
 
-        JButton Sair = new JButton("Sair");
+        JButton voltar = new JButton("Voltar");
+
         JButton confirmar = new JButton("Confirmar");
 
         JPanel botoesPanel = new JPanel();
@@ -151,8 +153,8 @@ public class IGAcoesVendedor {
         campoTaxaEntrega.addActionListener(e -> escreveCodigo.requestFocusInWindow());
         escreveCodigo.addActionListener(e -> confirmar.doClick());
 
-        botoesPanel.add(Sair);
         botoesPanel.add(Box.createHorizontalGlue());
+        botoesPanel.add(voltar);
         botoesPanel.add(confirmar);
         cadastro.add(botoesPanel);
 
@@ -181,6 +183,19 @@ public class IGAcoesVendedor {
                 JOptionPane.showMessageDialog(null, "Erro nos dados inseridos: " + ex.getMessage(), "Erro", JOptionPane.ERROR_MESSAGE);
             }
         });
+
+
+
+        voltar.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                System.out.println("Botão 'voltar' clicado");
+                cadastro.setVisible(false);
+                interfaceGrafica.sistemaVendedor();
+            }
+        });
+
+        atualizaFrame(cadastro,500,300);
+
         return cadastro;
     }
 
@@ -348,7 +363,7 @@ public class IGAcoesVendedor {
         int i = 0;
         for (Pedido p : vendedor.getPedidosOficial().values()) {
             dados[i][0] = p.getCodigo();
-            dados[i][1] = interfaceGrafica.formatarCPF(p.getCliente().getCpf());
+            dados[i][1] = formatarCPF(p.getCliente().getCpf());
             dados[i][2] = String.valueOf(p.getData());
             dados[i][3] = String.valueOf(p.getHora());
             dados[i][4] = p.getFormaDePagamento();
@@ -423,6 +438,16 @@ public class IGAcoesVendedor {
         botoesPanel.add(Box.createHorizontalGlue());
         lista.add(botoesPanel);
 
+        voltar.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                System.out.println("Botão 'voltar' clicado");
+                lista.setVisible(false);
+                interfaceGrafica.sistemaVendedor();
+            }
+        });
+
+        atualizaFrame(lista,500,300);
+
         return lista;
     }
 
@@ -441,32 +466,32 @@ public class IGAcoesVendedor {
 
         JPanel tabela = new JPanel(new GridLayout(9, 2, 10, 10));
 
-        tabela.add(interfaceGrafica.criaCelula("Código do pedido: "));
-        tabela.add(interfaceGrafica.criaCelula(pedido.getCodigo()));
+        tabela.add(criaCelula("Código do pedido: "));
+        tabela.add(criaCelula(pedido.getCodigo()));
 
-        tabela.add(interfaceGrafica.criaCelula("Cpf do vendedor: "));
-        tabela.add(interfaceGrafica.criaCelula(interfaceGrafica.formatarCPF(pedido.getCpfVendedor())));
+        tabela.add(criaCelula("Cpf do vendedor: "));
+        tabela.add(criaCelula(formatarCPF(pedido.getCpfVendedor())));
 
-        tabela.add(interfaceGrafica.criaCelula("CPF do cliente: "));
-        tabela.add(interfaceGrafica.criaCelula(interfaceGrafica.formatarCPF(pedido.getCliente().getCpf())));
+        tabela.add(criaCelula("CPF do cliente: "));
+        tabela.add(criaCelula(formatarCPF(pedido.getCliente().getCpf())));
 
-        tabela.add(interfaceGrafica.criaCelula("Data: "));
-        tabela.add(interfaceGrafica.criaCelula(String.valueOf(pedido.getData())));
+        tabela.add(criaCelula("Data: "));
+        tabela.add(criaCelula(String.valueOf(pedido.getData())));
 
-        tabela.add(interfaceGrafica.criaCelula("Hora: "));
-        tabela.add(interfaceGrafica.criaCelula(String.valueOf(pedido.getHora())));
+        tabela.add(criaCelula("Hora: "));
+        tabela.add(criaCelula(String.valueOf(pedido.getHora())));
 
-        tabela.add(interfaceGrafica.criaCelula("Forma de pagamente: "));
-        tabela.add(interfaceGrafica.criaCelula(pedido.getFormaDePagamento()));
+        tabela.add(criaCelula("Forma de pagamente: "));
+        tabela.add(criaCelula(pedido.getFormaDePagamento()));
 
-        tabela.add(interfaceGrafica.criaCelula("Taxa de entrega: "));
-        tabela.add(interfaceGrafica.criaCelula(formatadorPreco.format(pedido.getTaxaEntrega())));
+        tabela.add(criaCelula("Taxa de entrega: "));
+        tabela.add(criaCelula(formatadorPreco.format(pedido.getTaxaEntrega())));
 
-        tabela.add(interfaceGrafica.criaCelula("Valor total pago: "));
-        tabela.add(interfaceGrafica.criaCelula(formatadorPreco.format(pedido.getValorTotal())));
+        tabela.add(criaCelula("Valor total pago: "));
+        tabela.add(criaCelula(formatadorPreco.format(pedido.getValorTotal())));
 
-        tabela.add(interfaceGrafica.criaCelula("Valor total recebido pela loja: "));
-        tabela.add(interfaceGrafica.criaCelula(formatadorPreco.format(pedido.getValorTotal().subtract(pedido.getTaxaEntrega()))));
+        tabela.add(criaCelula("Valor total recebido pela loja: "));
+        tabela.add(criaCelula(formatadorPreco.format(pedido.getValorTotal().subtract(pedido.getTaxaEntrega()))));
 
         String[] colunas = {"Nome", "preço", "características", "quantidade", "código"};
 
@@ -634,7 +659,6 @@ public class IGAcoesVendedor {
         label.setAlignmentX(Component.LEFT_ALIGNMENT);
         return label;
     }
-
 
     public void excluirProd(){
         JPanel edicao = new JPanel();

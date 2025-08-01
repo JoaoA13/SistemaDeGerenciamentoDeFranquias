@@ -20,13 +20,14 @@ import java.util.Locale;
 import static SistemaDeGerenciamentoDeFranquias.Control.GerenciadorDeLojas.getCpfPorCodigo;
 import static SistemaDeGerenciamentoDeFranquias.Control.GerenciadorDeLojas.getLoja;
 
-public class IGAcoesDono {
+public class IGAcoesDono extends InterfaceBase{
     private InterfaceGrafica interfaceGrafica;
     private GerenciadorDeLojas gerenciaDeLojas;
 
     DecimalFormat formatadorReais = new DecimalFormat("R$ #,##0.00", new DecimalFormatSymbols(new Locale("pt", "BR")));
 
     IGAcoesDono(InterfaceGrafica interfaceGrafica,GerenciadorDeLojas gerenciaDeLojas){
+        super(interfaceGrafica);
         this.interfaceGrafica = interfaceGrafica;
         this.gerenciaDeLojas = gerenciaDeLojas;
     }
@@ -109,7 +110,7 @@ public class IGAcoesDono {
             public void actionPerformed(ActionEvent e) {
                 System.out.println("Botão 'voltar' clicado");
                 painelCadastroLoja.setVisible(false);
-                interfaceGrafica.sistemaDono();
+                sistemaDono();
             }
         });
         return painelCadastroLoja;
@@ -118,11 +119,11 @@ public class IGAcoesDono {
             System.out.println("Tecla Enter pressionada");
 
         try{
-                interfaceGrafica.gerenciaDono.cadastroLoja(endereco,codigo,cpf);
-                interfaceGrafica.exibeInformacao("Cadastro de Loja e atribuição de gerente feitos corretamente","Cadastro de Loja e gerente feito com sucesso");
+            gerenciaDono.cadastroLoja(endereco,codigo,cpf);
+                exibeInformacao("Cadastro de Loja e atribuição de gerente feitos corretamente","Cadastro de Loja e gerente feito com sucesso");
                 return true;
             }catch (CadastroException mes) {
-                interfaceGrafica.exibeException(mes.getMessage(),"Cadastro falhou");
+                exibeException(mes.getMessage(),"Cadastro falhou");
             }
             //gerenciaDono.cadastroLoja(nome,senha);
         return false;
@@ -189,7 +190,7 @@ public class IGAcoesDono {
                                 try {
                                     GerenciadorSistemaDono.excluirLoja(codigo);
                                 } catch (EntradaException ex) {
-                                        interfaceGrafica.exibeException(ex.getMessage(),"Exclusão falhou");
+                                        exibeException(ex.getMessage(),"Exclusão falhou");
                                 }
                                 ((DefaultTableModel) tabela.getModel()).removeRow(linha);
                             }
@@ -220,7 +221,7 @@ public class IGAcoesDono {
             }
         });
 
-        interfaceGrafica.atualizaFrame(lista,500,300);
+        atualizaFrame(lista,500,300);
 
         return lista;
     }
@@ -240,23 +241,23 @@ public class IGAcoesDono {
 
         JPanel tabela = new JPanel(new GridLayout(6, 2, 10, 10));
 
-        tabela.add(interfaceGrafica.criaCelula("Código da loja: "));
-        tabela.add(interfaceGrafica.criaCelula(loja.getCodigo()));
+        tabela.add(criaCelula("Código da loja: "));
+        tabela.add(criaCelula(loja.getCodigo()));
 
-        tabela.add(interfaceGrafica.criaCelula("Endereço: "));
-        tabela.add(interfaceGrafica.criaCelula(loja.getEndereco()));
+        tabela.add(criaCelula("Endereço: "));
+        tabela.add(criaCelula(loja.getEndereco()));
 
-        tabela.add(interfaceGrafica.criaCelula("CPF do gerente: "));
-        tabela.add(interfaceGrafica.criaCelula(loja.getCpfGerente()));
+        tabela.add(criaCelula("CPF do gerente: "));
+        tabela.add(criaCelula(loja.getCpfGerente()));
 
-        tabela.add(interfaceGrafica.criaCelula("Faturamento bruto: "));
-        tabela.add(interfaceGrafica.criaCelula(formatadorReais.format(loja.calculaFaturamentoBruto())));
+        tabela.add(criaCelula("Faturamento bruto: "));
+        tabela.add(criaCelula(formatadorReais.format(loja.calculaFaturamentoBruto())));
 
-        tabela.add(interfaceGrafica.criaCelula("Total de pedidos: "));
-        tabela.add(interfaceGrafica.criaCelula(Integer.toString(loja.calculaTotalPedidos())));
+        tabela.add(criaCelula("Total de pedidos: "));
+        tabela.add(criaCelula(Integer.toString(loja.calculaTotalPedidos())));
 
-        tabela.add(interfaceGrafica.criaCelula("Ticket médio: "));
-        tabela.add(interfaceGrafica.criaCelula(formatadorReais.format(loja.calculaTicketMedio())));
+        tabela.add(criaCelula("Ticket médio: "));
+        tabela.add(criaCelula(formatadorReais.format(loja.calculaTicketMedio())));
 
         String[] colunas = {"Nome", "CPF", "e-mail","Valor atual de vendas"};
 
@@ -483,11 +484,11 @@ public class IGAcoesDono {
         System.out.println("Tecla Enter pressionada");
 
         try{
-            interfaceGrafica.gerenciaDono.cadastroGerente(nome,cpf,senha,email);
-            interfaceGrafica.exibeInformacao("Cadastro de gerente feito corretamente","Cadastro de gerente feito com sucesso");
+            gerenciaDono.cadastroGerente(nome,cpf,senha,email);
+            exibeInformacao("Cadastro de gerente feito corretamente","Cadastro de gerente feito com sucesso");
             return true;
         }catch (CadastroException mes) {
-            interfaceGrafica.exibeException(mes.getMessage(),"Cadastro falhou");
+            exibeException(mes.getMessage(),"Cadastro falhou");
         }
         return false;
     }
@@ -566,9 +567,9 @@ public class IGAcoesDono {
                                     if (confirma == JOptionPane.YES_OPTION) {
                                         try {
                                             GerenciadorSistemaDono.excluirLoja(cpf);
-                                            interfaceGrafica.exibeInformacao("Loja excluida com sucesso", "Exclusão concluida");
+                                            exibeInformacao("Loja excluida com sucesso", "Exclusão concluida");
                                         } catch (EntradaException ex) {
-                                            interfaceGrafica.exibeException(ex.getMessage(), "Exclusão falhou");
+                                            exibeException(ex.getMessage(), "Exclusão falhou");
                                         }
                                     }
                                 }
@@ -576,10 +577,10 @@ public class IGAcoesDono {
 
                                 try {
                                     GerenciadorSistemaDono.excluirGerente(cpf);
-                                    interfaceGrafica.exibeInformacao("Gerente excluido com sucesso", "Exclusão concluida");
+                                    exibeInformacao("Gerente excluido com sucesso", "Exclusão concluida");
                                     ((DefaultTableModel) tabela.getModel()).removeRow(linha);
                                 } catch (EntradaException ex) {
-                                    interfaceGrafica.exibeException(ex.getMessage(),"Exclusão falhou");
+                                    exibeException(ex.getMessage(),"Exclusão falhou");
                                 }
 
                         });
@@ -610,7 +611,7 @@ public class IGAcoesDono {
             }
         });
 
-        interfaceGrafica.atualizaFrame(lista,500,300);
+        atualizaFrame(lista,500,300);
 
         return lista;
     }
@@ -633,14 +634,14 @@ public class IGAcoesDono {
 
         JPanel tabela = new JPanel(new GridLayout(3, 2, 10, 10));
 
-        tabela.add(interfaceGrafica.criaCelula("Nome do gerente:"));
-        tabela.add(interfaceGrafica.criaCelula(gerente.getNome()));
+        tabela.add(criaCelula("Nome do gerente:"));
+        tabela.add(criaCelula(gerente.getNome()));
 
-        tabela.add(interfaceGrafica.criaCelula("CPF:"));
-        tabela.add(interfaceGrafica.criaCelula(gerente.getCpf()));
+        tabela.add(criaCelula("CPF:"));
+        tabela.add(criaCelula(gerente.getCpf()));
 
-        tabela.add(interfaceGrafica.criaCelula("Email:"));
-        tabela.add(interfaceGrafica.criaCelula(gerente.getEmail()));
+        tabela.add(criaCelula("Email:"));
+        tabela.add(criaCelula(gerente.getEmail()));
 
         painelPrincipal.add(tabela, BorderLayout.CENTER);
 
@@ -648,7 +649,7 @@ public class IGAcoesDono {
         if(getLoja(gerente.getCpf()) != null)
         visualizaLoja.addActionListener(e -> exibeLoja(GerenciadorDeLojas.getCodigoLoja(gerente.getCpf()),getLoja(gerente.getCpf())));
         else
-            visualizaLoja.addActionListener(e -> interfaceGrafica.exibeInformacao("Esse gerente não possui uma loja", "Sem loja"));
+            visualizaLoja.addActionListener(e -> exibeInformacao("Esse gerente não possui uma loja", "Sem loja"));
 
         // Botão de sair
         JButton sair = new JButton("Fechar");
@@ -727,7 +728,7 @@ public class IGAcoesDono {
         });
 
         JButton voltar = new JButton("voltar");
-        //sair.addActionListener(e -> interfaceGrafica.voltar());
+        //sair.addActionListener(e -> voltar());
 
         JPanel botoesPanel = new JPanel();
         botoesPanel.setLayout(new BoxLayout(botoesPanel, BoxLayout.X_AXIS));
@@ -853,11 +854,11 @@ public class IGAcoesDono {
         System.out.println("Tecla Enter pressionada");
 
         try{
-            interfaceGrafica.gerenciaDono.cadastroDono(nome,cpf,senha,email);
-            interfaceGrafica.exibeInformacao("Cadastro de dono feito corretamente","Cadastro de dono feito com sucesso");
+            gerenciaDono.cadastroDono(nome,cpf,senha,email);
+            exibeInformacao("Cadastro de dono feito corretamente","Cadastro de dono feito com sucesso");
             return true;
         }catch (CadastroException mes) {
-            interfaceGrafica.exibeException(mes.getMessage(),"Cadastro falhou");
+            exibeException(mes.getMessage(),"Cadastro falhou");
         }
         return false;
     }
@@ -923,10 +924,10 @@ public class IGAcoesDono {
                                 if (confirm == JOptionPane.YES_OPTION)
                             try {
                                 GerenciadorSistemaDono.excluirDono(cpf);
-                                interfaceGrafica.exibeInformacao("Dono excluido com sucesso", "Exclusão concluida");
+                                exibeInformacao("Dono excluido com sucesso", "Exclusão concluida");
                                 ((DefaultTableModel) tabela.getModel()).removeRow(linha);
                             } catch (EntradaException ex) {
-                                interfaceGrafica.exibeException(ex.getMessage(),"Exclusão falhou");
+                                exibeException(ex.getMessage(),"Exclusão falhou");
                             }
 
                         });
@@ -958,7 +959,7 @@ public class IGAcoesDono {
             }
         });
 
-        interfaceGrafica.atualizaFrame(lista,500,300);
+        atualizaFrame(lista,500,300);
 
         return lista;
     }
@@ -981,14 +982,14 @@ public class IGAcoesDono {
 
         JPanel tabela = new JPanel(new GridLayout(3, 2, 10, 10));
 
-        tabela.add(interfaceGrafica.criaCelula("Nome :"));
-        tabela.add(interfaceGrafica.criaCelula(dono.getNome()));
+        tabela.add(criaCelula("Nome :"));
+        tabela.add(criaCelula(dono.getNome()));
 
-        tabela.add(interfaceGrafica.criaCelula("CPF:"));
-        tabela.add(interfaceGrafica.criaCelula(dono.getCpf()));
+        tabela.add(criaCelula("CPF:"));
+        tabela.add(criaCelula(dono.getCpf()));
 
-        tabela.add(interfaceGrafica.criaCelula("Email:"));
-        tabela.add(interfaceGrafica.criaCelula(dono.getEmail()));
+        tabela.add(criaCelula("Email:"));
+        tabela.add(criaCelula(dono.getEmail()));
 
         painelPrincipal.add(tabela, BorderLayout.CENTER);
 
@@ -1068,7 +1069,7 @@ public class IGAcoesDono {
         });
 
         JButton voltar = new JButton("voltar");
-        //sair.addActionListener(e -> interfaceGrafica.voltar());
+        //sair.addActionListener(e -> voltar());
 
         JPanel botoesPanel = new JPanel();
         botoesPanel.setLayout(new BoxLayout(botoesPanel, BoxLayout.X_AXIS));

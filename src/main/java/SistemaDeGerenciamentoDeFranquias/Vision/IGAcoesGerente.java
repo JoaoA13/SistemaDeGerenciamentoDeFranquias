@@ -19,7 +19,7 @@ import java.util.Locale;
 
 import static SistemaDeGerenciamentoDeFranquias.Control.GerenciadorDeLojas.getLoja;
 
-public class IGAcoesGerente {
+public class IGAcoesGerente extends InterfaceBase{
     private InterfaceGrafica interfaceGrafica;
     private String cpf;
     private GerenciadorDeLojas gerenciaDeLojas;
@@ -30,6 +30,7 @@ public class IGAcoesGerente {
 
 
     public IGAcoesGerente(InterfaceGrafica interfaceGrafica,GerenciadorDeLojas gerenciaDeLojas, String cpf) {
+        super(interfaceGrafica);
         this.interfaceGrafica = interfaceGrafica;
         this.gerenciaDeLojas = gerenciaDeLojas;
         this.cpf = cpf;
@@ -372,7 +373,7 @@ public class IGAcoesGerente {
                                 try {
                                     gerenciaGerente.excluirVendedor(cpfSelecionado, cpfGerente);
                                 } catch (EntradaException ex) {
-                                    interfaceGrafica.exibeException(ex.getMessage(),"Exclusão falhou");
+                                    exibeException(ex.getMessage(),"Exclusão falhou");
                                 }
                                 ((DefaultTableModel) tabela.getModel()).removeRow(linha);
                             }
@@ -396,7 +397,7 @@ public class IGAcoesGerente {
             }
         });
 
-        interfaceGrafica.atualizaFrame(lista,500,300);
+        atualizaFrame(lista,500,300);
 
         return lista;
 
@@ -476,7 +477,7 @@ public class IGAcoesGerente {
 //                                try {
 //                                    gerenciaGerente.excluirVendedor(cpfSelecionado, cpf);
 //                                } catch (EntradaException ex) {
-//                                    interfaceGrafica.exibeException(ex.getMessage(),"Exclusão falhou");
+//                                    exibeException(ex.getMessage(),"Exclusão falhou");
 //                                }
 //                                ((DefaultTableModel) tabela.getModel()).removeRow(linha);
 //                            }
@@ -751,7 +752,7 @@ public class IGAcoesGerente {
             }
         });
 
-        interfaceGrafica.atualizaFrame(lista,500,300);
+        atualizaFrame(lista,500,300);
 
         return lista;
     }
@@ -943,8 +944,8 @@ public class IGAcoesGerente {
         for (Vendedor vendedor: loja.getArmazenaVendedores().values())
             for (Pedido p : vendedor.getPedidosOficial().values()) {
                 dados[i][0] = p.getCodigo();
-                dados[i][1] = interfaceGrafica.formatarCPF(vendedor.getCpf());
-                dados[i][2] = interfaceGrafica.formatarCPF(p.getCliente().getCpf());
+                dados[i][1] = formatarCPF(vendedor.getCpf());
+                dados[i][2] = formatarCPF(p.getCliente().getCpf());
                 dados[i][3] = String.valueOf(p.getData());
                 dados[i][4] = String.valueOf(p.getHora());
                 dados[i][5] = p.getFormaDePagamento();
@@ -1020,32 +1021,32 @@ public class IGAcoesGerente {
 
         JPanel tabela = new JPanel(new GridLayout(9, 2, 10, 10));
 
-        tabela.add(interfaceGrafica.criaCelula("Código do pedido: "));
-        tabela.add(interfaceGrafica.criaCelula(pedido.getCodigo()));
+        tabela.add(criaCelula("Código do pedido: "));
+        tabela.add(criaCelula(pedido.getCodigo()));
 
-        tabela.add(interfaceGrafica.criaCelula("Cpf do vendedor: "));
-        tabela.add(interfaceGrafica.criaCelula(interfaceGrafica.formatarCPF(pedido.getCpfVendedor())));
+        tabela.add(criaCelula("Cpf do vendedor: "));
+        tabela.add(criaCelula(formatarCPF(pedido.getCpfVendedor())));
 
-        tabela.add(interfaceGrafica.criaCelula("CPF do cliente: "));
-        tabela.add(interfaceGrafica.criaCelula(interfaceGrafica.formatarCPF(pedido.getCliente().getCpf())));
+        tabela.add(criaCelula("CPF do cliente: "));
+        tabela.add(criaCelula(formatarCPF(pedido.getCliente().getCpf())));
 
-        tabela.add(interfaceGrafica.criaCelula("Data: "));
-        tabela.add(interfaceGrafica.criaCelula(String.valueOf(pedido.getData())));
+        tabela.add(criaCelula("Data: "));
+        tabela.add(criaCelula(String.valueOf(pedido.getData())));
 
-        tabela.add(interfaceGrafica.criaCelula("Hora: "));
-        tabela.add(interfaceGrafica.criaCelula(String.valueOf(pedido.getHora())));
+        tabela.add(criaCelula("Hora: "));
+        tabela.add(criaCelula(String.valueOf(pedido.getHora())));
 
-        tabela.add(interfaceGrafica.criaCelula("Forma de pagamente: "));
-        tabela.add(interfaceGrafica.criaCelula(pedido.getFormaDePagamento()));
+        tabela.add(criaCelula("Forma de pagamente: "));
+        tabela.add(criaCelula(pedido.getFormaDePagamento()));
 
-        tabela.add(interfaceGrafica.criaCelula("Taxa de entrega: "));
-        tabela.add(interfaceGrafica.criaCelula(formatadorPreco.format(pedido.getTaxaEntrega())));
+        tabela.add(criaCelula("Taxa de entrega: "));
+        tabela.add(criaCelula(formatadorPreco.format(pedido.getTaxaEntrega())));
 
-        tabela.add(interfaceGrafica.criaCelula("Valor total pago: "));
-        tabela.add(interfaceGrafica.criaCelula(formatadorPreco.format(pedido.getValorTotal())));
+        tabela.add(criaCelula("Valor total pago: "));
+        tabela.add(criaCelula(formatadorPreco.format(pedido.getValorTotal())));
 
-        tabela.add(interfaceGrafica.criaCelula("Valor total recebido pela loja: "));
-        tabela.add(interfaceGrafica.criaCelula(formatadorPreco.format(pedido.getValorTotal().subtract(pedido.getTaxaEntrega()))));
+        tabela.add(criaCelula("Valor total recebido pela loja: "));
+        tabela.add(criaCelula(formatadorPreco.format(pedido.getValorTotal().subtract(pedido.getTaxaEntrega()))));
 
         String[] colunas = {"Nome", "preço", "características", "quantidade", "código"};
         Loja loja = getLoja(cpf);
