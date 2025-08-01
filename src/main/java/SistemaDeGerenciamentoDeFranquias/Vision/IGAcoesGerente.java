@@ -943,8 +943,8 @@ public class IGAcoesGerente {
         for (Vendedor vendedor: loja.getArmazenaVendedores().values())
             for (Pedido p : vendedor.getPedidosOficial().values()) {
                 dados[i][0] = p.getCodigo();
-                dados[i][1] = vendedor.getCpf();
-                dados[i][2] = p.getCliente().getCpf();
+                dados[i][1] = interfaceGrafica.formatarCPF(vendedor.getCpf());
+                dados[i][2] = interfaceGrafica.formatarCPF(p.getCliente().getCpf());
                 dados[i][3] = String.valueOf(p.getData());
                 dados[i][4] = String.valueOf(p.getHora());
                 dados[i][5] = p.getFormaDePagamento();
@@ -1024,10 +1024,10 @@ public class IGAcoesGerente {
         tabela.add(interfaceGrafica.criaCelula(pedido.getCodigo()));
 
         tabela.add(interfaceGrafica.criaCelula("Cpf do vendedor: "));
-        tabela.add(interfaceGrafica.criaCelula(pedido.getCpfVendedor()));
+        tabela.add(interfaceGrafica.criaCelula(interfaceGrafica.formatarCPF(pedido.getCpfVendedor())));
 
         tabela.add(interfaceGrafica.criaCelula("CPF do cliente: "));
-        tabela.add(interfaceGrafica.criaCelula(pedido.getCliente().getCpf()));
+        tabela.add(interfaceGrafica.criaCelula(interfaceGrafica.formatarCPF(pedido.getCliente().getCpf())));
 
         tabela.add(interfaceGrafica.criaCelula("Data: "));
         tabela.add(interfaceGrafica.criaCelula(String.valueOf(pedido.getData())));

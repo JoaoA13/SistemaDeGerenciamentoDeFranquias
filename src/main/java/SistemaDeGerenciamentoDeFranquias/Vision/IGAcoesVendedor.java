@@ -348,7 +348,7 @@ public class IGAcoesVendedor {
         int i = 0;
         for (Pedido p : vendedor.getPedidosOficial().values()) {
             dados[i][0] = p.getCodigo();
-            dados[i][1] = p.getCliente().getCpf();
+            dados[i][1] = interfaceGrafica.formatarCPF(p.getCliente().getCpf());
             dados[i][2] = String.valueOf(p.getData());
             dados[i][3] = String.valueOf(p.getHora());
             dados[i][4] = p.getFormaDePagamento();
@@ -378,6 +378,7 @@ public class IGAcoesVendedor {
         JMenuItem visualizar = new JMenuItem("Visualizar");
         JMenuItem editarItem = new JMenuItem("Editar");
         JMenuItem excluirItem = new JMenuItem("Excluir");
+        menuPopup.add(visualizar);
         menuPopup.add(editarItem);
         menuPopup.add(excluirItem);
 
@@ -409,7 +410,7 @@ public class IGAcoesVendedor {
                             visualizar.removeActionListener(al);
                         }
                         visualizar.addActionListener(ae -> {
-                            exibeVenda(codigoPedido,vendedor);
+                            exibePedido(codigoPedido,vendedor);
                         });
 
                         menuPopup.show(tabela, e.getX(), e.getY());
@@ -425,9 +426,9 @@ public class IGAcoesVendedor {
         return lista;
     }
 
-    protected void exibeVenda(String codigo,Vendedor vendedor) {
+    protected void exibePedido(String codigo,Vendedor vendedor) {
         Pedido pedido = vendedor.getPedido(codigo);
-        JFrame exibe = new JFrame("Informações da venda de pedido: " + codigo);
+        JFrame exibe = new JFrame("Informações de pedido: " + codigo);
         exibe.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         exibe.setSize(450, 600);
         exibe.setLocationRelativeTo(null);
@@ -444,10 +445,10 @@ public class IGAcoesVendedor {
         tabela.add(interfaceGrafica.criaCelula(pedido.getCodigo()));
 
         tabela.add(interfaceGrafica.criaCelula("Cpf do vendedor: "));
-        tabela.add(interfaceGrafica.criaCelula(pedido.getCpfVendedor()));
+        tabela.add(interfaceGrafica.criaCelula(interfaceGrafica.formatarCPF(pedido.getCpfVendedor())));
 
         tabela.add(interfaceGrafica.criaCelula("CPF do cliente: "));
-        tabela.add(interfaceGrafica.criaCelula(pedido.getCliente().getCpf()));
+        tabela.add(interfaceGrafica.criaCelula(interfaceGrafica.formatarCPF(pedido.getCliente().getCpf())));
 
         tabela.add(interfaceGrafica.criaCelula("Data: "));
         tabela.add(interfaceGrafica.criaCelula(String.valueOf(pedido.getData())));
@@ -477,9 +478,9 @@ public class IGAcoesVendedor {
         int i = 0;
         for (Produto p : pedido.getProdutos().values()) {
             dados[i][0] = p.getNomeProd();
-            dados[i][1] = formatadorPreco.format(p.getPreco()); // Ex: R$ 12,34
+            dados[i][1] = formatadorPreco.format(p.getPreco());
             dados[i][2] = p.getCarac();
-            dados[i][3] = formatadorQuant.format(p.getQuant()); // Ex: 3.000
+            dados[i][3] = formatadorQuant.format(pedido.getQuantProduto(p.getCodigoProd()));
             dados[i][4] = p.getCodigoProd();
             i++;
         }

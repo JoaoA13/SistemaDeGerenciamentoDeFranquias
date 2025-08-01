@@ -40,6 +40,11 @@ public class Pedido {
 
     public Map<String, BigDecimal> getQuantProdutos() { return quantProdutos; }
 
+    public BigDecimal getQuantProduto(String codigo) {
+        BigDecimal quantProduto = quantProdutos.get(codigo);
+        return quantProduto;
+    }
+
     public void setQuantProdutos(Map<String, BigDecimal> quantProdutos) {
         this.quantProdutos = quantProdutos;
     }
