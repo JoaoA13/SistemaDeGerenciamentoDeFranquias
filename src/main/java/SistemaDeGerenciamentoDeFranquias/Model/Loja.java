@@ -5,7 +5,7 @@ import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.*;
 
-public class Loja<T> {
+public class Loja {
 
     private String codigo;
     private String endereco;
@@ -14,7 +14,7 @@ public class Loja<T> {
     public Map<String, Produto> armazenaProdutos = new HashMap<>();
     public Map<String, Cliente> armazenaClientes = new HashMap<>();
     public Map<String, Pedido> armazenaPedidosAltera = new HashMap<>();
-    public Map<String, T> armazenaAlteracao = new HashMap<>();
+    private ArmazenaAlteracao armaAlteracao = new ArmazenaAlteracao(this);
 
     public Loja(String codigo, String endereco, Gerente gerenteDaUnidade){
         this.endereco = endereco;
@@ -149,12 +149,6 @@ public class Loja<T> {
         return armazenaPedidosAltera.getOrDefault(codigo, null);
     }
 
-    public Map<String, T> getArmazenaAlteracao() {
-        if (armazenaPedidosAltera != null)
-            return armazenaAlteracao;
-        return null;
-    }
-
     /*public Pedido getArmazenaAlteracao (String codigo) {
         if (armazenaPedidosAltera == null) {
             armazenaPedidosAltera = new HashMap<>();
@@ -168,11 +162,18 @@ public class Loja<T> {
         return null;
     }
 
-    public void addPedidosAltera(Pedido pedido, T texto, int escolha){
+    public void addPedidosAltera(Pedido pedido, int escolha){
         if (armazenaPedidosAltera == null) {
             armazenaPedidosAltera = new HashMap<>();
         }
+        if(pedido != null)
         armazenaPedidosAltera.put(pedido.getCodigo(),pedido);
-        armazenaAlteracao.put(pedido.getCodigo(), texto);
+    }
+
+    public ArmazenaAlteracao getArmazenaAlteracao() {
+        if (armaAlteracao == null) {
+            armaAlteracao = new ArmazenaAlteracao(this);
+        }
+        return armaAlteracao;
     }
 }

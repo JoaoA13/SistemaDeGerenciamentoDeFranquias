@@ -1,14 +1,11 @@
 package SistemaDeGerenciamentoDeFranquias.Control;
 import SistemaDeGerenciamentoDeFranquias.Arquivos.salvaArquivos;
-import SistemaDeGerenciamentoDeFranquias.Model.Gerente;
-import SistemaDeGerenciamentoDeFranquias.Model.Loja;
-import SistemaDeGerenciamentoDeFranquias.Model.Usuario;
-import SistemaDeGerenciamentoDeFranquias.Model.Vendedor;
+import SistemaDeGerenciamentoDeFranquias.Model.*;
 
 import java.util.*;
 
 
-public class GerenciadorDeLojas {
+public class GerenciadorDeLojas <T extends Loja>{
 
     static int quantidadeDeLojas = 0;
     static private Map<String, Loja> armazenaLojas = new HashMap<>();
@@ -137,7 +134,7 @@ public class GerenciadorDeLojas {
         loja.setCodigo(novoCodigo);
 
         for (Vendedor vendedor : loja.getArmazenaVendedores().values()) {
-            vendedor.setCodigoLoja(novoCodigo);
+                vendedor.setCodigoLoja(novoCodigo);
         }
 
         armazenaLojas.remove(codigoAntigo);

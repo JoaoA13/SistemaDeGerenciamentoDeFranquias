@@ -103,6 +103,7 @@ public class GerenciadorSistemaVendedor extends GerenciadorSistema{
     }
 
     public String solicitarEdicao(String texto, int escolha, Pedido pedido, Vendedor vendedor) throws EntradaException {
+        System.out.println("solicita edição");
         LocalDate data = null;
         LocalTime hora = null;
         BigDecimal taxaEntrega = null;
@@ -135,16 +136,30 @@ public class GerenciadorSistemaVendedor extends GerenciadorSistema{
             System.out.println("Erro: EntradaException: " + e.getMessage());
             throw new EntradaException(e.getMessage());
             }
-        Loja loja = GerenciadorDeLojas.getLoja(vendedor.getCpf());
-        if(escolha != 2 && escolha != 3 && escolha != 5)
-            loja.addPedidosAltera(pedido, texto, escolha);
-        else if(escolha == 2)
-            loja.addPedidosAltera(pedido, data, escolha);
-        else if(escolha == 3)
-            loja.addPedidosAltera(pedido, hora, escolha);
-        else
-            loja.addPedidosAltera(pedido, taxaEntrega, escolha);
-        IGAcoesGerente.listaMudarPedidos();
+
+
+        Loja loja = GerenciadorDeLojas.getLoja(vendedor.getCodigoLoja());
+        if(loja == null){return "Erro loja é nula";}
+
+        if (loja != null) {
+            if (escolha != 2 && escolha != 3 && escolha != 5) {
+                loja.addPedidosAltera(pedido, escolha);
+                loja.getArmazenaAlteracao().addAlteracao(pedido.getCodigo(), texto);
+            } else if (escolha == 2) {
+                loja.addPedidosAltera(pedido, escolha);
+               // if (loja.getArmazenaAlteracao() != null) ESTA SENDO NULO
+                    loja.getArmazenaAlteracao().addAlteracao(pedido.getCodigo(), data);
+               // else
+                   // return "deu ruim";
+            } else if (escolha == 3) {
+                loja.addPedidosAltera(pedido, escolha);
+                loja.getArmazenaAlteracao().addAlteracao(pedido.getCodigo(), hora);
+            } else {
+                loja.addPedidosAltera(pedido, escolha);
+                loja.getArmazenaAlteracao().addAlteracao(pedido.getCodigo(), taxaEntrega);
+            }
+        }
+        //Lo.listaMudarPedidos();
         //GerenciadorSistemaGerente.listaDePedidos(texto, data, hora, taxaEntrega, pedido, escolha);
 
             return "Edição solicitada";
