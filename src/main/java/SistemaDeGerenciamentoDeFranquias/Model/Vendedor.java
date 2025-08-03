@@ -9,6 +9,7 @@ public class Vendedor extends Usuario {
 
     private BigDecimal valorVenda =  BigDecimal.ZERO;
     String codigoLoja;
+    private int volumeVendas = 0;
 
     protected Vendedor(String nome,String cpf, String email, String senha, String codigoLoja){
         super(nome,cpf,email,senha);
@@ -38,6 +39,7 @@ public class Vendedor extends Usuario {
     }
 
     public void addPedido(Pedido pedido){ pedidosOficial.put(pedido.getCodigo(), pedido); }
+    public void excluirPedido(String codigo){ pedidosOficial.remove(codigo); }
 
     public BigDecimal getValorVenda(){
         return valorVenda;
@@ -49,4 +51,7 @@ public class Vendedor extends Usuario {
     public void setCodigoLoja(String codigoLoja) {
         this.codigoLoja = codigoLoja;
     }
+
+    public int getVolumeVendas(){ return volumeVendas; }
+    public void addVolumeVendas(int quantidade) { volumeVendas += quantidade; }
 }

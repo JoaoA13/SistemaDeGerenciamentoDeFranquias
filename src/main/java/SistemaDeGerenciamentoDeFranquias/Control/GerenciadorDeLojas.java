@@ -136,7 +136,7 @@ public class GerenciadorDeLojas {
 
         loja.setCodigo(novoCodigo);
 
-        for (Vendedor vendedor : loja.getArmazenaVendedores().values()) {
+        for (Vendedor vendedor : (Collection<Vendedor>) loja.getArmazenaVendedores().values()) {
             vendedor.setCodigoLoja(novoCodigo);
         }
 

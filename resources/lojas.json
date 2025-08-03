@@ -10,7 +10,65 @@
     },
     "armazenaVendedores": {
       "78978978978": {
-        "valorVenda": 0,
+        "pedidosOficial": {
+          "122": {
+            "produtos": {
+              "200": {
+                "nome": "arroz",
+                "preco": 12,
+                "carac": "grande e guloso",
+                "quant": 0,
+                "codigo": "200"
+              }
+            },
+            "quantProdutos": {
+              "200": 100
+            },
+            "codigo": "122",
+            "nomeCliente": "isaias",
+            "data": "2012-12-12",
+            "hora": "12:12:00",
+            "formaDePagamento": "Dinheiro Físico",
+            "taxaEntrega": 12,
+            "valorTotal": 1212,
+            "cliente": {
+              "nome": "isaias",
+              "quantidadeCompras": 1,
+              "valorGasto": 1200,
+              "cpf": "70413264629"
+            },
+            "cpfVendedor": "78978978978"
+          },
+          "123": {
+            "produtos": {
+              "123": {
+                "nome": "proe",
+                "preco": 3,
+                "carac": "dsadasdasdasdasdasdas",
+                "quant": 1,
+                "codigo": "123"
+              }
+            },
+            "quantProdutos": {
+              "123": 4
+            },
+            "codigo": "123",
+            "nomeCliente": "isaias",
+            "data": "2025-08-03",
+            "hora": "14:31:00",
+            "formaDePagamento": "Pix",
+            "taxaEntrega": 100,
+            "valorTotal": 112,
+            "cliente": {
+              "nome": "isaias",
+              "quantidadeCompras": 1,
+              "valorGasto": 12,
+              "cpf": "70413265609"
+            },
+            "cpfVendedor": "78978978978"
+          }
+        },
+        "valorVenda": 1212,
         "codigoLoja": "001",
         "nome": "Ana",
         "cpf": "78978978978",
@@ -18,6 +76,7 @@
         "senha": "12345677"
       },
       "45645645645": {
+        "pedidosOficial": {},
         "valorVenda": 0,
         "codigoLoja": "001",
         "nome": "Carlos",
@@ -26,6 +85,7 @@
         "senha": "12345677"
       },
       "14714714714": {
+        "pedidosOficial": {},
         "valorVenda": 0,
         "codigoLoja": "001",
         "nome": "Gleiph",
@@ -39,7 +99,7 @@
         "nome": "proe",
         "preco": 3,
         "carac": "dsadasdasdasdasdasdas",
-        "quant": 5,
+        "quant": 1,
         "codigo": "123"
       },
       "100": {
@@ -48,7 +108,64 @@
         "carac": "robusto e  bom",
         "quant": 10,
         "codigo": "100"
+      },
+      "145": {
+        "nome": "carro zero km",
+        "preco": 100000,
+        "carac": "barato em bom",
+        "quant": 1003,
+        "codigo": "145"
       }
+    },
+    "armazenaClientes": {
+      "70413265609": {
+        "nome": "isaias",
+        "quantidadeCompras": 1,
+        "valorGasto": 12,
+        "cpf": "70413265609"
+      },
+      "70413264629": {
+        "nome": "isaias",
+        "quantidadeCompras": 1,
+        "valorGasto": 1200,
+        "cpf": "70413264629"
+      }
+    },
+    "armazenaPedidosAltera": {
+      "123": {
+        "produtos": {
+          "123": {
+            "nome": "proe",
+            "preco": 3,
+            "carac": "dsadasdasdasdasdasdas",
+            "quant": 1,
+            "codigo": "123"
+          }
+        },
+        "quantProdutos": {
+          "123": 4
+        },
+        "codigo": "123",
+        "nomeCliente": "isaias",
+        "data": "2025-08-03",
+        "hora": "14:31:00",
+        "formaDePagamento": "Pix",
+        "taxaEntrega": 100,
+        "valorTotal": 112,
+        "cliente": {
+          "nome": "isaias",
+          "quantidadeCompras": 1,
+          "valorGasto": 12,
+          "cpf": "70413265609"
+        },
+        "cpfVendedor": "78978978978"
+      }
+    },
+    "armazenaAlteracao": {
+      "123": "Pix"
+    },
+    "armazenaAtual": {
+      "123": "Pix"
     }
   },
   "050": {

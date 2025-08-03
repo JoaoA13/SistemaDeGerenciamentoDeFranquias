@@ -13,6 +13,7 @@ import SistemaDeGerenciamentoDeFranquias.Validadores.*;
 import SistemaDeGerenciamentoDeFranquias.Validadores.ValidadoresBancoDados.*;
 import SistemaDeGerenciamentoDeFranquias.Validadores.ValidadoresNumericos.ValidadorBigDecimal;
 import SistemaDeGerenciamentoDeFranquias.Validadores.ValidadoresNumericos.ValidadorPrecoPositivo;
+import SistemaDeGerenciamentoDeFranquias.Vision.InterfaceGrafica;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;

@@ -58,7 +58,13 @@ public class Pedido {
 
     public String getCodigo() { return codigo; }
 
-    public void setCodigo(String codigo) { this.codigo = codigo; }
+    public void setCodigo(String codigo, Loja loja) {
+        Vendedor vendedor = loja.getVendedor(cpfVendedor);
+        Pedido pedido = vendedor.getPedido(this.codigo);
+        vendedor.excluirPedido(this.codigo);
+        this.codigo = codigo;
+        vendedor.addPedido(pedido);
+    }
 
     public String getNomeCliente() { return nomeCliente; }
 

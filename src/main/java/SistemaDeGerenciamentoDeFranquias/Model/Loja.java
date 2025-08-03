@@ -1,5 +1,7 @@
 package SistemaDeGerenciamentoDeFranquias.Model;
 
+import SistemaDeGerenciamentoDeFranquias.Exceptions.BancoDeDadosException;
+
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.LocalTime;
@@ -15,6 +17,7 @@ public class Loja<T> {
     public Map<String, Cliente> armazenaClientes = new HashMap<>();
     public Map<String, Pedido> armazenaPedidosAltera = new HashMap<>();
     public Map<String, T> armazenaAlteracao = new HashMap<>();
+    public Map<String, T> armazenaAtual = new HashMap<>();
 
     public Loja(String codigo, String endereco, Gerente gerenteDaUnidade){
         this.endereco = endereco;
@@ -45,7 +48,7 @@ public class Loja<T> {
     public String getEndereco() {return endereco;}
     public void setEndereco(String endereco) {this.endereco = endereco;}
 
-    protected Gerente getGerenteDaUnidade() {return gerenteDaUnidade;}
+    public Gerente getGerenteDaUnidade() {return gerenteDaUnidade;}
     public void setGerenteDaUnidade(Gerente gerenteDaUnidade) {this.gerenteDaUnidade = gerenteDaUnidade;}
 
     public Map<String, Vendedor> getArmazenaVendedores() { return armazenaVendedores; }
@@ -65,12 +68,12 @@ public class Loja<T> {
         Collections.sort(lista, (v1, v2) -> v2.getValorVenda().compareTo(v1.getValorVenda()));
         return lista.toArray(new Vendedor[0]);
     }
-
     public Vendedor[] vendedoresVolume(){
         List<Vendedor> lista = new ArrayList<>(getArmazenaVendedores().values());
-        lista.sort(Comparator.comparingInt((Vendedor v) -> v.getPedidosOficial().size()).reversed());;
+        lista.sort(Comparator.comparingInt((Vendedor v) -> v.getVolumeVendas()).reversed());;
         return lista.toArray(new Vendedor[0]);
     }
+
 
     public BigDecimal calculaFaturamentoBruto(){
        BigDecimal faturamentoBruto = BigDecimal.ZERO;
@@ -149,30 +152,58 @@ public class Loja<T> {
         return armazenaPedidosAltera.getOrDefault(codigo, null);
     }
 
-    public Map<String, T> getArmazenaAlteracao() {
-        if (armazenaPedidosAltera != null)
-            return armazenaAlteracao;
-        return null;
+    public T getArmazenaAlteracao (String codigo) {
+        if (armazenaAlteracao == null) {
+            armazenaAlteracao = new HashMap<>();
+        }
+        return armazenaAlteracao.getOrDefault(codigo, null);
     }
 
-    /*public Pedido getArmazenaAlteracao (String codigo) {
+    public T getArmazenaAtual (String codigo) {
+        if (armazenaAtual == null) {
+            armazenaAtual = new HashMap<>();
+        }
+        return armazenaAtual.getOrDefault(codigo, null);
+    }
+
+    public void addPedidosAltera(Pedido pedido, T texto, T texto2, int escolha){
         if (armazenaPedidosAltera == null) {
             armazenaPedidosAltera = new HashMap<>();
         }
-        return armazenaPedidosAltera.getOrDefault(codigo, null);
-    }*/
-
-    public Map<String, Pedido> getArmazenaPedidosAltera() {
-        if (armazenaPedidosAltera != null)
-            return armazenaPedidosAltera;
-        return null;
-    }
-
-    public void addPedidosAltera(Pedido pedido, T texto, int escolha){
-        if (armazenaPedidosAltera == null) {
-            armazenaPedidosAltera = new HashMap<>();
+        if (armazenaAlteracao == null) {
+            armazenaAlteracao = new HashMap<>();
+        }
+        if (armazenaAtual == null) {
+            armazenaAtual = new HashMap<>();
         }
         armazenaPedidosAltera.put(pedido.getCodigo(),pedido);
         armazenaAlteracao.put(pedido.getCodigo(), texto);
+        armazenaAtual.put(pedido.getCodigo(), texto2);
+    }
+
+    public Map<String, Pedido> getArmazenaPedidosAltera() {
+        if (armazenaPedidosAltera == null)
+            armazenaPedidosAltera = new HashMap<>();
+        return armazenaPedidosAltera;
+    }
+
+    public Map<String, T> getArmazenaAlteracoes() {
+        if (armazenaAlteracao == null)
+            armazenaAlteracao = new HashMap<>();
+        return armazenaAlteracao;
+    }
+
+    public Map<String, T> getArmazenaAtual() {
+        if (armazenaAtual == null)
+            armazenaAtual = new HashMap<>();
+        return armazenaAtual;
+    }
+
+    public Pedido getPedido(String cod){
+        for (Vendedor vendedor : (Collection<Vendedor>) armazenaVendedores.values()){
+            if(vendedor.getPedido(cod) != null)
+                return vendedor.getPedido(cod);
+        }
+        return null;
     }
 }

@@ -21,7 +21,7 @@ import java.util.Locale;
 import static SistemaDeGerenciamentoDeFranquias.Control.GerenciadorDeLojas.getLoja;
 
 public class IGAcoesGerente {
-    private InterfaceGrafica interfaceGrafica;
+    private static InterfaceGrafica interfaceGrafica;
     private String cpf;
     private GerenciadorDeLojas gerenciaDeLojas;
 
@@ -332,7 +332,7 @@ public class IGAcoesGerente {
             dados[i][1] = v[j].getCpf();
             dados[i][2] = v[j].getEmail();
             dados[i][3] = formatadorReais.format(v[j].getValorVenda());
-            dados[i][4] = Integer.toString(v[j].getPedidosOficial().size());
+            dados[i][4] = String.valueOf(v[j].getVolumeVendas());
             i++;
         }
 
@@ -342,7 +342,7 @@ public class IGAcoesGerente {
             }
         };
 
-        JTable tabela = new JTable(modelo); // <-- corrigido aqui
+        JTable tabela = new JTable(modelo);
         JScrollPane scroll = new JScrollPane(tabela);
         lista.add(scroll, BorderLayout.CENTER);
 
@@ -403,7 +403,7 @@ public class IGAcoesGerente {
 
     }
 
-    JPanel visualizarPedidos(String cpf){
+    static JPanel visualizarPedidos(String cpf){
         JPanel visualizacao = new JPanel();
         visualizacao.setLayout(new BoxLayout(visualizacao, BoxLayout.Y_AXIS));
         visualizacao.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
@@ -456,16 +456,18 @@ public class IGAcoesGerente {
         menuPopup.add(editarItem);
         menuPopup.add(excluirItem);
 
+        IGAcoesVendedor gerenciaVendedorGerente = new IGAcoesVendedor(interfaceGrafica);
+
         tabela.addMouseListener(new MouseAdapter() {
             public void mousePressed(MouseEvent e) {
                 if (e.isPopupTrigger() || SwingUtilities.isRightMouseButton(e)) {
                     int linha = tabela.rowAtPoint(e.getPoint());
                     if (linha >= 0 && linha < tabela.getRowCount()) {
                         tabela.setRowSelectionInterval(linha, linha);
-                        String cpfSelecionado = (String) tabela.getValueAt(linha, 1);
+                        String codigoSelecionado = (String) tabela.getValueAt(linha, 0);
 
                         editarItem.addActionListener(ae -> {
-                            //editar( cpf, cpfSelecionado);
+                            gerenciaVendedorGerente.editarProd(loja.getGerenteDaUnidade(),loja.getPedido(codigoSelecionado));
                         });
 
                         excluirItem.addActionListener(ae -> {
@@ -516,32 +518,24 @@ public class IGAcoesGerente {
         botoesPanel.setLayout(new BoxLayout(botoesPanel, BoxLayout.X_AXIS));
         botoesPanel.setAlignmentX(Component.LEFT_ALIGNMENT);
 
-        //Lista de pedidos
         Loja loja = getLoja(cpf);
-        int tamanho= 0;
-        if(getLoja(cpf) != null && loja.getArmazenaPedidosAltera() != null) {
-                tamanho += loja.getArmazenaPedidosAltera().size();
+        int tamanho = 0;
+        if (loja != null && loja.getArmazenaPedidosAltera() != null) {
+            tamanho = loja.getArmazenaPedidosAltera().size();
         }
-        String[] colunas = {"Código", "CPF do vendedor" , "CPF do cliente", "Data", "Hora", "Forma de Pagamento","Taxa de entrega", "Valor total"};
 
-        String[][] dados = new String[tamanho][8];
-
-        DecimalFormat formatadorPreco = new DecimalFormat("R$ #,##0.00", new DecimalFormatSymbols(new Locale("pt", "BR")));
-        DecimalFormat formatadorQuant = new DecimalFormat("00");
+        String[] colunas = {"Código do pedido", "Formato Atual", "Solicitação de alteração"};
+        String[][] dados = new String[tamanho][3];
 
         int i = 0;
-        if(loja.getArmazenaPedidosAltera() != null)
-            for (Pedido p : loja.getArmazenaPedidosAltera().values()) {
+        if (loja.getArmazenaPedidosAltera() != null) {
+            for (Pedido p : (Collection<Pedido>) loja.getArmazenaPedidosAltera().values()) {
                 dados[i][0] = p.getCodigo();
-                dados[i][1] = p.getCpfVendedor();
-                dados[i][2] = p.getCliente().getCpf();
-                dados[i][3] = String.valueOf(p.getData());
-                dados[i][4] = String.valueOf(p.getHora());
-                dados[i][5] = p.getFormaDePagamento();
-                dados[i][6] = formatadorPreco.format(p.getTaxaEntrega());
-                dados[i][7] = formatadorPreco.format(p.getValorTotal());
+                dados[i][1] = loja.getArmazenaAtual(p.getCodigo()).toString();
+                dados[i][2] = loja.getArmazenaAlteracao(p.getCodigo()).toString();
                 i++;
             }
+        }
 
         DefaultTableModel modelo = new DefaultTableModel(dados, colunas) {
             public boolean isCellEditable(int row, int column) {
@@ -550,18 +544,23 @@ public class IGAcoesGerente {
         };
 
         JTable tabela = new JTable(modelo);
+
+        // Centraliza conteúdo
+        DefaultTableCellRenderer centralizado = new DefaultTableCellRenderer();
+        centralizado.setHorizontalAlignment(SwingConstants.CENTER);
+        for (int c = 0; c < tabela.getColumnCount(); c++) {
+            tabela.getColumnModel().getColumn(c).setCellRenderer(centralizado);
+        }
+
         JScrollPane scroll = new JScrollPane(tabela);
         solicitacoes.add(scroll, BorderLayout.CENTER);
 
+        // Menu popup de clique direito
         JPopupMenu menuPopup = new JPopupMenu();
-        JMenuItem visualizar = new JMenuItem("Visualizar");
-        JMenuItem editarItem = new JMenuItem("Editar");
-        JMenuItem excluirItem = new JMenuItem("Excluir");
-        menuPopup.add(editarItem);
-        menuPopup.add(excluirItem);
-        menuPopup.add(visualizar);
-
-        //---------------------------------
+        JMenuItem acatar = new JMenuItem("Acatar");
+        JMenuItem rejeitar = new JMenuItem("Rejeitar");
+        menuPopup.add(acatar);
+        menuPopup.add(rejeitar);
 
         tabela.addMouseListener(new MouseAdapter() {
             public void mousePressed(MouseEvent e) {
@@ -569,28 +568,14 @@ public class IGAcoesGerente {
                     int linha = tabela.rowAtPoint(e.getPoint());
                     if (linha >= 0 && linha < tabela.getRowCount()) {
                         tabela.setRowSelectionInterval(linha, linha);
-                        String codigoSelecionado = (String) tabela.getValueAt(linha, 4);
+                        String codigoSelecionado = (String) tabela.getValueAt(linha, 0); // coluna 0 = código do pedido
 
-                        editarItem.addActionListener(ae -> {
-                            //editarProd(cpfGerente, codigoSelecionado);
+                        acatar.addActionListener(ae -> {
+                            ((DefaultTableModel) tabela.getModel()).removeRow(linha);
                         });
 
-                        excluirItem.addActionListener(ae -> {
-//                            int confirm = JOptionPane.showConfirmDialog(lista,
-//                                    "Tem certeza que deseja excluir o produto com o " + codigoSelecionado + "?",
-//                                    "Confirmar exclusão",
-//                                    JOptionPane.YES_NO_OPTION);
-//                            if (confirm == JOptionPane.YES_OPTION) {
-//                                gerenciaGerente.excluirProdutos(codigoSelecionado, cpfGerente);
-//                                ((DefaultTableModel) tabela.getModel()).removeRow(linha);
-//                            }
-                        });
-
-                        for (ActionListener al : visualizar.getActionListeners()) {
-                            visualizar.removeActionListener(al);
-                        }
-                        visualizar.addActionListener(ae -> {
-                            //exibeAlteracao(codigo,cpfVendedor);
+                        rejeitar.addActionListener(ae -> {
+                            ((DefaultTableModel) tabela.getModel()).removeRow(linha);
                         });
 
                         menuPopup.show(tabela, e.getX(), e.getY());
@@ -599,84 +584,18 @@ public class IGAcoesGerente {
             }
         });
 
-        //botao voltar -------------
         botoesPanel.add(voltar);
         botoesPanel.add(Box.createHorizontalGlue());
         solicitacoes.add(botoesPanel);
 
-        voltar.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                System.out.println("Botão 'voltar' clicado");
-                solicitacoes.setVisible(false);
-                interfaceGrafica.sistemaGerente();
-            }
+        voltar.addActionListener(e -> {
+            solicitacoes.setVisible(false);
+            interfaceGrafica.sistemaGerente();
         });
+
         return solicitacoes;
     }
 
-    protected void exibeAlteracao(String codigo,String cpfVendedor){
-        Pedido pedido = getLoja(cpf).getVendedor(cpfVendedor).getPedido(codigo);
-
-        JFrame exibe = new JFrame("Informações da venda de pedido: " + codigo);
-        exibe.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-        exibe.setSize(450, 600);
-        exibe.setLocationRelativeTo(null);
-
-        JPanel exibeInformacaoLoja = new JPanel(new BorderLayout(10, 10));
-        exibeInformacaoLoja.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
-
-        String[] colunas = {"Atual", "Solicitação de alteração"};
-        Loja loja = getLoja(cpf);
-
-        String[][] dados = new String[loja.getArmazenaAlteracao().getAlteracoes().size()][2];
-
-        //DecimalFormat formatadorPreco = new DecimalFormat("R$ #,##0.00", new DecimalFormatSymbols(new Locale("pt", "BR")));
-        DecimalFormat formatadorQuant = new DecimalFormat("00");
-
-        int i = 0;
-        for (Produto p : pedido.getProdutos().values()) { /// VOU TER QUE CRIAR UM ETODO NO GERENCIADOR DO GERENTE, QUE RECEBE O CODIGO DO PEDIDO, PROCURA NO PARA DE ALTERAÇÕES FAZ UM IF PRA VER QUAL O TIPO E RETORNA UMA STRING, SO PARA EXIBIÇÃO
-        /// DESSE METODO TEM QUE TER UM TREM PRA SELECIONAR ALTERAÇÃO IGUAL SELECIONA PRODUTO, UM BOTAO PRA APROVAR OU REJEITAR
-            dados[i][0] = p.getNomeProd();
-            dados[i][1] = formatadorPreco.format(p.getPreco()); // Ex: R$ 12,34
-            dados[i][2] = p.getCarac();
-            dados[i][3] = formatadorQuant.format(p.getQuant()); // Ex: 3.000
-            dados[i][4] = p.getCodigoProd();
-            i++;
-        }
-        DefaultTableModel modelo = new DefaultTableModel(dados, colunas) {
-            public boolean isCellEditable(int row, int column) {
-                return false;
-            }
-        };
-
-        JTable tabela1 = new JTable(modelo);
-
-        DefaultTableCellRenderer centralizado = new DefaultTableCellRenderer();
-        centralizado.setHorizontalAlignment(SwingConstants.CENTER);
-        for (int col = 0; col < tabela1.getColumnCount(); col++) {
-            tabela1.getColumnModel().getColumn(col).setCellRenderer(centralizado);
-        }
-
-        JScrollPane scroll = new JScrollPane(tabela1);
-        exibeInformacaoLoja.add(scroll, BorderLayout.CENTER);
-
-        JPanel painelBotao = new JPanel();
-        JButton sair = new JButton("Fechar");
-        sair.addActionListener(e -> exibe.dispose());
-        sair.addActionListener(e -> exibe.removeAll());
-        painelBotao.add(sair);
-
-        exibeInformacaoLoja.add(painelBotao, BorderLayout.SOUTH);
-
-        exibe.setContentPane(exibeInformacaoLoja);
-        exibe.setVisible(true);
-        exibe.addWindowListener(new WindowAdapter() {
-            @Override
-            public void windowClosed(WindowEvent e) {
-                System.out.println("Janela foi fechada");
-            }
-        });
-    }
 
     JPanel cadastrarProduto(String cpfGerente){
         JPanel cadastro = new JPanel();

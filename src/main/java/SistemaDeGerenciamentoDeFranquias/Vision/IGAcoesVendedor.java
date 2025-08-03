@@ -1,6 +1,7 @@
 package SistemaDeGerenciamentoDeFranquias.Vision;
 
 import SistemaDeGerenciamentoDeFranquias.Control.GerenciadorDeLojas;
+import SistemaDeGerenciamentoDeFranquias.Control.GerenciadorSistemaGerente;
 import SistemaDeGerenciamentoDeFranquias.Control.GerenciadorSistemaVendedor;
 import SistemaDeGerenciamentoDeFranquias.Exceptions.CadastroException;
 import SistemaDeGerenciamentoDeFranquias.Exceptions.EntradaException;
@@ -24,7 +25,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
 
 import static SistemaDeGerenciamentoDeFranquias.Control.GerenciadorDeLojas.getLoja;
 
-public class IGAcoesVendedor {
+public class IGAcoesVendedor<T> {
     private InterfaceGrafica interfaceGrafica;
     static GerenciadorSistemaVendedor gerenciaVendedor = new GerenciadorSistemaVendedor();
     Loja loja;
@@ -280,7 +281,7 @@ public class IGAcoesVendedor {
                     BigDecimal quantidade = BigDecimal.valueOf(qtdInt);
 
                     try {
-                        gerenciaVendedor.validarNovosProdutos(codigo, quantidade, loja);
+                        gerenciaVendedor.validarNovosProdutos(codigo, quantidade, loja, vendedor);
                     } catch (EntradaException ex) {
                         JOptionPane.showMessageDialog(null, "Erro: " + ex.getMessage(), "Entrada inválida", JOptionPane.ERROR_MESSAGE);
                         houveErro = true;
@@ -558,7 +559,7 @@ public class IGAcoesVendedor {
         });
     }
 
-    public void editarProd(Vendedor vendedor, Pedido pedido){
+    public void editarProd(Usuario vendedor, Pedido pedido){
         JPanel edicao = new JPanel();
         edicao.setLayout(new BoxLayout(edicao, BoxLayout.Y_AXIS));
         edicao.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
@@ -656,7 +657,10 @@ public class IGAcoesVendedor {
             try {
                 String msg = gerenciaVendedor.solicitarEdicao(texto2[0], escolha, pedido, vendedor);
                 JOptionPane.showMessageDialog(null, msg, "Sucesso", JOptionPane.INFORMATION_MESSAGE);
-                InterfaceGrafica.trocarTela(listaDePedidos(vendedor.getCpf()), 700, 600);
+                if(vendedor instanceof Vendedor)
+                    InterfaceGrafica.trocarTela(listaDePedidos(vendedor.getCpf()), 700, 600);
+                if(vendedor instanceof Gerente)
+                    InterfaceGrafica.trocarTela(IGAcoesGerente.visualizarPedidos(vendedor.getCpf()), 800, 500);
             } catch (EntradaException ex) {
                 JOptionPane.showMessageDialog(null, "Erro ao editar: " + ex.getMessage(), "Erro", JOptionPane.ERROR_MESSAGE);
             }

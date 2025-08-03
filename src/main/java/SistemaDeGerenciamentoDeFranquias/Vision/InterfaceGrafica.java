@@ -300,7 +300,7 @@ public class InterfaceGrafica {
 
         menu2Item1.addActionListener(e -> trocarTela(acoes.cadastrar(cpf), 400, 300));
         menu2Item2.addActionListener(e -> trocarTela(acoes.excluir(cpf), 400, 200));
-        menu2Item4.addActionListener(e -> trocarTela(acoes.listaDeVendedores(cpf), 400, 300));
+        menu2Item4.addActionListener(e -> trocarTela(acoes.listaDeVendedores(cpf), 500, 400));
 
 
         JMenu menu3 = new JMenu ("Pedidos");
@@ -310,8 +310,8 @@ public class InterfaceGrafica {
         JMenuItem  menu3Item2 = new JMenuItem ("Solicitações de Alteração", KeyEvent.VK_T);
         menu3.add(menu3Item2);
 
-        menu3Item1.addActionListener(e -> trocarTela(acoes.visualizarPedidos(cpf), 800, 300));
-        menu3Item2.addActionListener(e -> trocarTela(acoes.solicitacoesDeAlteracao(), 400, 300));
+        menu3Item1.addActionListener(e -> trocarTela(acoes.visualizarPedidos(cpf), 800, 500));
+        menu3Item2.addActionListener(e -> trocarTela(acoes.solicitacoesDeAlteracao(), 500, 300));
 
 
         JMenu menu4 = new JMenu ("Estoque");
@@ -332,8 +332,8 @@ public class InterfaceGrafica {
         JMenuItem  menu5Item2 = new JMenuItem ("Lista de Clientes Recorrentes", KeyEvent.VK_T);
         menu5.add(menu5Item2);
 
-        menu5Item1.addActionListener(e -> trocarTela(acoes.historicoDeVendas(), 400, 300));
-        menu5Item2.addActionListener(e -> trocarTela(acoes.listaDeClientesRecorrentes(cpf), 400, 300));
+        menu5Item1.addActionListener(e -> trocarTela(acoes.historicoDeVendas(), 900, 700));
+        menu5Item2.addActionListener(e -> trocarTela(acoes.listaDeClientesRecorrentes(cpf), 600, 400));
 
 
         frame.pack();

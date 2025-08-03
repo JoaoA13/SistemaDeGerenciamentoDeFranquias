@@ -26,7 +26,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
 
 import static SistemaDeGerenciamentoDeFranquias.Control.GerenciadorDeLojas.getVendedorGeral;
 
-public class GerenciadorSistemaVendedor extends GerenciadorSistema{
+public class GerenciadorSistemaVendedor extends GerenciadorSistema {
 
 //    public String login(String cpf, String senha) throws LoginException {
 //        super.login(cpf,senha);
@@ -76,12 +76,12 @@ public class GerenciadorSistemaVendedor extends GerenciadorSistema{
             System.out.println("Erro: Entrada Exception: " + e.getMessage());
             throw new EntradaException(e.getMessage());
         }
-        Pedido pedido = new Pedido(codigo, nomeCliente, data, hora, formaDePagamento, taxaEntrega,vendedor.getCpf());
+        Pedido pedido = new Pedido(codigo, nomeCliente, data, hora, formaDePagamento, taxaEntrega, vendedor.getCpf());
 
         return pedido;
     }
 
-    public String validarNovosProdutos(String codigo, BigDecimal quantidade, Loja loja) throws EntradaException {
+    public String validarNovosProdutos(String codigo, BigDecimal quantidade, Loja loja, Vendedor vendedor) throws EntradaException {
         try {
             ValidadorPrecoPositivo.valida(String.valueOf(quantidade));
             ValidadorQuantidadeValida.validar(quantidade, loja.getProduto(codigo));
@@ -89,79 +89,119 @@ public class GerenciadorSistemaVendedor extends GerenciadorSistema{
             System.out.println("Erro: Quantidade inválida " + e.getMessage());
             throw new EntradaException(e.getMessage());
         }
+        vendedor.addVolumeVendas(quantidade.intValue());
         return "Pedido Cadastrado";
     }
 
-    public void adicionaoAoPedido (Pedido pedido, String codigo, BigDecimal quantidade, Loja loja, Cliente cliente){
+    public void adicionaoAoPedido(Pedido pedido, String codigo, BigDecimal quantidade, Loja loja, Cliente cliente) {
         Produto produto = loja.getProduto(codigo);
         pedido.addProduto(codigo, produto);
         pedido.addQntProd(codigo, quantidade);
         produto.setQuant(produto.getQuant().subtract(quantidade));
         cliente.setQuantidaCompras(BigDecimal.ONE);
-        if(produto.getQuant().compareTo(BigDecimal.ZERO) <= 0)
+        if (produto.getQuant().compareTo(BigDecimal.ZERO) <= 0)
             loja.excluirProduto(codigo);
     }
 
-    public String solicitarEdicao(String texto, int escolha, Pedido pedido, Vendedor vendedor) throws EntradaException {
+    public String solicitarEdicao(String texto, int escolha, Pedido pedido, Usuario vendedor) throws EntradaException {
         System.out.println("solicita edição");
         LocalDate data = null;
         LocalTime hora = null;
         BigDecimal taxaEntrega = null;
         try {
-            if(escolha !=2 && escolha !=3)
+            if (escolha != 2 && escolha != 3)
                 ValidadorCampoVazio.valida(texto);
-            switch (escolha){
+            switch (escolha) {
                 case 0: {
                     ValidadorCodigo.validarCodigo(texto);
                     ValidadorCodigoPedidoBancoDeDadosFalse.valida(texto);
-                    break; }
+                    break;
+                }
                 case 1: {
                     ValidadorCpf.validarCpf(texto);
-                    break; }
+                    break;
+                }
                 case 2: {
                     data = ValidadorData.validarData(texto);
-                    break; }
+                    break;
+                }
                 case 3: {
                     hora = ValidadorHora.validarHora(texto);
-                    break; }
+                    break;
+                }
                 case 5: {
                     taxaEntrega = ValidadorValorNaoNegativo.validarValorNaoNegativo(texto);
-                    break; }
+                    break;
+                }
             }
-            } catch (EntradaException e) {
+        } catch (EntradaException e) {
+            System.out.println("Erro: EntradaException: " + e.getMessage());
+            throw new EntradaException(e.getMessage());
+        } catch (BancoDeDadosException e) {
             System.out.println("Erro: EntradaException: " + e.getMessage());
             throw new EntradaException(e.getMessage());
         }
-        catch (BancoDeDadosException e) {
-            System.out.println("Erro: EntradaException: " + e.getMessage());
-            throw new EntradaException(e.getMessage());
-            }
 
-
-        Loja loja = GerenciadorDeLojas.getLoja(vendedor.getCodigoLoja());
-        if(loja == null){return "Erro loja é nula";}
-
-        if (loja != null) {
-            if (escolha != 2 && escolha != 3 && escolha != 5) {
-                loja.addPedidosAltera(pedido, escolha);
-                loja.getArmazenaAlteracao().addAlteracao(pedido.getCodigo(), texto);
-            } else if (escolha == 2) {
-                loja.addPedidosAltera(pedido, escolha);
-               // if (loja.getArmazenaAlteracao() != null) ESTA SENDO NULO
-                    loja.getArmazenaAlteracao().addAlteracao(pedido.getCodigo(), data);
-               // else
-                   // return "deu ruim";
-            } else if (escolha == 3) {
-                loja.addPedidosAltera(pedido, escolha);
-                loja.getArmazenaAlteracao().addAlteracao(pedido.getCodigo(), hora);
+        if (vendedor instanceof Vendedor) {
+            Loja loja = GerenciadorDeLojas.getLoja(((Vendedor) vendedor).getCodigoLoja());
+            if (loja == null) {
+                return "Erro loja é nula";
             } else {
-                loja.addPedidosAltera(pedido, escolha);
-                loja.getArmazenaAlteracao().addAlteracao(pedido.getCodigo(), taxaEntrega);
+                switch (escolha) {
+                    case 0: {
+                        loja.addPedidosAltera(pedido, texto, pedido.getCodigo(), escolha);
+                        break;
+                    }
+                    case 1: {
+                        loja.addPedidosAltera(pedido, texto, pedido.getCliente().getCpf(), escolha);
+                        break;
+                    }
+                    case 2: {
+                        loja.addPedidosAltera(pedido, data, pedido.getData(), escolha);
+                        break;
+                    }
+                    case 3: {
+                        loja.addPedidosAltera(pedido, hora, pedido.getHora(), escolha);
+                        break;
+                    }
+                    case 4: {
+                        loja.addPedidosAltera(pedido, texto, pedido.getFormaDePagamento(), escolha);
+                        break;
+                    }
+                    case 5: {
+                        loja.addPedidosAltera(pedido, taxaEntrega, pedido.getTaxaEntrega(), escolha);
+                        break;
+                    }
+                }
+                return "Edição solicitada";
             }
         }
-        //Lo.listaMudarPedidos();
-        //GerenciadorSistemaGerente.listaDePedidos(texto, data, hora, taxaEntrega, pedido, escolha);
-
-            return "Edição solicitada";
+        switch (escolha) {
+            case 0: {
+                pedido.setCodigo(texto, GerenciadorDeLojas.getLoja(vendedor.getCpf()));
+                break;
+            }
+            case 1: {
+                pedido.getCliente().setCpf(texto);
+                break;
+            }
+            case 2: {
+                pedido.setData(data);
+                break;
+            }
+            case 3: {
+                pedido.setHora(hora);
+                break;
+            }
+            case 4: {
+                pedido.setFormaDePagamento(texto);
+                break;
+            }
+            case 5: {
+                pedido.setTaxaEntrega(taxaEntrega);
+                break;
+            }
+        }
+        return "Edição Realizada";
     }
 }
