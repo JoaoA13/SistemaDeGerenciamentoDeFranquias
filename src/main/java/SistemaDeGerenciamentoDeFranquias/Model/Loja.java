@@ -172,6 +172,9 @@ public class Loja<T> {
         if (armazenaPedidosAltera == null) {
             armazenaPedidosAltera = new HashMap<>();
         }
+        if (armazenaAlteracao == null) {
+            armazenaAlteracao = new HashMap<>();
+        }
         armazenaPedidosAltera.put(pedido.getCodigo(),pedido);
         armazenaAlteracao.put(pedido.getCodigo(), texto);
     }

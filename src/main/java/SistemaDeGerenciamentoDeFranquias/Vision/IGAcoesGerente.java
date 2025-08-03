@@ -15,6 +15,7 @@ import java.awt.event.*;
 import java.math.BigDecimal;
 import java.text.DecimalFormat;
 import java.text.DecimalFormatSymbols;
+import java.util.Collection;
 import java.util.Locale;
 
 import static SistemaDeGerenciamentoDeFranquias.Control.GerenciadorDeLojas.getLoja;
@@ -415,7 +416,7 @@ public class IGAcoesGerente {
         Loja loja = getLoja(cpf);
         int tamanho= 0;
         if(getLoja(cpf) != null) {
-            for (Vendedor vendedor : loja.getArmazenaVendedores().values())
+            for (Vendedor vendedor : (Collection<Vendedor>) loja.getArmazenaVendedores().values())
                 tamanho += vendedor.getPedidosOficial().size();
         }
         String[] colunas = {"Código", "CPF do vendedor" , "CPF do cliente", "Data", "Hora", "Forma de Pagamento","Taxa de entrega", "Valor total"};
@@ -426,7 +427,7 @@ public class IGAcoesGerente {
         DecimalFormat formatadorQuant = new DecimalFormat("00");
 
         int i = 0;
-        for (Vendedor vendedor: loja.getArmazenaVendedores().values())
+        for (Vendedor vendedor: (Collection<Vendedor>) loja.getArmazenaVendedores().values())
             for (Pedido p : vendedor.getPedidosOficial().values()) {
                 dados[i][0] = p.getCodigo();
                 dados[i][1] = vendedor.getCpf();
@@ -647,7 +648,7 @@ public class IGAcoesGerente {
         DecimalFormat formatadorQuant = new DecimalFormat("00");
 
         int i = 0;
-        for (Produto p : loja.getArmazenaProdutos().values()) {
+        for (Produto p : (Collection<Produto>) loja.getArmazenaProdutos().values()) {
             dados[i][0] = p.getNomeProd();
             dados[i][1] = formatadorPreco.format(p.getPreco()); // Ex: R$ 12,34
             dados[i][2] = p.getCarac();
@@ -930,7 +931,7 @@ public class IGAcoesGerente {
         Loja loja = getLoja(cpf);
         int tamanho= 0;
         if(getLoja(cpf) != null) {
-            for (Vendedor vendedor : loja.getArmazenaVendedores().values())
+            for (Vendedor vendedor : (Collection<Vendedor>) loja.getArmazenaVendedores().values())
                 tamanho += vendedor.getPedidosOficial().size();
         }
         String[] colunas = {"Código de pedido", "CPF do vendedor" , "CPF do cliente", "Data", "Hora", "Forma de Pagamento","Taxa de entrega", "Valor total"};
@@ -940,7 +941,7 @@ public class IGAcoesGerente {
         DecimalFormat formatadorQuant = new DecimalFormat("00");
 
         int i = 0;
-        for (Vendedor vendedor: loja.getArmazenaVendedores().values())
+        for (Vendedor vendedor: (Collection<Vendedor>) loja.getArmazenaVendedores().values())
             for (Pedido p : vendedor.getPedidosOficial().values()) {
                 dados[i][0] = p.getCodigo();
                 dados[i][1] = interfaceGrafica.formatarCPF(vendedor.getCpf());

@@ -8,7 +8,7 @@ import SistemaDeGerenciamentoDeFranquias.Model.Vendedor;
 import java.util.*;
 
 
-public class GerenciadorDeLojas {
+public class GerenciadorDeLojas  {
 
     static int quantidadeDeLojas = 0;
     static private Map<String, Loja> armazenaLojas = new HashMap<>();
@@ -136,7 +136,7 @@ public class GerenciadorDeLojas {
 
         loja.setCodigo(novoCodigo);
 
-        for (Vendedor vendedor : loja.getArmazenaVendedores().values()) {
+        for (Vendedor vendedor : (Collection<Vendedor>) loja.getArmazenaVendedores().values()) {
             vendedor.setCodigoLoja(novoCodigo);
         }
 

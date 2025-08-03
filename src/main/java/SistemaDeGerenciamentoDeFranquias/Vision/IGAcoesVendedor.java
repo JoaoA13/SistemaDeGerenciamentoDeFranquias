@@ -18,6 +18,7 @@ import java.awt.*;
 import java.awt.event.*;
 import java.math.BigDecimal;
 import java.text.*;
+import java.util.Collection;
 import java.util.Locale;
 import java.util.concurrent.atomic.AtomicBoolean;
 
@@ -191,7 +192,7 @@ public class IGAcoesVendedor {
 
         Object[][] dados = new Object[loja.getArmazenaProdutos().size()][6];
         int i = 0;
-        for (Produto p : loja.getArmazenaProdutos().values()) {
+        for (Produto p : (Collection<Produto>) loja.getArmazenaProdutos().values()) {
             dados[i][0] = Boolean.FALSE;
             dados[i][1] = p.getNomeProd();
             dados[i][2] = formatadorPreco.format(p.getPreco());
