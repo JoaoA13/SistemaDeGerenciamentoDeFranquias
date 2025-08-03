@@ -520,7 +520,7 @@ public class IGAcoesVendedor {
                         String codigoSelecionado = (String) tabela1.getValueAt(linha, 4);
 
                         editarItem.addActionListener(ae -> {
-                            //editarProd();
+                            editarProd(vendedor,pedido);
                         });
 
                         excluirItem.addActionListener(ae -> {

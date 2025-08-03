@@ -118,6 +118,7 @@ public class InterfaceGrafica {
             public void actionPerformed(ActionEvent e) {
                     System.out.println("Tecla Enter pressionada");
                     cpf = escreveCpf.getText();
+                    cpf = cpf.replaceAll("[^\\d]", "");
                     String senha = escreveSenha.getText();
                     System.out.println(cpf + " " + senha);
 

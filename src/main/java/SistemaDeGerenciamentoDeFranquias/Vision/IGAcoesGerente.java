@@ -516,8 +516,90 @@ public class IGAcoesGerente {
         botoesPanel.setLayout(new BoxLayout(botoesPanel, BoxLayout.X_AXIS));
         botoesPanel.setAlignmentX(Component.LEFT_ALIGNMENT);
 
-        //conteudo do painel
+        //Lista de pedidos
+        Loja loja = getLoja(cpf);
+        int tamanho= 0;
+        if(getLoja(cpf) != null && loja.getArmazenaPedidosAltera() != null) {
+                tamanho += loja.getArmazenaPedidosAltera().size();
+        }
+        String[] colunas = {"Código", "CPF do vendedor" , "CPF do cliente", "Data", "Hora", "Forma de Pagamento","Taxa de entrega", "Valor total"};
 
+        String[][] dados = new String[tamanho][8];
+
+        DecimalFormat formatadorPreco = new DecimalFormat("R$ #,##0.00", new DecimalFormatSymbols(new Locale("pt", "BR")));
+        DecimalFormat formatadorQuant = new DecimalFormat("00");
+
+        int i = 0;
+        if(loja.getArmazenaPedidosAltera() != null)
+            for (Pedido p : loja.getArmazenaPedidosAltera().values()) {
+                dados[i][0] = p.getCodigo();
+                dados[i][1] = p.getCpfVendedor();
+                dados[i][2] = p.getCliente().getCpf();
+                dados[i][3] = String.valueOf(p.getData());
+                dados[i][4] = String.valueOf(p.getHora());
+                dados[i][5] = p.getFormaDePagamento();
+                dados[i][6] = formatadorPreco.format(p.getTaxaEntrega());
+                dados[i][7] = formatadorPreco.format(p.getValorTotal());
+                i++;
+            }
+
+        DefaultTableModel modelo = new DefaultTableModel(dados, colunas) {
+            public boolean isCellEditable(int row, int column) {
+                return false;
+            }
+        };
+
+        JTable tabela = new JTable(modelo);
+        JScrollPane scroll = new JScrollPane(tabela);
+        solicitacoes.add(scroll, BorderLayout.CENTER);
+
+        JPopupMenu menuPopup = new JPopupMenu();
+        JMenuItem visualizar = new JMenuItem("Visualizar");
+        JMenuItem editarItem = new JMenuItem("Editar");
+        JMenuItem excluirItem = new JMenuItem("Excluir");
+        menuPopup.add(editarItem);
+        menuPopup.add(excluirItem);
+        menuPopup.add(visualizar);
+
+        //---------------------------------
+
+        tabela.addMouseListener(new MouseAdapter() {
+            public void mousePressed(MouseEvent e) {
+                if (e.isPopupTrigger() || SwingUtilities.isRightMouseButton(e)) {
+                    int linha = tabela.rowAtPoint(e.getPoint());
+                    if (linha >= 0 && linha < tabela.getRowCount()) {
+                        tabela.setRowSelectionInterval(linha, linha);
+                        String codigoSelecionado = (String) tabela.getValueAt(linha, 4);
+
+                        editarItem.addActionListener(ae -> {
+                            //editarProd(cpfGerente, codigoSelecionado);
+                        });
+
+                        excluirItem.addActionListener(ae -> {
+//                            int confirm = JOptionPane.showConfirmDialog(lista,
+//                                    "Tem certeza que deseja excluir o produto com o " + codigoSelecionado + "?",
+//                                    "Confirmar exclusão",
+//                                    JOptionPane.YES_NO_OPTION);
+//                            if (confirm == JOptionPane.YES_OPTION) {
+//                                gerenciaGerente.excluirProdutos(codigoSelecionado, cpfGerente);
+//                                ((DefaultTableModel) tabela.getModel()).removeRow(linha);
+//                            }
+                        });
+
+                        for (ActionListener al : visualizar.getActionListeners()) {
+                            visualizar.removeActionListener(al);
+                        }
+                        visualizar.addActionListener(ae -> {
+                            //exibeAlteracao(codigo,cpfVendedor);
+                        });
+
+                        menuPopup.show(tabela, e.getX(), e.getY());
+                    }
+                }
+            }
+        });
+
+        //botao voltar -------------
         botoesPanel.add(voltar);
         botoesPanel.add(Box.createHorizontalGlue());
         solicitacoes.add(botoesPanel);
@@ -530,6 +612,70 @@ public class IGAcoesGerente {
             }
         });
         return solicitacoes;
+    }
+
+    protected void exibeAlteracao(String codigo,String cpfVendedor){
+        Pedido pedido = getLoja(cpf).getVendedor(cpfVendedor).getPedido(codigo);
+
+        JFrame exibe = new JFrame("Informações da venda de pedido: " + codigo);
+        exibe.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+        exibe.setSize(450, 600);
+        exibe.setLocationRelativeTo(null);
+
+        JPanel exibeInformacaoLoja = new JPanel(new BorderLayout(10, 10));
+        exibeInformacaoLoja.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
+
+        String[] colunas = {"Atual", "Solicitação de alteração"};
+        Loja loja = getLoja(cpf);
+
+        String[][] dados = new String[loja.getArmazenaAlteracao().getAlteracoes().size()][2];
+
+        //DecimalFormat formatadorPreco = new DecimalFormat("R$ #,##0.00", new DecimalFormatSymbols(new Locale("pt", "BR")));
+        DecimalFormat formatadorQuant = new DecimalFormat("00");
+
+        int i = 0;
+        for (Produto p : pedido.getProdutos().values()) { /// VOU TER QUE CRIAR UM ETODO NO GERENCIADOR DO GERENTE, QUE RECEBE O CODIGO DO PEDIDO, PROCURA NO PARA DE ALTERAÇÕES FAZ UM IF PRA VER QUAL O TIPO E RETORNA UMA STRING, SO PARA EXIBIÇÃO
+        /// DESSE METODO TEM QUE TER UM TREM PRA SELECIONAR ALTERAÇÃO IGUAL SELECIONA PRODUTO, UM BOTAO PRA APROVAR OU REJEITAR
+            dados[i][0] = p.getNomeProd();
+            dados[i][1] = formatadorPreco.format(p.getPreco()); // Ex: R$ 12,34
+            dados[i][2] = p.getCarac();
+            dados[i][3] = formatadorQuant.format(p.getQuant()); // Ex: 3.000
+            dados[i][4] = p.getCodigoProd();
+            i++;
+        }
+        DefaultTableModel modelo = new DefaultTableModel(dados, colunas) {
+            public boolean isCellEditable(int row, int column) {
+                return false;
+            }
+        };
+
+        JTable tabela1 = new JTable(modelo);
+
+        DefaultTableCellRenderer centralizado = new DefaultTableCellRenderer();
+        centralizado.setHorizontalAlignment(SwingConstants.CENTER);
+        for (int col = 0; col < tabela1.getColumnCount(); col++) {
+            tabela1.getColumnModel().getColumn(col).setCellRenderer(centralizado);
+        }
+
+        JScrollPane scroll = new JScrollPane(tabela1);
+        exibeInformacaoLoja.add(scroll, BorderLayout.CENTER);
+
+        JPanel painelBotao = new JPanel();
+        JButton sair = new JButton("Fechar");
+        sair.addActionListener(e -> exibe.dispose());
+        sair.addActionListener(e -> exibe.removeAll());
+        painelBotao.add(sair);
+
+        exibeInformacaoLoja.add(painelBotao, BorderLayout.SOUTH);
+
+        exibe.setContentPane(exibeInformacaoLoja);
+        exibe.setVisible(true);
+        exibe.addWindowListener(new WindowAdapter() {
+            @Override
+            public void windowClosed(WindowEvent e) {
+                System.out.println("Janela foi fechada");
+            }
+        });
     }
 
     JPanel cadastrarProduto(String cpfGerente){
@@ -1161,97 +1307,5 @@ public class IGAcoesGerente {
         });
 
         return listaClientes;
-    }
-
-    public static void listaMudarPedidos(){
-        /*JPanel lista = new JPanel();
-        lista.setLayout(new BoxLayout(lista, BoxLayout.Y_AXIS));
-        lista.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
-
-        JButton voltar = new JButton("Voltar");
-
-        JPanel botoesPanel = new JPanel();
-        botoesPanel.setLayout(new BoxLayout(botoesPanel, BoxLayout.X_AXIS));
-        botoesPanel.setAlignmentX(Component.LEFT_ALIGNMENT);
-
-        String[] colunas = {"Nome", "CPF", "e-mail","Valor total de vendas","Volume de vendas"};
-
-        Loja loja = getLoja(cpfGerente);
-        String[][] dados = new String[loja.getArmazenaVendedores().size()][5];
-        Vendedor[] v = loja.vendedoresVolume();
-        int i = 0;
-        for (int j = 0; j < loja.getArmazenaVendedores().size();j++ ) {
-            dados[i][0] = v[j].getNome();
-            dados[i][1] = v[j].getCpf();
-            dados[i][2] = v[j].getEmail();
-            dados[i][3] = formatadorReais.format(v[j].getValorVenda());
-            dados[i][4] = Integer.toString(v[j].getPedidosOficial().size());
-            i++;
-        }
-
-        DefaultTableModel modelo = new DefaultTableModel(dados, colunas) {
-            public boolean isCellEditable(int row, int column) {
-                return false;
-            }
-        };
-
-        JTable tabela = new JTable(modelo); // <-- corrigido aqui
-        JScrollPane scroll = new JScrollPane(tabela);
-        lista.add(scroll, BorderLayout.CENTER);
-
-        JPopupMenu menuPopup = new JPopupMenu();
-        JMenuItem editarItem = new JMenuItem("Editar");
-        JMenuItem excluirItem = new JMenuItem("Excluir");
-        menuPopup.add(editarItem);
-        menuPopup.add(excluirItem);
-
-        tabela.addMouseListener(new MouseAdapter() {
-            public void mousePressed(MouseEvent e) {
-                if (e.isPopupTrigger() || SwingUtilities.isRightMouseButton(e)) {
-                    int linha = tabela.rowAtPoint(e.getPoint());
-                    if (linha >= 0 && linha < tabela.getRowCount()) {
-                        tabela.setRowSelectionInterval(linha, linha);
-                        String cpfSelecionado = (String) tabela.getValueAt(linha, 1);
-
-                        editarItem.addActionListener(ae -> {
-                            editar(cpfGerente, cpfSelecionado);
-                        });
-
-                        excluirItem.addActionListener(ae -> {
-                            int confirm = JOptionPane.showConfirmDialog(lista,
-                                    "Tem certeza que deseja excluir o vendedor com CPF " + cpfSelecionado + "?",
-                                    "Confirmar exclusão",
-                                    JOptionPane.YES_NO_OPTION);
-                            if (confirm == JOptionPane.YES_OPTION) {
-                                try {
-                                    gerenciaGerente.excluirVendedor(cpfSelecionado, cpfGerente);
-                                } catch (EntradaException ex) {
-                                    interfaceGrafica.exibeException(ex.getMessage(),"Exclusão falhou");
-                                }
-                                ((DefaultTableModel) tabela.getModel()).removeRow(linha);
-                            }
-                        });
-
-                        menuPopup.show(tabela, e.getX(), e.getY());
-                    }
-                }
-            }
-        });
-
-        botoesPanel.add(voltar);
-        botoesPanel.add(Box.createHorizontalGlue());
-        lista.add(botoesPanel);
-
-        voltar.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                System.out.println("Botão 'voltar' clicado");
-                lista.setVisible(false);
-                interfaceGrafica.sistemaGerente();
-            }
-        });
-
-        interfaceGrafica.atualizaFrame(lista,500,300);
-
-        return lista;*/
     }
 }
