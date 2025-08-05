@@ -2,6 +2,7 @@ package SistemaDeGerenciamentoDeFranquias.Vision;
 
 import SistemaDeGerenciamentoDeFranquias.Control.GerenciadorDeLojas;
 import SistemaDeGerenciamentoDeFranquias.Control.GerenciadorSistema;
+import SistemaDeGerenciamentoDeFranquias.Control.GerenciadorSistemaVendedor;
 import SistemaDeGerenciamentoDeFranquias.Exceptions.BancoDeDadosException;
 import SistemaDeGerenciamentoDeFranquias.Exceptions.CadastroException;
 import SistemaDeGerenciamentoDeFranquias.Control.GerenciadorSistemaGerente;
@@ -458,6 +459,7 @@ public class IGAcoesGerente {
         menuPopup.add(excluirItem);
 
         IGAcoesVendedor gerenciaVendedorGerente = new IGAcoesVendedor(interfaceGrafica);
+        GerenciadorSistemaVendedor gerenciaVendedorGerente2 = new GerenciadorSistemaVendedor();
 
         tabela.addMouseListener(new MouseAdapter() {
             public void mousePressed(MouseEvent e) {
@@ -477,18 +479,19 @@ public class IGAcoesGerente {
                         });
 
                         excluirItem.addActionListener(ae -> {
-//                            int confirm = JOptionPane.showConfirmDialog(visualizacao,
-//                                    "Tem certeza que deseja excluir o vendedor com CPF " + cpfSelecionado + "?",
-//                                    "Confirmar exclusão",
-//                                    JOptionPane.YES_NO_OPTION);
-//                            if (confirm == JOptionPane.YES_OPTION) {
-//                                try {
-//                                    gerenciaGerente.excluirVendedor(cpfSelecionado, cpf);
-//                                } catch (EntradaException ex) {
-//                                    interfaceGrafica.exibeException(ex.getMessage(),"Exclusão falhou");
-//                                }
-//                                ((DefaultTableModel) tabela.getModel()).removeRow(linha);
-//                            }
+                            int confirm = JOptionPane.showConfirmDialog(visualizacao,
+                                    "Tem certeza que deseja excluir o pedido " + codigoSelecionado + "?",
+                                    "Confirmar exclusão",
+                                    JOptionPane.YES_NO_OPTION);
+                            if (confirm == JOptionPane.YES_OPTION) {
+                                try {
+                                    String msg = gerenciaVendedorGerente2.solicitarExclusao(loja.getGerenteDaUnidade(),loja , loja.getPedido(codigoSelecionado));
+                                    JOptionPane.showMessageDialog(null, msg, "Sucesso", JOptionPane.INFORMATION_MESSAGE);
+                                } catch (EntradaException ex) {
+                                    interfaceGrafica.exibeException(ex.getMessage(),"Exclusão falhou");
+                                }
+                                    ((DefaultTableModel) tabela.getModel()).removeRow(linha);
+                            }
                         });
 
                         menuPopup.show(tabela, e.getX(), e.getY());
@@ -578,10 +581,15 @@ public class IGAcoesGerente {
 
                         acatar.addActionListener(ae -> {
                             ((DefaultTableModel) tabela.getModel()).removeRow(linha);
+                            JOptionPane.showMessageDialog(null, "Solicitação de mudança aprovada", "Sucesso", JOptionPane.INFORMATION_MESSAGE);
                         });
 
                         rejeitar.addActionListener(ae -> {
-                            ((DefaultTableModel) tabela.getModel()).removeRow(linha);
+                            loja.excluirAlteracao(codigoSelecionado);
+                            int selectedRow = tabela.getSelectedRow();
+                            if (selectedRow >= 0)
+                                ((DefaultTableModel) tabela.getModel()).removeRow(linha);
+                            JOptionPane.showMessageDialog(null, "Solicitação de mudança rejeitada", "Sucesso", JOptionPane.INFORMATION_MESSAGE);
                         });
 
                         menuPopup.show(tabela, e.getX(), e.getY());

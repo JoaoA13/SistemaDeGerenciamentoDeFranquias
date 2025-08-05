@@ -64,6 +64,7 @@ public class Pedido {
         vendedor.excluirPedido(this.codigo);
         this.codigo = codigo;
         vendedor.addPedido(pedido);
+        /// lembrete: mudar o código nos outros mapas
     }
 
     public String getNomeCliente() { return nomeCliente; }

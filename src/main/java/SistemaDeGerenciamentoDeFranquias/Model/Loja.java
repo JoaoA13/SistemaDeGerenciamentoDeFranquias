@@ -1,5 +1,6 @@
 package SistemaDeGerenciamentoDeFranquias.Model;
 
+import SistemaDeGerenciamentoDeFranquias.Control.GerenciadorDeLojas;
 import SistemaDeGerenciamentoDeFranquias.Exceptions.BancoDeDadosException;
 
 import java.math.BigDecimal;
@@ -205,5 +206,43 @@ public class Loja<T> {
                 return vendedor.getPedido(cod);
         }
         return null;
+    }
+
+    public void excluirPedido(Pedido pedido){
+        if(pedido!= null) {
+            Vendedor vendedor = getVendedor(pedido.getCpfVendedor());
+            vendedor.excluirPedido(pedido.getCodigo());
+            armazenaPedidosAltera.remove(pedido.getCodigo());
+            armazenaAtual.remove(pedido.getCodigo());
+            armazenaAlteracao.remove(pedido.getCodigo());
+        }
+    }
+
+    public void excluirAlteracao(String codigo){
+            armazenaPedidosAltera.remove(codigo);
+            armazenaAtual.remove(codigo);
+            armazenaAlteracao.remove(codigo);
+    }
+
+    public void acatarAlteracao(String codigo){
+        Pedido pedido = getPedido(codigo);
+        if(pedido != null) {
+            if (getArmazenaAtual(codigo) instanceof LocalDate)
+                pedido.setData((LocalDate) getArmazenaAlteracao(codigo));
+            if (getArmazenaAtual(codigo) instanceof LocalTime)
+                pedido.setHora((LocalTime) getArmazenaAlteracao(codigo));
+            if (getArmazenaAtual(codigo) instanceof BigDecimal)
+                pedido.setTaxaEntrega((BigDecimal) getArmazenaAlteracao(codigo));
+            if (getArmazenaAtual(codigo) instanceof String){
+                if (getArmazenaAtual(codigo) == "Exclusão")
+                    excluirPedido(pedido);
+                if(((String) getArmazenaAtual(codigo)).length() == 3 && ((String) getArmazenaAtual(codigo)).chars().allMatch(Character::isDigit))
+                    pedido.setCodigo((String) getArmazenaAlteracao(codigo), GerenciadorDeLojas.getLoja(codigo));
+            }
+
+        }
+        armazenaPedidosAltera.remove(codigo);
+        armazenaAtual.remove(codigo);
+        armazenaAlteracao.remove(codigo);
     }
 }

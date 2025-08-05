@@ -400,7 +400,6 @@ public class IGAcoesVendedor {
                         editarItem.addActionListener(ae -> {
                             try {
                                 editarProd(vendedor, vendedor.getPedido(codigoPedido));
-                                //JOptionPane.showMessageDialog(null, "Solicitação de modificação realizada", "Sucesso", JOptionPane.INFORMATION_MESSAGE);
                             } catch (EntradaException ex) {
                                 JOptionPane.showMessageDialog(null, "Erro: " + ex.getMessage(), "Entrada inválida", JOptionPane.ERROR_MESSAGE);
                             }

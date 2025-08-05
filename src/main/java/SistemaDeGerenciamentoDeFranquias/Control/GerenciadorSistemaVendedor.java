@@ -212,7 +212,9 @@ public class GerenciadorSistemaVendedor extends GerenciadorSistema {
                 throw new EntradaException(e.getMessage());
             }
             loja.addPedidosAltera(pedido, "Exclusão", pedido.getCodigo(), 0);
+            return "Exclusão Solicitada";
         }
-        return "Exclusão Solicitada";
+        loja.excluirPedido(pedido);
+        return "Exclusão Concluída";
     }
 }
