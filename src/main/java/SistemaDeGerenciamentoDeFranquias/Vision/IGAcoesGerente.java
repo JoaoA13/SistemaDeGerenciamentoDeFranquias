@@ -2,6 +2,7 @@ package SistemaDeGerenciamentoDeFranquias.Vision;
 
 import SistemaDeGerenciamentoDeFranquias.Control.GerenciadorDeLojas;
 import SistemaDeGerenciamentoDeFranquias.Control.GerenciadorSistema;
+import SistemaDeGerenciamentoDeFranquias.Exceptions.BancoDeDadosException;
 import SistemaDeGerenciamentoDeFranquias.Exceptions.CadastroException;
 import SistemaDeGerenciamentoDeFranquias.Control.GerenciadorSistemaGerente;
 import SistemaDeGerenciamentoDeFranquias.Exceptions.EntradaException;
@@ -467,7 +468,12 @@ public class IGAcoesGerente {
                         String codigoSelecionado = (String) tabela.getValueAt(linha, 0);
 
                         editarItem.addActionListener(ae -> {
-                            gerenciaVendedorGerente.editarProd(loja.getGerenteDaUnidade(),loja.getPedido(codigoSelecionado));
+                            try {
+                                gerenciaVendedorGerente.editarProd(loja.getGerenteDaUnidade(),loja.getPedido(codigoSelecionado));
+                                JOptionPane.showMessageDialog(null, "Edicao realizada", "Sucesso", JOptionPane.INFORMATION_MESSAGE);
+                            } catch (EntradaException ex) {
+                                JOptionPane.showMessageDialog(null, "Erro: " + ex.getMessage(), "Entrada inválida", JOptionPane.ERROR_MESSAGE);
+                            }
                         });
 
                         excluirItem.addActionListener(ae -> {

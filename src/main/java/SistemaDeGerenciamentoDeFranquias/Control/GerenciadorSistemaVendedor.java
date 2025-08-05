@@ -6,10 +6,8 @@ import SistemaDeGerenciamentoDeFranquias.Exceptions.EntradaException;
 import SistemaDeGerenciamentoDeFranquias.Exceptions.LoginException;
 import SistemaDeGerenciamentoDeFranquias.Model.*;
 import SistemaDeGerenciamentoDeFranquias.Validadores.*;
-import SistemaDeGerenciamentoDeFranquias.Validadores.ValidadoresBancoDados.ValidadorCodigoPedidoBancoDeDadosFalse;
-import SistemaDeGerenciamentoDeFranquias.Validadores.ValidadoresBancoDados.ValidadorCodigoProdutoBancoDeDadosTrue;
+import SistemaDeGerenciamentoDeFranquias.Validadores.ValidadoresBancoDados.*;
 import SistemaDeGerenciamentoDeFranquias.Validadores.ValidadorCpf;
-import SistemaDeGerenciamentoDeFranquias.Validadores.ValidadoresBancoDados.ValidadorCpfBancoDeDadosTrue;
 import SistemaDeGerenciamentoDeFranquias.Validadores.ValidadoresNumericos.ValidadorPrecoPositivo;
 import SistemaDeGerenciamentoDeFranquias.Validadores.ValidadoresNumericos.ValidadorValorNaoNegativo;
 import SistemaDeGerenciamentoDeFranquias.Vision.IGAcoesGerente;
@@ -203,5 +201,18 @@ public class GerenciadorSistemaVendedor extends GerenciadorSistema {
             }
         }
         return "Edição Realizada";
+    }
+
+    public String solicitarExclusao(Usuario usuario,Loja loja, Pedido pedido) throws EntradaException {
+        if(usuario instanceof Vendedor){
+            try {
+                ValidadorEdicaoExclusaoDePedidosBancoDeDadosFalse.valida(pedido.getCodigo(), GerenciadorDeLojas.getLoja(((Vendedor) usuario).getCodigoLoja()));
+            } catch (BancoDeDadosException e) {
+                System.out.println("Erro: EntradaException: " + e.getMessage());
+                throw new EntradaException(e.getMessage());
+            }
+            loja.addPedidosAltera(pedido, "Exclusão", pedido.getCodigo(), 0);
+        }
+        return "Exclusão Solicitada";
     }
 }

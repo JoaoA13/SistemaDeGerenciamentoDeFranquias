@@ -3,9 +3,14 @@ package SistemaDeGerenciamentoDeFranquias.Vision;
 import SistemaDeGerenciamentoDeFranquias.Control.GerenciadorDeLojas;
 import SistemaDeGerenciamentoDeFranquias.Control.GerenciadorSistemaGerente;
 import SistemaDeGerenciamentoDeFranquias.Control.GerenciadorSistemaVendedor;
+import SistemaDeGerenciamentoDeFranquias.Exceptions.BancoDeDadosException;
 import SistemaDeGerenciamentoDeFranquias.Exceptions.CadastroException;
 import SistemaDeGerenciamentoDeFranquias.Exceptions.EntradaException;
 import SistemaDeGerenciamentoDeFranquias.Model.*;
+import SistemaDeGerenciamentoDeFranquias.Validadores.*;
+import SistemaDeGerenciamentoDeFranquias.Validadores.ValidadoresBancoDados.ValidadorCodigoPedidoBancoDeDadosFalse;
+import SistemaDeGerenciamentoDeFranquias.Validadores.ValidadoresBancoDados.ValidadorEdicaoExclusaoDePedidosBancoDeDadosFalse;
+import SistemaDeGerenciamentoDeFranquias.Validadores.ValidadoresNumericos.ValidadorValorNaoNegativo;
 
 import javax.swing.*;
 import javax.swing.event.DocumentEvent;
@@ -25,7 +30,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
 
 import static SistemaDeGerenciamentoDeFranquias.Control.GerenciadorDeLojas.getLoja;
 
-public class IGAcoesVendedor<T> {
+public class IGAcoesVendedor {
     private InterfaceGrafica interfaceGrafica;
     static GerenciadorSistemaVendedor gerenciaVendedor = new GerenciadorSistemaVendedor();
     Loja loja;
@@ -391,10 +396,14 @@ public class IGAcoesVendedor<T> {
                     if (linha >= 0 && linha < tabela.getRowCount()) {
                         tabela.setRowSelectionInterval(linha, linha);
                         String codigoPedido = (String) tabela.getValueAt(linha, 0);
-                        String codigoSelecionado = (String) tabela.getValueAt(linha, 4);
 
                         editarItem.addActionListener(ae -> {
-                            editarProd(vendedor, vendedor.getPedido(codigoPedido));
+                            try {
+                                editarProd(vendedor, vendedor.getPedido(codigoPedido));
+                                //JOptionPane.showMessageDialog(null, "Solicitação de modificação realizada", "Sucesso", JOptionPane.INFORMATION_MESSAGE);
+                            } catch (EntradaException ex) {
+                                JOptionPane.showMessageDialog(null, "Erro: " + ex.getMessage(), "Entrada inválida", JOptionPane.ERROR_MESSAGE);
+                            }
                         });
 
                         excluirItem.addActionListener(ae -> {
@@ -403,8 +412,12 @@ public class IGAcoesVendedor<T> {
                                     "Confirmar exclusão",
                                     JOptionPane.YES_NO_OPTION);
                             if (confirm == JOptionPane.YES_OPTION) {
-                                excluirProd();
-                                ((DefaultTableModel) tabela.getModel()).removeRow(linha);
+                                try {
+                                    String msg = gerenciaVendedor.solicitarExclusao(vendedor, loja, vendedor.getPedido(codigoPedido));
+                                    JOptionPane.showMessageDialog(null, msg, "Sucesso", JOptionPane.INFORMATION_MESSAGE);
+                                } catch (EntradaException ex) {
+                                    JOptionPane.showMessageDialog(null, "Erro: " + ex.getMessage(), "Entrada inválida", JOptionPane.ERROR_MESSAGE);
+                                }
                             }
                         });
 
@@ -521,7 +534,12 @@ public class IGAcoesVendedor<T> {
                         String codigoSelecionado = (String) tabela1.getValueAt(linha, 4);
 
                         editarItem.addActionListener(ae -> {
-                            editarProd(vendedor,pedido);
+                            try {
+                                editarProd(vendedor,pedido);
+                                JOptionPane.showMessageDialog(null, "Solicitação de modificação realizada", "Sucesso", JOptionPane.INFORMATION_MESSAGE);
+                            } catch (EntradaException ex) {
+                                JOptionPane.showMessageDialog(null, "Erro: " + ex.getMessage(), "Entrada inválida", JOptionPane.ERROR_MESSAGE);
+                            }
                         });
 
                         excluirItem.addActionListener(ae -> {
@@ -530,8 +548,8 @@ public class IGAcoesVendedor<T> {
                                     "Confirmar exclusão",
                                     JOptionPane.YES_NO_OPTION);
                             if (confirm == JOptionPane.YES_OPTION) {
-                                //excluirProd();
-                                //((DefaultTableModel) tabela1.getModel()).removeRow(linha);
+                                excluirProd();
+                                ((DefaultTableModel) tabela1.getModel()).removeRow(linha);
                             }
                         });
 
@@ -559,7 +577,15 @@ public class IGAcoesVendedor<T> {
         });
     }
 
-    public void editarProd(Usuario vendedor, Pedido pedido){
+    public void editarProd(Usuario vendedor, Pedido pedido) throws EntradaException {
+        if (vendedor instanceof Vendedor) {
+            try {
+                ValidadorEdicaoExclusaoDePedidosBancoDeDadosFalse.valida(pedido.getCodigo(), GerenciadorDeLojas.getLoja(((Vendedor) vendedor).getCodigoLoja()));
+            } catch (BancoDeDadosException e) {
+                System.out.println("Erro: EntradaException: " + e.getMessage());
+                throw new EntradaException(e.getMessage());
+            }
+        }
         JPanel edicao = new JPanel();
         edicao.setLayout(new BoxLayout(edicao, BoxLayout.Y_AXIS));
         edicao.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
