@@ -23,29 +23,6 @@ public class GerenciadorSistemaGerente extends GerenciadorSistema{
 
     static GerenciadorDeLojas listaLojas = new GerenciadorDeLojas();
 
-//    public String login(String cpf, String senha) throws LoginException {
-//        super.login(cpf, senha);
-//
-//        try {
-//            ValidadorCampoVazio.valida(cpf);
-//            ValidadorCampoVazio.valida(senha);
-//            ValidadorCpf.validarCpf(cpf);
-//            ValidadorSenha.valida(senha);
-//        } catch (EntradaException e) {
-//            System.out.println("Erro: LoginException: " + e.getMessage());
-//            throw new LoginException(e.getMessage());
-//        }
-//
-//        try {
-//            buscaCpfExiste(cpf);
-//            ValidadorLogin.valida(GerenciadorDeLojas.getGerente(cpf),cpf,senha);
-//            return "CPF e senha corretos";
-//        }catch (LoginException e){
-//            System.out.println("Erro: LoginException: " + e.getMessage());
-//            throw new LoginException(e.getMessage());
-//        }
-//    }
-
     public String lancarCadastro(String nome, String cpf,String email, String senha, String cpfGerente) throws CadastroException {
         try {
             ValidadorCampoVazio.valida(nome);
@@ -72,6 +49,8 @@ public class GerenciadorSistemaGerente extends GerenciadorSistema{
 
         Loja loja = listaLojas.getLoja(cpfGerente);
         loja.addVendedor(nome, cpf, email, senha);
+        GerenciadorDeLojas.salvaLojaGerente();
+
         return "Vendedor Cadastrado";
     }
 
@@ -89,6 +68,7 @@ public class GerenciadorSistemaGerente extends GerenciadorSistema{
             Vendedor vendedor = loja.getVendedor(cpfAntigo);
             vendedor.setNome(nome);
 
+            GerenciadorDeLojas.salvaLojaGerente();
             return "Nome editado";
         }
         if(cpf != ""){
@@ -113,6 +93,7 @@ public class GerenciadorSistemaGerente extends GerenciadorSistema{
             vendedor.setCpf(cpf);
             loja.getArmazenaVendedores().put(cpf, vendedor);
 
+            GerenciadorDeLojas.salvaLojaGerente();
             return "CPf editado";
         }
         if(email != ""){
@@ -128,6 +109,7 @@ public class GerenciadorSistemaGerente extends GerenciadorSistema{
             Vendedor vendedor = loja.getVendedor(cpfAntigo);
             vendedor.setEmail(email);
 
+            GerenciadorDeLojas.salvaLojaGerente();
             return "E-mail editado";
         }
         if(senha != ""){
@@ -143,8 +125,10 @@ public class GerenciadorSistemaGerente extends GerenciadorSistema{
             Vendedor vendedor = loja.getVendedor(cpfAntigo);
             vendedor.setSenha(senha);
 
+            GerenciadorDeLojas.salvaLojaGerente();
             return "Senha editada";
         }
+
         return "";
     }
 
@@ -166,6 +150,8 @@ public class GerenciadorSistemaGerente extends GerenciadorSistema{
 
         Loja loja = listaLojas.getLoja(cpfGerente);
         loja.excluirVendedor(cpf);
+
+        GerenciadorDeLojas.salvaLojaGerente();
 
         return "Vendedor Excluído com Sucesso";
     }
@@ -205,7 +191,7 @@ public class GerenciadorSistemaGerente extends GerenciadorSistema{
         Loja loja = listaLojas.getLoja(cpfGerente);
         loja.addProduto(nome, preco, carac, quant, codigo);
 
-        salvaArquivos.salvarLojas(GerenciadorDeLojas.getLojas());
+        GerenciadorDeLojas.salvaLojaGerente();
         return "Produto Cadastrado";
 
     }
@@ -224,6 +210,7 @@ public class GerenciadorSistemaGerente extends GerenciadorSistema{
             Produto produto = loja.getProduto(codigoAntigo);
             produto.setNomeProd(nome);
 
+            GerenciadorDeLojas.salvaLojaGerente();
             return "Nome editado";
         }
         if(preco != ""){
@@ -242,6 +229,7 @@ public class GerenciadorSistemaGerente extends GerenciadorSistema{
             Produto produto = loja.getProduto(codigoAntigo);
             produto.setPreco(precoProd);
 
+            GerenciadorDeLojas.salvaLojaGerente();
             return "Preço editado";
         }
         if(carac != ""){
@@ -257,6 +245,7 @@ public class GerenciadorSistemaGerente extends GerenciadorSistema{
             Produto produto = loja.getProduto(codigoAntigo);
             produto.setCarac(carac);
 
+            GerenciadorDeLojas.salvaLojaGerente();
             return "Características editadas";
         }
         if(quant != ""){
@@ -275,6 +264,7 @@ public class GerenciadorSistemaGerente extends GerenciadorSistema{
             Produto produto = loja.getProduto(codigoAntigo);
             produto.setQuant(quantProd);
 
+            GerenciadorDeLojas.salvaLojaGerente();
             return "Quantidade editada";
         }
         if(codigo != ""){
@@ -299,6 +289,7 @@ public class GerenciadorSistemaGerente extends GerenciadorSistema{
             produto.setCodigoProd(codigo);
             loja.addProdutoDireto(produto);
 
+            GerenciadorDeLojas.salvaLojaGerente();
             return "Código editado";
         }
         return "";
@@ -309,7 +300,7 @@ public class GerenciadorSistemaGerente extends GerenciadorSistema{
         Loja loja = listaLojas.getLoja(cpfGerente);
         loja.excluirProduto(codigo);
 
-        salvaArquivos.salvarLojas(GerenciadorDeLojas.getLojas());
+        GerenciadorDeLojas.salvaLojaGerente();
     }
 
     static void listaDePedidos(String texto, LocalDate data, LocalTime hora, BigDecimal taxaExtra, Pedido pedido, int escolha){

@@ -324,6 +324,7 @@ public class IGAcoesVendedor {
                 pedido.setCliente(cliente);
                 BigDecimal valorPago = pedido.getValorTotal().subtract(pedido.getTaxaEntrega());
                 cliente.setValorGasto(valorPago);
+                GerenciadorDeLojas.salvaLojaGerente();
             }
         });
 
@@ -355,7 +356,10 @@ public class IGAcoesVendedor {
         int i = 0;
         for (Pedido p : vendedor.getPedidosOficial().values()) {
             dados[i][0] = p.getCodigo();
+            if (p.getCliente()!=null)
             dados[i][1] = interfaceGrafica.formatarCPF(p.getCliente().getCpf());
+            else
+                dados[i][1] = interfaceGrafica.formatarCPF(" kjnjbhjbjhb");
             dados[i][2] = String.valueOf(p.getData());
             dados[i][3] = String.valueOf(p.getHora());
             dados[i][4] = p.getFormaDePagamento();

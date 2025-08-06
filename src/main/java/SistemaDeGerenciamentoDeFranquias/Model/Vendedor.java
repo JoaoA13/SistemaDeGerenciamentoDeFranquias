@@ -1,5 +1,7 @@
 package SistemaDeGerenciamentoDeFranquias.Model;
 
+import SistemaDeGerenciamentoDeFranquias.Control.GerenciadorDeLojas;
+
 import java.math.BigDecimal;
 import java.util.HashMap;
 import java.util.Map;
@@ -27,6 +29,7 @@ public class Vendedor extends Usuario {
     }
     public void setPedidosOficial(Map<String, Pedido> pedidos){
         pedidosOficial = pedidos;
+        GerenciadorDeLojas.salvaLojaGerente();
     }
     public Pedido getPedido(String codigo){
         if(pedidosOficial == null)
@@ -38,20 +41,31 @@ public class Vendedor extends Usuario {
             return null;
     }
 
-    public void addPedido(Pedido pedido){ pedidosOficial.put(pedido.getCodigo(), pedido); }
-    public void excluirPedido(String codigo){ pedidosOficial.remove(codigo); }
+    public void addPedido(Pedido pedido){
+        pedidosOficial.put(pedido.getCodigo(), pedido);
+        GerenciadorDeLojas.salvaLojaGerente();
+    }
+    public void excluirPedido(String codigo){ pedidosOficial.remove(codigo);
+        GerenciadorDeLojas.salvaLojaGerente();
+    }
 
     public BigDecimal getValorVenda(){
         return valorVenda;
     }
-    public void setValorVenda(BigDecimal venda){valorVenda = valorVenda.add(venda);}
+    public void setValorVenda(BigDecimal venda){
+        valorVenda = valorVenda.add(venda);
+        GerenciadorDeLojas.salvaLojaGerente();
+    }
 
 
     public String getCodigoLoja(){ return codigoLoja; }
     public void setCodigoLoja(String codigoLoja) {
         this.codigoLoja = codigoLoja;
+        GerenciadorDeLojas.salvaLojaGerente();
     }
 
     public int getVolumeVendas(){ return volumeVendas; }
-    public void addVolumeVendas(int quantidade) { volumeVendas += quantidade; }
+    public void addVolumeVendas(int quantidade) { volumeVendas += quantidade;
+        GerenciadorDeLojas.salvaLojaGerente();
+    }
 }
