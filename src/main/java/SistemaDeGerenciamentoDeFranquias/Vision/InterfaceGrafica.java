@@ -125,15 +125,15 @@ public class InterfaceGrafica {
                     try{
                         String validaLog = null;
                         validaLog = GerenciadorSistema.login(cpf,senha);
-                        if(GerenciadorSistema.identificaTipoUsuario(cpf).getTipo() == TipoUsuario.DONO) {
+                        if(GerenciadorSistema.buscaUsuario(cpf).getTipo() == TipoUsuario.DONO) {
                             sistemaDono();
                             exibeInformacao(validaLog, "Login feito com sucesso");
                             menuLogin.setVisible(false);
-                        }else if(GerenciadorSistema.identificaTipoUsuario(cpf).getTipo() == TipoUsuario.GERENTE) {
+                        }else if(GerenciadorSistema.buscaUsuario(cpf).getTipo() == TipoUsuario.GERENTE) {
                             sistemaGerente();
                             exibeInformacao(validaLog, "Login feito com sucesso");
                             menuLogin.setVisible(false);
-                        }else if(GerenciadorSistema.identificaTipoUsuario(cpf).getTipo() == TipoUsuario.VENDEDOR){
+                        }else if(GerenciadorSistema.buscaUsuario(cpf).getTipo() == TipoUsuario.VENDEDOR){
                             sistemaVendedor();
                             exibeInformacao(validaLog, "Login feito com sucesso");
                             menuLogin.setVisible(false);
@@ -179,6 +179,19 @@ public class InterfaceGrafica {
         subPainel.add(descricao);
 
         subPainel.add(Box.createVerticalStrut(15));
+
+        JPanel tabela = new JPanel(new GridLayout(3, 2, 10, 10));
+
+        tabela.add(criaCelula("Nome :"));
+        tabela.add(criaCelula(GerenciadorSistema.buscaUsuario(cpf).getNome()));
+
+        tabela.add(criaCelula("CPF:"));
+        tabela.add(criaCelula(GerenciadorSistema.buscaUsuario(cpf).getCpf()));
+
+        tabela.add(criaCelula("Email:"));
+        tabela.add(criaCelula(GerenciadorSistema.buscaUsuario(cpf).getEmail()));
+
+        subPainel.add(tabela, BorderLayout.CENTER);
 
         JButton sair = new JButton("Sair");
         sair.setAlignmentX(Component.CENTER_ALIGNMENT);
