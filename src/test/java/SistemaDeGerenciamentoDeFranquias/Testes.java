@@ -30,9 +30,13 @@ public abstract class Testes {
         sistemaVendedor = new GerenciadorSistemaVendedor();
 
         gerenciaLojas = new GerenciadorDeLojas();
-        GerenciadorDeLojas.getLojas().clear();
-        GerenciadorDeLojas.getGerentes().clear();
-        GerenciadorDeLojas.getCodigoPraCpf().clear();
+
+        /// Criando lojas para testes
+        /// Criando donos para testes
+        /// Criando gerentes para testes
+        /// Criando vendedores para testes
+        /// Criando produtos para testes
+        /// Criando pedidos para testes
     }
 
     /*@Test
