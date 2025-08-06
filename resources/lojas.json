@@ -249,6 +249,16 @@
         "cpf": "14714714714",
         "email": "socorro@gmail.com",
         "senha": "12345677"
+      },
+      "78787878787": {
+        "pedidosOficial": {},
+        "valorVenda": 0,
+        "codigoLoja": "050",
+        "volumeVendas": 0,
+        "nome": "veterano",
+        "cpf": "78787878787",
+        "email": "n@gmail.com",
+        "senha": "12345678"
       }
     },
     "armazenaProdutos": {
@@ -258,6 +268,13 @@
         "carac": "muito legal",
         "quant": 18,
         "codigo": "001"
+      },
+      "456": {
+        "nome": "feijao amigo",
+        "preco": 30,
+        "carac": "muito chato e ruim",
+        "quant": 10,
+        "codigo": "456"
       }
     },
     "armazenaClientes": {
@@ -313,7 +330,7 @@
   },
   "090": {
     "codigo": "090",
-    "endereco": "Rua lala",
+    "endereco": "alal",
     "gerenteDaUnidade": {
       "nome": "lolo",
       "cpf": "20920920920",
