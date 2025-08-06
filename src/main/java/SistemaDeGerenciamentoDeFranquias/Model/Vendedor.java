@@ -11,7 +11,7 @@ public class Vendedor extends Usuario {
     String codigoLoja;
     private int volumeVendas = 0;
 
-    protected Vendedor(String nome,String cpf, String email, String senha, String codigoLoja){
+    public Vendedor(String nome, String cpf, String email, String senha, String codigoLoja){
         super(nome,cpf,email,senha);
         this.codigoLoja = codigoLoja;
     }
