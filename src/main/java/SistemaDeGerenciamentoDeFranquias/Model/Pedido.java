@@ -59,12 +59,17 @@ public class Pedido {
     public String getCodigo() { return codigo; }
 
     public void setCodigo(String codigo, Loja loja) {
-        if(loja.getPedidoAltera(this.codigo)!= null){
-
-        }
         Vendedor vendedor = loja.getVendedor(cpfVendedor);
         Pedido pedido = vendedor.getPedido(this.codigo);
         vendedor.excluirPedido(this.codigo);
+        if(loja.getPedidoAltera(pedido.getCodigo()) != null){
+            System.out.println("entrooooooooooooooooooouuuuuuu");
+            String codigoAntigo = this.codigo;
+            this.codigo = codigo;
+            loja.addPedidosAltera(pedido, loja.getArmazenaAlteracao(codigoAntigo),loja.getArmazenaAtual(codigoAntigo),0);
+            this.codigo = codigoAntigo;
+            loja.excluirPedido(pedido);
+        }
         this.codigo = codigo;
         vendedor.addPedido(pedido);
         /// lembrete: mudar o código nos outros mapas

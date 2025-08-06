@@ -472,7 +472,6 @@ public class IGAcoesGerente {
                         editarItem.addActionListener(ae -> {
                             try {
                                 gerenciaVendedorGerente.editarProd(loja.getGerenteDaUnidade(),loja.getPedido(codigoSelecionado));
-                                JOptionPane.showMessageDialog(null, "Edicao realizada", "Sucesso", JOptionPane.INFORMATION_MESSAGE);
                             } catch (EntradaException ex) {
                                 JOptionPane.showMessageDialog(null, "Erro: " + ex.getMessage(), "Entrada inválida", JOptionPane.ERROR_MESSAGE);
                             }

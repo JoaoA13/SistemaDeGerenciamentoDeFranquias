@@ -237,10 +237,10 @@ public class Loja<T> {
                 if (getArmazenaAlteracao(codigo) == "Exclusão")
                     excluirPedido(pedido);
                 else if(((String) getArmazenaAtual(codigo)).length() == 3 && ((String) getArmazenaAtual(codigo)).chars().allMatch(Character::isDigit))
-                    pedido.setCodigo((String) getArmazenaAlteracao(codigo), GerenciadorDeLojas.getLoja(codigo));
+                    pedido.setCodigo((String) getArmazenaAlteracao(codigo), GerenciadorDeLojas.getLoja(this.codigo));
                 else if("Dinheiro Físico".equals(getArmazenaAtual(codigo)) ||"Pix".equals(getArmazenaAtual(codigo)) || "Cartão".equals(getArmazenaAtual(codigo)))
                     pedido.setFormaDePagamento((String) getArmazenaAlteracao(codigo));
-                else //(((String) getArmazenaAtual(codigo)).length() >= 11 && ((String) getArmazenaAtual(codigo)).chars().allMatch(Character::isDigit))
+                else
                     pedido.getCliente().setCpf((String) getArmazenaAlteracao(codigo));
             }
 

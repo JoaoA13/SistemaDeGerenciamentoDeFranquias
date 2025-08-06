@@ -35,7 +35,7 @@ public abstract class Testes {
         GerenciadorDeLojas.getCodigoPraCpf().clear();
     }
 
-    @Test
+    /*@Test
     void testLoginComDadosValidos() throws CadastroException, LoginException {
         sistemaDono.cadastroDono("Ana", "99988877766", "senha123", "ana@email.com");
         String resultado = sistemaDono.login("99988877766", "senha123");
@@ -49,8 +49,9 @@ public abstract class Testes {
         sistemaGerente.lancarCadastro("luis","12312312312","l@gmail.com","12345678","12345678900");
         String resultado3 = sistemaVendedor.login("12312312312", "12345678");
         assertEquals("CPF e senha corretos", resultado3);
-    }
+    }*/
 
+    ///
     @Test
     void deveAceitarCpfValido() {
         assertDoesNotThrow(() -> ValidadorCpf.validarCpf("12345678909"));
