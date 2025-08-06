@@ -33,7 +33,7 @@ public abstract class GerenciadorSistema {
         Usuario usuario = null;
 
         try {
-            usuario = identificaTipoUsuario(cpf);
+            usuario = buscaUsuario(cpf);
         }catch (BancoDeDadosException e){
             System.out.println("Erro: LoginException: " + e.getMessage());
             throw new LoginException(e.getMessage());
@@ -64,7 +64,7 @@ public abstract class GerenciadorSistema {
         }
     }
 
-    static public Usuario identificaTipoUsuario(String cpf) {
+    static public Usuario buscaUsuario(String cpf) {
         cpf = cpf.replaceAll("[^\\d]", "");
         for (Loja loja : GerenciadorDeLojas.getLojas().values()) {
             if (loja == null)
