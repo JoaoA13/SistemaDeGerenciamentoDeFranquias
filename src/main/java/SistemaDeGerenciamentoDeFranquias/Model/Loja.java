@@ -229,15 +229,19 @@ public class Loja<T> {
         if(pedido != null) {
             if (getArmazenaAtual(codigo) instanceof LocalDate)
                 pedido.setData((LocalDate) getArmazenaAlteracao(codigo));
-            if (getArmazenaAtual(codigo) instanceof LocalTime)
+            else if (getArmazenaAtual(codigo) instanceof LocalTime)
                 pedido.setHora((LocalTime) getArmazenaAlteracao(codigo));
-            if (getArmazenaAtual(codigo) instanceof BigDecimal)
+            else if (getArmazenaAtual(codigo) instanceof BigDecimal)
                 pedido.setTaxaEntrega((BigDecimal) getArmazenaAlteracao(codigo));
-            if (getArmazenaAtual(codigo) instanceof String){
-                if (getArmazenaAtual(codigo) == "Exclusão")
+            else if (getArmazenaAtual(codigo) instanceof String){
+                if (getArmazenaAlteracao(codigo) == "Exclusão")
                     excluirPedido(pedido);
-                if(((String) getArmazenaAtual(codigo)).length() == 3 && ((String) getArmazenaAtual(codigo)).chars().allMatch(Character::isDigit))
+                else if(((String) getArmazenaAtual(codigo)).length() == 3 && ((String) getArmazenaAtual(codigo)).chars().allMatch(Character::isDigit))
                     pedido.setCodigo((String) getArmazenaAlteracao(codigo), GerenciadorDeLojas.getLoja(codigo));
+                else if("Dinheiro Físico".equals(getArmazenaAtual(codigo)) ||"Pix".equals(getArmazenaAtual(codigo)) || "Cartão".equals(getArmazenaAtual(codigo)))
+                    pedido.setFormaDePagamento((String) getArmazenaAlteracao(codigo));
+                else //(((String) getArmazenaAtual(codigo)).length() >= 11 && ((String) getArmazenaAtual(codigo)).chars().allMatch(Character::isDigit))
+                    pedido.getCliente().setCpf((String) getArmazenaAlteracao(codigo));
             }
 
         }

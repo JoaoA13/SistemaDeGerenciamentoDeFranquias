@@ -397,6 +397,9 @@ public class IGAcoesVendedor {
                         tabela.setRowSelectionInterval(linha, linha);
                         String codigoPedido = (String) tabela.getValueAt(linha, 0);
 
+                        for (ActionListener al : editarItem.getActionListeners()) {
+                            editarItem.removeActionListener(al);
+                        }
                         editarItem.addActionListener(ae -> {
                             try {
                                 editarProd(vendedor, vendedor.getPedido(codigoPedido));
@@ -405,6 +408,9 @@ public class IGAcoesVendedor {
                             }
                         });
 
+                        for (ActionListener al : excluirItem.getActionListeners()) {
+                            excluirItem.removeActionListener(al);
+                        }
                         excluirItem.addActionListener(ae -> {
                             int confirm = JOptionPane.showConfirmDialog(lista,
                                     "Tem certeza que deseja solicitar a exclusão do produto?",

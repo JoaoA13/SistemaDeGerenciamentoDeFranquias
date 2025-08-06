@@ -580,9 +580,11 @@ public class IGAcoesGerente {
                         String codigoSelecionado = (String) tabela.getValueAt(linha, 0); // coluna 0 = código do pedido
 
                         acatar.addActionListener(ae -> {
-                            ((DefaultTableModel) tabela.getModel()).removeRow(linha);
-                            JOptionPane.showMessageDialog(null, "Solicitação de mudança aprovada", "Sucesso", JOptionPane.INFORMATION_MESSAGE);
-                        });
+                            if (linha >= 0 && linha < tabela.getRowCount()) {
+                                loja.acatarAlteracao(codigoSelecionado);
+                                ((DefaultTableModel) tabela.getModel()).removeRow(linha);
+                                JOptionPane.showMessageDialog(null, "Solicitação de mudança aprovada", "Sucesso", JOptionPane.INFORMATION_MESSAGE);
+                            }});
 
                         rejeitar.addActionListener(ae -> {
                             loja.excluirAlteracao(codigoSelecionado);

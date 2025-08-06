@@ -59,6 +59,9 @@ public class Pedido {
     public String getCodigo() { return codigo; }
 
     public void setCodigo(String codigo, Loja loja) {
+        if(loja.getPedidoAltera(this.codigo)!= null){
+
+        }
         Vendedor vendedor = loja.getVendedor(cpfVendedor);
         Pedido pedido = vendedor.getPedido(this.codigo);
         vendedor.excluirPedido(this.codigo);
