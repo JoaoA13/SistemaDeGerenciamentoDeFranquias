@@ -32,6 +32,7 @@ public abstract class Testes {
         gerenciaLojas = new GerenciadorDeLojas();
 
         /// Criando lojas para testes
+
         /// Criando donos para testes
         /// Criando gerentes para testes
         /// Criando vendedores para testes
