@@ -1,4 +1,4 @@
-package SistemaDeGerenciamentoDeFranquias.Validadores;
+package SistemaDeGerenciamentoDeFranquias.Validadores.ValidadoresEntrada;
 
 import SistemaDeGerenciamentoDeFranquias.Exceptions.EntradaException;
 

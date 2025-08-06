@@ -1,7 +1,5 @@
-package SistemaDeGerenciamentoDeFranquias.Validadores;
+package SistemaDeGerenciamentoDeFranquias.Validadores.ValidadoresEntrada;
 
-import SistemaDeGerenciamentoDeFranquias.Exceptions.CadastroException;
-import SistemaDeGerenciamentoDeFranquias.Exceptions.CampoVazioException;
 import SistemaDeGerenciamentoDeFranquias.Exceptions.EmailInválidoException;
 import SistemaDeGerenciamentoDeFranquias.Exceptions.EntradaException;
 

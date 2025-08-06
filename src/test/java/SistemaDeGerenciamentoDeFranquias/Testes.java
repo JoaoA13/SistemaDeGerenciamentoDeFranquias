@@ -6,9 +6,9 @@ import SistemaDeGerenciamentoDeFranquias.Control.GerenciadorSistemaGerente;
 import SistemaDeGerenciamentoDeFranquias.Control.GerenciadorSistemaVendedor;
 import SistemaDeGerenciamentoDeFranquias.Exceptions.*;
 import SistemaDeGerenciamentoDeFranquias.Model.Dono;
-import SistemaDeGerenciamentoDeFranquias.Validadores.ValidadorCpf;
+import SistemaDeGerenciamentoDeFranquias.Validadores.ValidadoresEntrada.ValidadorCpf;
 import SistemaDeGerenciamentoDeFranquias.Validadores.ValidadoresBancoDados.ValidadorCpfBancoDeDadosFalse;
-import SistemaDeGerenciamentoDeFranquias.Validadores.ValidadorSenha;
+import SistemaDeGerenciamentoDeFranquias.Validadores.ValidadoresEntrada.ValidadorSenha;
 import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.Test;
 

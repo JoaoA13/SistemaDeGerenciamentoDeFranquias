@@ -1,19 +1,16 @@
 package SistemaDeGerenciamentoDeFranquias.Control;
 
-import SistemaDeGerenciamentoDeFranquias.Arquivos.salvaArquivos;
 import SistemaDeGerenciamentoDeFranquias.Exceptions.BancoDeDadosException;
 import SistemaDeGerenciamentoDeFranquias.Exceptions.CadastroException;
 import SistemaDeGerenciamentoDeFranquias.Exceptions.EntradaException;
-import SistemaDeGerenciamentoDeFranquias.Exceptions.LoginException;
 import SistemaDeGerenciamentoDeFranquias.Model.Loja;
 import SistemaDeGerenciamentoDeFranquias.Model.Pedido;
 import SistemaDeGerenciamentoDeFranquias.Model.Produto;
 import SistemaDeGerenciamentoDeFranquias.Model.Vendedor;
-import SistemaDeGerenciamentoDeFranquias.Validadores.*;
 import SistemaDeGerenciamentoDeFranquias.Validadores.ValidadoresBancoDados.*;
+import SistemaDeGerenciamentoDeFranquias.Validadores.ValidadoresEntrada.*;
 import SistemaDeGerenciamentoDeFranquias.Validadores.ValidadoresNumericos.ValidadorBigDecimal;
 import SistemaDeGerenciamentoDeFranquias.Validadores.ValidadoresNumericos.ValidadorPrecoPositivo;
-import SistemaDeGerenciamentoDeFranquias.Vision.InterfaceGrafica;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;

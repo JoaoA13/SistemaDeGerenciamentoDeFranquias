@@ -1,28 +1,17 @@
 package SistemaDeGerenciamentoDeFranquias.Control;
 
 import SistemaDeGerenciamentoDeFranquias.Exceptions.BancoDeDadosException;
-import SistemaDeGerenciamentoDeFranquias.Exceptions.CadastroException;
 import SistemaDeGerenciamentoDeFranquias.Exceptions.EntradaException;
-import SistemaDeGerenciamentoDeFranquias.Exceptions.LoginException;
 import SistemaDeGerenciamentoDeFranquias.Model.*;
-import SistemaDeGerenciamentoDeFranquias.Validadores.*;
 import SistemaDeGerenciamentoDeFranquias.Validadores.ValidadoresBancoDados.*;
-import SistemaDeGerenciamentoDeFranquias.Validadores.ValidadorCpf;
+import SistemaDeGerenciamentoDeFranquias.Validadores.ValidadoresEntrada.*;
 import SistemaDeGerenciamentoDeFranquias.Validadores.ValidadoresNumericos.ValidadorPrecoPositivo;
+import SistemaDeGerenciamentoDeFranquias.Validadores.ValidadoresNumericos.ValidadorQuantidadeValida;
 import SistemaDeGerenciamentoDeFranquias.Validadores.ValidadoresNumericos.ValidadorValorNaoNegativo;
-import SistemaDeGerenciamentoDeFranquias.Vision.IGAcoesGerente;
-import SistemaDeGerenciamentoDeFranquias.Vision.IGAcoesVendedor;
-import SistemaDeGerenciamentoDeFranquias.Vision.InterfaceGrafica;
 
-import javax.swing.*;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.LocalTime;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.concurrent.atomic.AtomicBoolean;
-
-import static SistemaDeGerenciamentoDeFranquias.Control.GerenciadorDeLojas.getVendedorGeral;
 
 public class GerenciadorSistemaVendedor extends GerenciadorSistema {
     public Pedido lancarPedido(String nomeCliente, String dataTexto, String horaTexto, String formaDePagamento, String taxaEntregaTexto, String cpfCliente, String codigo, Vendedor vendedor, Loja loja) throws EntradaException {

@@ -1,9 +1,7 @@
-package SistemaDeGerenciamentoDeFranquias.Validadores;
+package SistemaDeGerenciamentoDeFranquias.Validadores.ValidadoresEntrada;
 
 import SistemaDeGerenciamentoDeFranquias.Exceptions.CampoVazioException;
-import SistemaDeGerenciamentoDeFranquias.Exceptions.CpfInvalidoException;
 import SistemaDeGerenciamentoDeFranquias.Exceptions.EntradaException;
-import SistemaDeGerenciamentoDeFranquias.Exceptions.LoginException;
 
 public interface ValidadorCampoVazio {
     static public void valida(String textoDoCampo) throws EntradaException {
