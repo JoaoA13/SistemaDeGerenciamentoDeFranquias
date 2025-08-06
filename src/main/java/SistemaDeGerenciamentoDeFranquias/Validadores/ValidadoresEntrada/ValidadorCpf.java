@@ -4,7 +4,7 @@ import SistemaDeGerenciamentoDeFranquias.Exceptions.CpfInvalidoException;
 import SistemaDeGerenciamentoDeFranquias.Exceptions.EntradaException;
 import SistemaDeGerenciamentoDeFranquias.Validadores.ValidadorLogin;
 
-public class ValidadorCpf implements ValidadorLogin {
+public class ValidadorCpf implements ValidadadorEntrada {
         static public void validarCpf(String cpf) throws EntradaException {
         cpf = cpf.replaceAll("[^\\d]", "");
 

@@ -6,7 +6,7 @@ import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
 
-public class ValidadorHora {
+public class ValidadorHora implements ValidadadorEntrada{
     public static LocalTime validarHora(String horaTexto) throws EntradaException {
         if (horaTexto == null || horaTexto.isBlank())
             throw new EntradaException("O campo de hora está vazio");

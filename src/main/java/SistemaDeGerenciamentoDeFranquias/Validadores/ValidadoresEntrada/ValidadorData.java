@@ -6,7 +6,7 @@ import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
 
-public class ValidadorData {
+public class ValidadorData implements ValidadadorEntrada{
     public static LocalDate validarData(String dataTexto) throws EntradaException {
         if (dataTexto == null || dataTexto.isBlank())
             throw new EntradaException("O campo de data está vazio");
