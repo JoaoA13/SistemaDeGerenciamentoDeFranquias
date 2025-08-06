@@ -151,5 +151,11 @@ public class GerenciadorDeLojas {
         salvaArquivos.salvarCodigos(codigoParaCpf);
         salvaArquivos.salvarGerentes(armazenaGerentes);
     }
+    static public void salvaLojaGerente(){
+        salvaArquivos.salvarLojas(armazenaLojas);
+        salvaArquivos.salvarCodigos(codigoParaCpf);
+        salvaArquivos.salvarGerentes(armazenaGerentes);
+        salvaArquivos.salvarQuantidadeDeLojas(quantidadeDeLojas);
+    }
 
 }

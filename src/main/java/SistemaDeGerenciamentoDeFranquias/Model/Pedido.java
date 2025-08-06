@@ -99,7 +99,12 @@ public class Pedido {
 
     public void setCliente(Cliente cliente){ this.cliente = cliente;}
 
-    public Cliente getCliente(){ return cliente;}
+    public Cliente getCliente(){
+        if(cliente != null)
+            return cliente;
+        else
+            return null;
+    }
 
     public String getCpfVendedor() {
         return cpfVendedor;

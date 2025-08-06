@@ -94,13 +94,13 @@ public class Loja<T> {
         armazenaProdutos.put(codigo,produto);
     }
 
-    public void addProdutoDireto(Produto produto){ armazenaProdutos.put(produto.getCodigoProd(), produto); }
+    public void addProdutoDireto(Produto produto){ armazenaProdutos.put(produto.getCodigoProd(), produto); GerenciadorDeLojas.salvaLojaGerente();}
 
-    public void excluirProduto(String codigo){armazenaProdutos.remove(codigo);}
+    public void excluirProduto(String codigo){armazenaProdutos.remove(codigo);GerenciadorDeLojas.salvaLojaGerente();}
 
-    public void addCliente(Cliente cliente){ armazenaClientes.put(cliente.getCpf(), cliente); }
+    public void addCliente(Cliente cliente){ armazenaClientes.put(cliente.getCpf(), cliente); GerenciadorDeLojas.salvaLojaGerente();}
 
-    public void excluirCliente(String cpf){armazenaClientes.remove(cpf);}
+    public void excluirCliente(String cpf){armazenaClientes.remove(cpf);GerenciadorDeLojas.salvaLojaGerente();}
 
     public Cliente getCliente(String cpf) {
         if (armazenaClientes == null) {
@@ -180,6 +180,8 @@ public class Loja<T> {
         armazenaPedidosAltera.put(pedido.getCodigo(),pedido);
         armazenaAlteracao.put(pedido.getCodigo(), texto);
         armazenaAtual.put(pedido.getCodigo(), texto2);
+
+        GerenciadorDeLojas.salvaLojaGerente();
     }
 
     public Map<String, Pedido> getArmazenaPedidosAltera() {
@@ -216,12 +218,15 @@ public class Loja<T> {
             armazenaAtual.remove(pedido.getCodigo());
             armazenaAlteracao.remove(pedido.getCodigo());
         }
+        GerenciadorDeLojas.salvaLojaGerente();
     }
 
     public void excluirAlteracao(String codigo){
             armazenaPedidosAltera.remove(codigo);
             armazenaAtual.remove(codigo);
             armazenaAlteracao.remove(codigo);
+
+        GerenciadorDeLojas.salvaLojaGerente();
     }
 
     public void acatarAlteracao(String codigo){
@@ -248,5 +253,7 @@ public class Loja<T> {
         armazenaPedidosAltera.remove(codigo);
         armazenaAtual.remove(codigo);
         armazenaAlteracao.remove(codigo);
+
+        GerenciadorDeLojas.salvaLojaGerente();
     }
 }

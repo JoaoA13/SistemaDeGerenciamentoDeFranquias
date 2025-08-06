@@ -25,9 +25,9 @@ public class GerenciadorSistemaDono extends GerenciadorSistema {
     }
 
     public GerenciadorSistemaDono() {
-        Dono dono1 = new Dono("João","14127945605","joao@gmail","12345678");
-        armazenaDonos.put(dono1.getCpf(), dono1);
-        salvaArquivos.salvarDonos(armazenaDonos);
+//        Dono dono1 = new Dono("João","14127945605","joao@gmail","12345678");
+//        armazenaDonos.put(dono1.getCpf(), dono1);
+//        salvaArquivos.salvarDonos(armazenaDonos);
         carregaArmazenaDonos();
     }
 
@@ -39,39 +39,6 @@ public class GerenciadorSistemaDono extends GerenciadorSistema {
         Map<String, Dono> Donos = armazenaDonos;
         return Donos;
     }
-
-//    @Override
-//    public String login(String cpf, String senha) throws LoginException {
-//        super.login(cpf, senha);
-//
-//        try {
-//            ValidadorCampoVazio.valida(cpf);
-//            ValidadorCampoVazio.valida(senha);
-//            ValidadorCpf.validarCpf(cpf);
-//            ValidadorSenha.valida(senha);
-//        } catch (EntradaException e) {
-//            System.out.println("Erro: EntradaException: " + e.getMessage());
-//            throw new LoginException(e.getMessage());
-//        }
-//
-//        Usuario usuario = null;
-//
-//        try {
-//            usuario = identificaTipoUsuario(cpf);
-//        }catch (BancoDeDadosException e){
-//            System.out.println("Erro: LoginException: " + e.getMessage());
-//            throw new LoginException(e.getMessage());
-//        }
-//
-//        try {
-//            ValidadorLogin.valida(usuario, cpf, senha);
-//            return "CPF e senha corretos";
-//        } catch (LoginException e) {
-//            System.out.println("Erro: LoginException: " + e.getMessage());
-//            throw new LoginException(e.getMessage());
-//        }
-//    }
-
     public void cadastroLoja(String endereco,String codigo, String cpfGerente) throws CadastroException {
         try {
             ValidadorCampoVazio.valida(endereco);
@@ -217,6 +184,7 @@ public class GerenciadorSistemaDono extends GerenciadorSistema {
 
         armazenaDonos.remove(cpf);
 
+        salvaArquivos.salvarDonos(armazenaDonos);
         return "Dono excluído com Sucesso";
     }
 
@@ -226,6 +194,7 @@ public class GerenciadorSistemaDono extends GerenciadorSistema {
             if(loja != null)
                 loja.setEndereco(endereco);
 
+            GerenciadorDeLojas.salvaLojaGerente();
             return "Endereço editado";
         }
         if (novoCodigo != "") {
@@ -245,6 +214,7 @@ public class GerenciadorSistemaDono extends GerenciadorSistema {
 
             GerenciadorDeLojas.trocarCodigo(novoCodigo,codigo);
 
+            GerenciadorDeLojas.salvaLojaGerente();
             return "Codigo da loja editado";
         }
         /// troca o gerente da unidade
@@ -269,6 +239,7 @@ public class GerenciadorSistemaDono extends GerenciadorSistema {
 
             GerenciadorDeLojas.trocarGerente(codigo,GerenciadorDeLojas.getGerente(cpfNovoGerente));
 
+            GerenciadorDeLojas.salvaLojaGerente();
             return "Gerente da unidade foi trocado";
         }
         return "";
@@ -286,6 +257,7 @@ public class GerenciadorSistemaDono extends GerenciadorSistema {
 
             GerenciadorDeLojas.getGerente(cpf).setNome(nome);
 
+            GerenciadorDeLojas.salvaLojaGerente();
             return "Nome editado";
         }
         if (cpfNovo != "") {
@@ -316,6 +288,7 @@ public class GerenciadorSistemaDono extends GerenciadorSistema {
 
             GerenciadorDeLojas.getGerente(cpfNovo).setCpf(cpfNovo);
 
+            GerenciadorDeLojas.salvaLojaGerente();
             return "CPf editado";
         }
             if (email != "") {
@@ -329,6 +302,7 @@ public class GerenciadorSistemaDono extends GerenciadorSistema {
 
                 GerenciadorDeLojas.getGerente(cpf).setEmail(email);
 
+                GerenciadorDeLojas.salvaLojaGerente();
                 return "E-mail editado";
             }
             if (senha != "") {
@@ -342,6 +316,7 @@ public class GerenciadorSistemaDono extends GerenciadorSistema {
 
                 GerenciadorDeLojas.getGerente(cpf).setSenha(senha);
 
+                GerenciadorDeLojas.salvaLojaGerente();
                 return "Senha editada";
             }
             return "";
@@ -359,6 +334,7 @@ public class GerenciadorSistemaDono extends GerenciadorSistema {
 
             getDono(cpf).setNome(nome);
 
+            salvaArquivos.salvarDonos(armazenaDonos);
             return "Nome editado";
         }
         if (cpfNovo != "") {
@@ -383,6 +359,7 @@ public class GerenciadorSistemaDono extends GerenciadorSistema {
             dono.setCpf(cpfNovo);
             armazenaDonos.put(cpfNovo,dono);
 
+            salvaArquivos.salvarDonos(armazenaDonos);
             return "CPf editado";
         }
         if (email != "") {
@@ -396,6 +373,7 @@ public class GerenciadorSistemaDono extends GerenciadorSistema {
 
             getDono(cpf).setEmail(email);
 
+            salvaArquivos.salvarDonos(armazenaDonos);
             return "E-mail editado";
         }
         if (senha != "") {
@@ -409,6 +387,7 @@ public class GerenciadorSistemaDono extends GerenciadorSistema {
 
             getDono(cpf).setSenha(senha);
 
+            salvaArquivos.salvarDonos(armazenaDonos);
             return "Senha editada";
         }
         return "";

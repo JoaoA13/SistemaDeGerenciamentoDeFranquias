@@ -1,18 +1,75 @@
 {
-  "123": {
-    "codigo": "123",
-    "endereco": "Avenida Paulista",
+  "001": {
+    "codigo": "001",
+    "endereco": "dqwdadsd",
     "gerenteDaUnidade": {
-      "nome": "Nalon",
-      "cpf": "12345678900",
-      "email": "nalon@gmail.com",
-      "senha": "12345678"
+      "nome": "j",
+      "cpf": "09876543211",
+      "email": "eita@gmail.com",
+      "senha": "senha123"
     },
     "armazenaVendedores": {
       "78978978978": {
-        "pedidosOficial": {},
-        "valorVenda": 0,
-        "codigoLoja": "123",
+        "pedidosOficial": {
+          "122": {
+            "produtos": {
+              "200": {
+                "nome": "arroz",
+                "preco": 12,
+                "carac": "grande e guloso",
+                "quant": 0,
+                "codigo": "200"
+              }
+            },
+            "quantProdutos": {
+              "200": 100
+            },
+            "codigo": "122",
+            "nomeCliente": "isaias",
+            "data": "2012-12-12",
+            "hora": "12:12:00",
+            "formaDePagamento": "Dinheiro Físico",
+            "taxaEntrega": 12,
+            "valorTotal": 1212,
+            "cliente": {
+              "nome": "isaias",
+              "quantidadeCompras": 1,
+              "valorGasto": 1200,
+              "cpf": "70413264629"
+            },
+            "cpfVendedor": "78978978978"
+          },
+          "123": {
+            "produtos": {
+              "123": {
+                "nome": "proe",
+                "preco": 3,
+                "carac": "dsadasdasdasdasdasdas",
+                "quant": 1,
+                "codigo": "123"
+              }
+            },
+            "quantProdutos": {
+              "123": 4
+            },
+            "codigo": "123",
+            "nomeCliente": "isaias",
+            "data": "2025-08-03",
+            "hora": "14:31:00",
+            "formaDePagamento": "Pix",
+            "taxaEntrega": 100,
+            "valorTotal": 112,
+            "cliente": {
+              "nome": "isaias",
+              "quantidadeCompras": 1,
+              "valorGasto": 12,
+              "cpf": "70413265609"
+            },
+            "cpfVendedor": "78978978978"
+          }
+        },
+        "valorVenda": 1212,
+        "codigoLoja": "001",
         "volumeVendas": 0,
         "nome": "Ana",
         "cpf": "78978978978",
@@ -22,7 +79,7 @@
       "45645645645": {
         "pedidosOficial": {},
         "valorVenda": 0,
-        "codigoLoja": "123",
+        "codigoLoja": "001",
         "volumeVendas": 0,
         "nome": "Carlos",
         "cpf": "45645645645",
@@ -32,7 +89,279 @@
       "14714714714": {
         "pedidosOficial": {},
         "valorVenda": 0,
-        "codigoLoja": "123",
+        "codigoLoja": "001",
+        "volumeVendas": 0,
+        "nome": "Gleiph",
+        "cpf": "14714714714",
+        "email": "socorro@gmail.com",
+        "senha": "12345677"
+      }
+    },
+    "armazenaProdutos": {
+      "123": {
+        "nome": "proe",
+        "preco": 3,
+        "carac": "dsadasdasdasdasdasdas",
+        "quant": 1,
+        "codigo": "123"
+      },
+      "100": {
+        "nome": "feijão",
+        "preco": 10,
+        "carac": "robusto e  bom",
+        "quant": 10,
+        "codigo": "100"
+      },
+      "145": {
+        "nome": "carro zero km",
+        "preco": 100000,
+        "carac": "barato em bom",
+        "quant": 1003,
+        "codigo": "145"
+      }
+    },
+    "armazenaClientes": {
+      "70413265609": {
+        "nome": "isaias",
+        "quantidadeCompras": 1,
+        "valorGasto": 12,
+        "cpf": "70413265609"
+      },
+      "70413264629": {
+        "nome": "isaias",
+        "quantidadeCompras": 1,
+        "valorGasto": 1200,
+        "cpf": "70413264629"
+      }
+    },
+    "armazenaPedidosAltera": {
+      "123": {
+        "produtos": {
+          "123": {
+            "nome": "proe",
+            "preco": 3,
+            "carac": "dsadasdasdasdasdasdas",
+            "quant": 1,
+            "codigo": "123"
+          }
+        },
+        "quantProdutos": {
+          "123": 4
+        },
+        "codigo": "123",
+        "nomeCliente": "isaias",
+        "data": "2025-08-03",
+        "hora": "14:31:00",
+        "formaDePagamento": "Pix",
+        "taxaEntrega": 100,
+        "valorTotal": 112,
+        "cliente": {
+          "nome": "isaias",
+          "quantidadeCompras": 1,
+          "valorGasto": 12,
+          "cpf": "70413265609"
+        },
+        "cpfVendedor": "78978978978"
+      }
+    },
+    "armazenaAlteracao": {
+      "123": "Pix"
+    },
+    "armazenaAtual": {
+      "123": "Pix"
+    }
+  },
+  "050": {
+    "codigo": "050",
+    "endereco": "rua tal",
+    "gerenteDaUnidade": {
+      "nome": "mano",
+      "cpf": "09809809809",
+      "email": "ma@gmail.com",
+      "senha": "12345678"
+    },
+    "armazenaVendedores": {
+      "23423423423": {
+        "pedidosOficial": {
+          "321": {
+            "produtos": {
+              "001": {
+                "nome": "arroz",
+                "preco": 10,
+                "carac": "muito legal",
+                "quant": 18,
+                "codigo": "001"
+              }
+            },
+            "quantProdutos": {
+              "001": 1
+            },
+            "codigo": "321",
+            "nomeCliente": "joaquim",
+            "data": "2012-12-12",
+            "hora": "11:11:00",
+            "formaDePagamento": "Dinheiro Físico",
+            "taxaEntrega": 12,
+            "valorTotal": 22,
+            "cliente": {
+              "nome": "joaquim",
+              "quantidadeCompras": 1,
+              "valorGasto": 10,
+              "cpf": "12345665432"
+            },
+            "cpfVendedor": "23423423423"
+          }
+        },
+        "valorVenda": 20,
+        "codigoLoja": "050",
+        "volumeVendas": 2,
+        "nome": "roberto",
+        "cpf": "23423423423",
+        "email": "rb@gmail.com",
+        "senha": "12345678"
+      },
+      "78978978978": {
+        "pedidosOficial": {},
+        "valorVenda": 0,
+        "codigoLoja": "050",
+        "volumeVendas": 0,
+        "nome": "Ana",
+        "cpf": "78978978978",
+        "email": "Tome-lheForro@gmail.com",
+        "senha": "12345677"
+      },
+      "45645645645": {
+        "pedidosOficial": {},
+        "valorVenda": 0,
+        "codigoLoja": "050",
+        "volumeVendas": 0,
+        "nome": "Carlos",
+        "cpf": "45645645645",
+        "email": "eitanois@gmail.com",
+        "senha": "12345677"
+      },
+      "14714714714": {
+        "pedidosOficial": {},
+        "valorVenda": 0,
+        "codigoLoja": "050",
+        "volumeVendas": 0,
+        "nome": "Gleiph",
+        "cpf": "14714714714",
+        "email": "socorro@gmail.com",
+        "senha": "12345677"
+      },
+      "78787878787": {
+        "pedidosOficial": {},
+        "valorVenda": 0,
+        "codigoLoja": "050",
+        "volumeVendas": 0,
+        "nome": "veterano",
+        "cpf": "78787878787",
+        "email": "n@gmail.com",
+        "senha": "12345678"
+      }
+    },
+    "armazenaProdutos": {
+      "001": {
+        "nome": "arroz",
+        "preco": 10,
+        "carac": "muito legal",
+        "quant": 18,
+        "codigo": "001"
+      },
+      "456": {
+        "nome": "feijao amigo",
+        "preco": 30,
+        "carac": "muito chato e ruim",
+        "quant": 10,
+        "codigo": "456"
+      }
+    },
+    "armazenaClientes": {
+      "12345612345": {
+        "nome": "asdsaddas",
+        "quantidadeCompras": 1,
+        "valorGasto": 0,
+        "cpf": "12345612345"
+      },
+      "12345665432": {
+        "nome": "joaquim",
+        "quantidadeCompras": 1,
+        "valorGasto": 10,
+        "cpf": "12345665432"
+      }
+    },
+    "armazenaPedidosAltera": {
+      "321": {
+        "produtos": {
+          "001": {
+            "nome": "arroz",
+            "preco": 10,
+            "carac": "muito legal",
+            "quant": 18,
+            "codigo": "001"
+          }
+        },
+        "quantProdutos": {
+          "001": 1
+        },
+        "codigo": "321",
+        "nomeCliente": "joaquim",
+        "data": "2012-12-12",
+        "hora": "11:11:00",
+        "formaDePagamento": "Dinheiro Físico",
+        "taxaEntrega": 12,
+        "valorTotal": 22,
+        "cliente": {
+          "nome": "joaquim",
+          "quantidadeCompras": 1,
+          "valorGasto": 10,
+          "cpf": "12345665432"
+        },
+        "cpfVendedor": "23423423423"
+      }
+    },
+    "armazenaAlteracao": {
+      "321": "12345612345"
+    },
+    "armazenaAtual": {
+      "321": "12345665432"
+    }
+  },
+  "090": {
+    "codigo": "090",
+    "endereco": "alal",
+    "gerenteDaUnidade": {
+      "nome": "lolo",
+      "cpf": "20920920920",
+      "email": "lo@gmail.com",
+      "senha": "12345678"
+    },
+    "armazenaVendedores": {
+      "78978978978": {
+        "pedidosOficial": {},
+        "valorVenda": 0,
+        "codigoLoja": "090",
+        "volumeVendas": 0,
+        "nome": "Ana",
+        "cpf": "78978978978",
+        "email": "Tome-lheForro@gmail.com",
+        "senha": "12345677"
+      },
+      "45645645645": {
+        "pedidosOficial": {},
+        "valorVenda": 0,
+        "codigoLoja": "090",
+        "volumeVendas": 0,
+        "nome": "Carlos",
+        "cpf": "45645645645",
+        "email": "eitanois@gmail.com",
+        "senha": "12345677"
+      },
+      "14714714714": {
+        "pedidosOficial": {},
+        "valorVenda": 0,
+        "codigoLoja": "090",
         "volumeVendas": 0,
         "nome": "Gleiph",
         "cpf": "14714714714",
