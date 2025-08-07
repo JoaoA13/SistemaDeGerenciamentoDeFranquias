@@ -6,11 +6,16 @@ import SistemaDeGerenciamentoDeFranquias.Control.GerenciadorSistemaGerente;
 import SistemaDeGerenciamentoDeFranquias.Control.GerenciadorSistemaVendedor;
 import SistemaDeGerenciamentoDeFranquias.Exceptions.*;
 import SistemaDeGerenciamentoDeFranquias.Model.Dono;
+import SistemaDeGerenciamentoDeFranquias.Model.Gerente;
+import SistemaDeGerenciamentoDeFranquias.Model.Loja;
 import SistemaDeGerenciamentoDeFranquias.Validadores.ValidadoresEntrada.ValidadorCpf;
 import SistemaDeGerenciamentoDeFranquias.Validadores.ValidadoresBancoDados.ValidadorCpfBancoDeDadosFalse;
 import SistemaDeGerenciamentoDeFranquias.Validadores.ValidadoresEntrada.ValidadorSenha;
 import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.Test;
+
+import java.util.HashMap;
+import java.util.Map;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -30,14 +35,6 @@ public abstract class Testes {
         sistemaVendedor = new GerenciadorSistemaVendedor();
 
         gerenciaLojas = new GerenciadorDeLojas();
-
-        /// Criando lojas para testes
-
-        /// Criando donos para testes
-        /// Criando gerentes para testes
-        /// Criando vendedores para testes
-        /// Criando produtos para testes
-        /// Criando pedidos para testes
     }
 
     /*@Test
@@ -56,7 +53,6 @@ public abstract class Testes {
         assertEquals("CPF e senha corretos", resultado3);
     }*/
 
-    ///
     @Test
     void deveAceitarCpfValido() {
         assertDoesNotThrow(() -> ValidadorCpf.validarCpf("12345678909"));

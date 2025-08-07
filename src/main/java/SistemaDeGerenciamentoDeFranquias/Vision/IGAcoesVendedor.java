@@ -434,7 +434,7 @@ public class IGAcoesVendedor {
                             visualizar.removeActionListener(al);
                         }
                         visualizar.addActionListener(ae -> {
-                            exibePedido(codigoPedido,vendedor);
+                            exibePedido(codigoPedido,vendedor,false);
                         });
 
                         menuPopup.show(tabela, e.getX(), e.getY());
@@ -450,7 +450,7 @@ public class IGAcoesVendedor {
         return lista;
     }
 
-    protected void exibePedido(String codigo,Vendedor vendedor) {
+    protected void exibePedido(String codigo,Vendedor vendedor,boolean u) {
         Pedido pedido = vendedor.getPedido(codigo);
         JFrame exibe = new JFrame("Informações de pedido: " + codigo);
         exibe.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
@@ -544,8 +544,13 @@ public class IGAcoesVendedor {
 
                         editarItem.addActionListener(ae -> {
                             try {
-                                editarProd(vendedor,pedido);
-                                JOptionPane.showMessageDialog(null, "Solicitação de modificação realizada", "Sucesso", JOptionPane.INFORMATION_MESSAGE);
+                                if(u == false) {
+                                    editarProd(vendedor, pedido);
+                                    JOptionPane.showMessageDialog(null, "Solicitação de modificação realizada", "Sucesso", JOptionPane.INFORMATION_MESSAGE);
+                                }else{
+                                    editarQntProd(vendedor, pedido,u);
+                                    JOptionPane.showMessageDialog(null, "Edição de quantidade concluida", "Sucesso", JOptionPane.INFORMATION_MESSAGE);
+                                }
                             } catch (EntradaException ex) {
                                 JOptionPane.showMessageDialog(null, "Erro: " + ex.getMessage(), "Entrada inválida", JOptionPane.ERROR_MESSAGE);
                             }
@@ -584,6 +589,47 @@ public class IGAcoesVendedor {
                 System.out.println("Janela foi fechada");
             }
         });
+    }
+
+    public void editarQntProd(Usuario vendedor, Pedido pedido,boolean u) throws EntradaException {
+        JPanel edicao = new JPanel();
+        edicao.setLayout(new BoxLayout(edicao, BoxLayout.Y_AXIS));
+        edicao.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
+
+        String texto = "";
+
+        JTextField escreveTexto = new JTextField();
+        escreveTexto.setMaximumSize(new Dimension(Integer.MAX_VALUE, 30));
+
+        JButton confirmar = new JButton("Confirmar");
+
+        JLabel descricao = new JLabel("Editar quantidade");
+        descricao.setAlignmentX(Component.LEFT_ALIGNMENT);
+        escreveTexto.setAlignmentX(Component.LEFT_ALIGNMENT);
+        confirmar.setAlignmentX(Component.LEFT_ALIGNMENT);
+
+        edicao.add(descricao);
+        edicao.add(Box.createVerticalStrut(5));
+        edicao.add(escreveTexto);
+        edicao.add(Box.createVerticalStrut(10));
+        edicao.add(confirmar);
+
+        JTextField finalEscreveTexto = escreveTexto;
+
+        confirmar.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                String textoDigitado = finalEscreveTexto.getText();
+                JOptionPane.showMessageDialog(interfaceGrafica.getFrame(), "Você digitou a quantidade: " + textoDigitado);
+
+                BigDecimal quantidade = new BigDecimal(textoDigitado);
+
+                if(u == true){
+                    loja.qntProdPedido(pedido.getCpfVendedor(), pedido.getCodigo(),quantidade);
+                }
+            }
+        });
+        InterfaceGrafica.trocarTela(edicao, 400, 200);
     }
 
     public void editarProd(Usuario vendedor, Pedido pedido) throws EntradaException {

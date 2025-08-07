@@ -256,4 +256,13 @@ public class Loja<T> {
 
         GerenciadorDeLojas.salvaLojaGerente();
     }
+
+    public void qntProdPedido(String cpfVendedor, String codigoP, BigDecimal quantidade){
+        Vendedor vendedor = getVendedor(cpfVendedor);
+
+        vendedor.getPedido(codigoP).qntProdPedido(codigoP,quantidade);
+
+        GerenciadorDeLojas.salvaLojaGerente();
+    }
+
 }

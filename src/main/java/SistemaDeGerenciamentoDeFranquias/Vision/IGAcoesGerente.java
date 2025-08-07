@@ -453,8 +453,10 @@ public class IGAcoesGerente {
         visualizacao.add(scroll, BorderLayout.CENTER);
 
         JPopupMenu menuPopup = new JPopupMenu();
+        JMenuItem visualizar = new JMenuItem("Visualizar");
         JMenuItem editarItem = new JMenuItem("Editar");
         JMenuItem excluirItem = new JMenuItem("Excluir");
+        menuPopup.add(visualizar);
         menuPopup.add(editarItem);
         menuPopup.add(excluirItem);
 
@@ -468,6 +470,8 @@ public class IGAcoesGerente {
                     if (linha >= 0 && linha < tabela.getRowCount()) {
                         tabela.setRowSelectionInterval(linha, linha);
                         String codigoSelecionado = (String) tabela.getValueAt(linha, 0);
+                        String cpfSelecionado = (String) tabela.getValueAt(linha, 1);
+                        Vendedor vendedor = loja.getVendedor(cpfSelecionado);
 
                         editarItem.addActionListener(ae -> {
                             try {
@@ -491,6 +495,13 @@ public class IGAcoesGerente {
                                 }
                                     ((DefaultTableModel) tabela.getModel()).removeRow(linha);
                             }
+                        });
+
+                        for (ActionListener al : visualizar.getActionListeners()) {
+                            visualizar.removeActionListener(al);
+                        }
+                        visualizar.addActionListener(ae -> {
+                            gerenciaVendedorGerente.exibePedido(codigoSelecionado,vendedor,true);
                         });
 
                         menuPopup.show(tabela, e.getX(), e.getY());
