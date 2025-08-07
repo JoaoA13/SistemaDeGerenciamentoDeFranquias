@@ -1,3 +1,6 @@
+//João Arthur Vieira 202465564B
+//Ismael Cezário Rosa 202465503B
+
 package org.example;
 import SistemaDeGerenciamentoDeFranquias.Arquivos.salvaArquivos;
 import SistemaDeGerenciamentoDeFranquias.Control.GerenciadorDeLojas;
