@@ -1,1 +1,49 @@
-{}
+{
+  "080": {
+    "codigo": "080",
+    "endereco": "Rua jose",
+    "gerenteDaUnidade": {
+      "nome": "j",
+      "cpf": "09876543211",
+      "email": "eita@gmail.com",
+      "senha": "senha123"
+    },
+    "armazenaVendedores": {
+      "78978978978": {
+        "pedidosOficial": {},
+        "valorVenda": 0,
+        "codigoLoja": "080",
+        "volumeVendas": 0,
+        "nome": "Ana",
+        "cpf": "78978978978",
+        "email": "Tome-lheForro@gmail.com",
+        "senha": "12345677"
+      },
+      "45645645645": {
+        "pedidosOficial": {},
+        "valorVenda": 0,
+        "codigoLoja": "080",
+        "volumeVendas": 0,
+        "nome": "Carlos",
+        "cpf": "45645645645",
+        "email": "eitanois@gmail.com",
+        "senha": "12345677"
+      },
+      "14714714714": {
+        "pedidosOficial": {},
+        "valorVenda": 0,
+        "codigoLoja": "080",
+        "volumeVendas": 0,
+        "nome": "Gleiph",
+        "cpf": "14714714714",
+        "email": "socorro@gmail.com",
+        "senha": "12345677"
+      }
+    },
+    "armazenaProdutos": {},
+    "armazenaClientes": {},
+    "armazenaPedidosAltera": {},
+    "armazenaAlteracao": {},
+    "armazenaAtual": {}
+  }
+}

@@ -97,7 +97,7 @@ public class TestesValidadorBancoDeDados {
     // valida //
     @Test
     void deveAceitarOCodigoDoPedido() {
-        assertDoesNotThrow(() -> ValidadorCodigoPedidoBancoDeDadosFalse.valida("123"));
+        assertDoesNotThrow(() -> ValidadorCodigoPedidoBancoDeDadosFalse.valida("999"));
     }
 
 
