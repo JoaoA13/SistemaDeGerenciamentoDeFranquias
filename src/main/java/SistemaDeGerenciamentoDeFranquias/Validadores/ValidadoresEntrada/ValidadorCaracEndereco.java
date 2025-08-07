@@ -1,8 +1,8 @@
-package SistemaDeGerenciamentoDeFranquias.Validadores;
+package SistemaDeGerenciamentoDeFranquias.Validadores.ValidadoresEntrada;
 
 import SistemaDeGerenciamentoDeFranquias.Exceptions.EntradaException;
 
-public class ValidadorCaracEndereco  {
+public class ValidadorCaracEndereco  implements ValidadadorEntrada{
     public static String validarTexto(String entrada, String campoNome) throws EntradaException {
         String limpa = entrada.replaceAll("[^\\p{L}\\p{Nd} ]", "").trim();
 

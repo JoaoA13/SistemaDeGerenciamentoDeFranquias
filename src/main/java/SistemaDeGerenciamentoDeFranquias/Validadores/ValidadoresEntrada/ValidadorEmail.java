@@ -1,11 +1,9 @@
-package SistemaDeGerenciamentoDeFranquias.Validadores;
+package SistemaDeGerenciamentoDeFranquias.Validadores.ValidadoresEntrada;
 
-import SistemaDeGerenciamentoDeFranquias.Exceptions.CadastroException;
-import SistemaDeGerenciamentoDeFranquias.Exceptions.CampoVazioException;
 import SistemaDeGerenciamentoDeFranquias.Exceptions.EmailInválidoException;
 import SistemaDeGerenciamentoDeFranquias.Exceptions.EntradaException;
 
-public interface ValidadorEmail {
+public class ValidadorEmail implements ValidadadorEntrada{
     static public void valida(String email) throws EntradaException {
         if (email == null || email.trim().isEmpty()) {
             throw new EmailInválidoException("E-mail está vazio.");

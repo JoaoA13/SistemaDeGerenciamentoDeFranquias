@@ -5,10 +5,8 @@ import SistemaDeGerenciamentoDeFranquias.Exceptions.*;
 import SistemaDeGerenciamentoDeFranquias.Model.Dono;
 import SistemaDeGerenciamentoDeFranquias.Model.Gerente;
 import SistemaDeGerenciamentoDeFranquias.Model.Loja;
-import SistemaDeGerenciamentoDeFranquias.Model.Usuario;
-import SistemaDeGerenciamentoDeFranquias.Validadores.*;
 import SistemaDeGerenciamentoDeFranquias.Validadores.ValidadoresBancoDados.ValidadorCodigoLojaBancoDeDadosFalse;
-import SistemaDeGerenciamentoDeFranquias.Validadores.ValidadorCpf;
+import SistemaDeGerenciamentoDeFranquias.Validadores.ValidadoresEntrada.*;
 import SistemaDeGerenciamentoDeFranquias.Validadores.ValidadoresBancoDados.ValidadorCpfBancoDeDadosFalse;
 import SistemaDeGerenciamentoDeFranquias.Validadores.ValidadoresBancoDados.ValidadorCpfBancoDeDadosTrue;
 

@@ -5,19 +5,12 @@ import SistemaDeGerenciamentoDeFranquias.Control.GerenciadorSistemaDono;
 import SistemaDeGerenciamentoDeFranquias.Control.GerenciadorSistemaGerente;
 import SistemaDeGerenciamentoDeFranquias.Control.GerenciadorSistemaVendedor;
 import SistemaDeGerenciamentoDeFranquias.Exceptions.*;
-import SistemaDeGerenciamentoDeFranquias.Model.*;
+import SistemaDeGerenciamentoDeFranquias.Model.Dono;
 import SistemaDeGerenciamentoDeFranquias.Validadores.ValidadorCpf;
-import SistemaDeGerenciamentoDeFranquias.Validadores.ValidadoresBancoDados.ValidadorCodigoLojaBancoDeDadosFalse;
-import SistemaDeGerenciamentoDeFranquias.Validadores.ValidadoresBancoDados.ValidadorCodigoPedidoBancoDeDadosFalse;
 import SistemaDeGerenciamentoDeFranquias.Validadores.ValidadoresBancoDados.ValidadorCpfBancoDeDadosFalse;
 import SistemaDeGerenciamentoDeFranquias.Validadores.ValidadorSenha;
 import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.Test;
-
-import java.math.BigDecimal;
-import java.time.LocalDate;
-import java.time.LocalTime;
-import java.time.format.DateTimeFormatter;
 
 import static org.junit.jupiter.api.Assertions.*;
 

@@ -1,5 +1,7 @@
 package SistemaDeGerenciamentoDeFranquias.Model;
 
+import SistemaDeGerenciamentoDeFranquias.Control.GerenciadorDeLojas;
+
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.LocalTime;
@@ -112,5 +114,10 @@ public class Pedido {
 
     public void setCpfVendedor(String cpfVendedor) {
         this.cpfVendedor = cpfVendedor;
+    }
+
+    public void qntProdPedido(String codigo, BigDecimal quantidade){
+        quantProdutos.remove(codigo);
+        addQntProd(codigo,quantidade);
     }
 }

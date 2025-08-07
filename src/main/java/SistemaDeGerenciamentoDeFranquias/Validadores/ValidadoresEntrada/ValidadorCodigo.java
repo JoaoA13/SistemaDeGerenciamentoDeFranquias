@@ -1,8 +1,8 @@
-package SistemaDeGerenciamentoDeFranquias.Validadores;
+package SistemaDeGerenciamentoDeFranquias.Validadores.ValidadoresEntrada;
 
 import SistemaDeGerenciamentoDeFranquias.Exceptions.EntradaException;
 
-public class ValidadorCodigo {
+public class ValidadorCodigo implements ValidadadorEntrada{
 
     public static void validarCodigo(String codigo) throws EntradaException {
         codigo = codigo.trim();
