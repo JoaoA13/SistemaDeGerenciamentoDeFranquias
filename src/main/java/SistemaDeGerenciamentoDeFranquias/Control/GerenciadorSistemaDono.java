@@ -23,9 +23,9 @@ public class GerenciadorSistemaDono extends GerenciadorSistema {
     }
 
     public GerenciadorSistemaDono() {
-        Dono dono1 = new Dono("João","14127945605","joao@gmail","12345678");
-        armazenaDonos.put(dono1.getCpf(), dono1);
-        salvaArquivos.salvarDonos(armazenaDonos);
+//        Dono dono1 = new Dono("João","14127945605","joao@gmail","12345678");
+//        armazenaDonos.put(dono1.getCpf(), dono1);
+//        salvaArquivos.salvarDonos(armazenaDonos);
         carregaArmazenaDonos();
     }
 

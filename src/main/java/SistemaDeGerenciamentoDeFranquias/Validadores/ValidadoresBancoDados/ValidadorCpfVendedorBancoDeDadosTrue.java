@@ -6,8 +6,10 @@ import static SistemaDeGerenciamentoDeFranquias.Control.GerenciadorDeLojas.getLo
 
 public class ValidadorCpfVendedorBancoDeDadosTrue implements ValidadorBancoDeDados {
     static public boolean valida(String cpf)  throws BancoDeDadosException {
+        if (getLoja(cpf)!=null)
         if(getLoja(cpf).getVendedor(cpf) == null)
             throw new BancoDeDadosException("Esse Cpf não está cadastrado");
+        else  return false;
         else
         return true;
     }

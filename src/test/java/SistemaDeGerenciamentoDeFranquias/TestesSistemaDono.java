@@ -34,9 +34,9 @@ public class TestesSistemaDono extends Testes{
         sistemaVendedor = new GerenciadorSistemaVendedor();
 
         gerenciaLojas = new GerenciadorDeLojas();
-        GerenciadorDeLojas.getLojas().clear();
-        GerenciadorDeLojas.getGerentes().clear();
-        GerenciadorDeLojas.getCodigoPraCpf().clear();
+//        GerenciadorDeLojas.getLojas().clear();
+//        GerenciadorDeLojas.getGerentes().clear();
+//        GerenciadorDeLojas.getCodigoPraCpf().clear();
     }
 
     /// TESTE SISTEMA DONO

@@ -24,12 +24,12 @@ public class Loja<T> {
         this.endereco = endereco;
         this.gerenteDaUnidade = gerenteDaUnidade;
         this.codigo = codigo;
-        Vendedor vendedor1 = new Vendedor("Gleiph", "14714714714","socorro@gmail.com", "12345677", codigo);
-        Vendedor vendedor2 = new Vendedor("Carlos", "45645645645","eitanois@gmail.com", "12345677", codigo);
-        Vendedor vendedor3 = new Vendedor("Ana", "78978978978","Tome-lheForro@gmail.com", "12345677", codigo);
-        armazenaVendedores.put("14714714714",vendedor1);
-        armazenaVendedores.put("45645645645",vendedor2);
-        armazenaVendedores.put("78978978978",vendedor3);
+//        Vendedor vendedor1 = new Vendedor("Gleiph", "14714714714","socorro@gmail.com", "12345677", codigo);
+//        Vendedor vendedor2 = new Vendedor("Carlos", "45645645645","eitanois@gmail.com", "12345677", codigo);
+//        Vendedor vendedor3 = new Vendedor("Ana", "78978978978","Tome-lheForro@gmail.com", "12345677", codigo);
+//        armazenaVendedores.put("14714714714",vendedor1);
+//        armazenaVendedores.put("45645645645",vendedor2);
+//        armazenaVendedores.put("78978978978",vendedor3);
     }
 
     /// Getters e Setters
