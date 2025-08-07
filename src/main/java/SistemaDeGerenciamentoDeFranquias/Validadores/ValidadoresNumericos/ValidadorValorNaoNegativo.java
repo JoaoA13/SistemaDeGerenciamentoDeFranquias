@@ -5,7 +5,7 @@ import SistemaDeGerenciamentoDeFranquias.Exceptions.EntradaException;
 import java.math.BigDecimal;
 
 public class ValidadorValorNaoNegativo implements ValidadorNumerico{
-    public static BigDecimal validarValorNaoNegativo(String entrada) throws EntradaException {
+    public static BigDecimal valida(String entrada) throws EntradaException {
         try {
             BigDecimal valor = new BigDecimal(entrada.replace(",", "."));
             if (valor.compareTo(BigDecimal.ZERO) < 0) {

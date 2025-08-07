@@ -27,7 +27,7 @@ public class GerenciadorSistemaGerente extends GerenciadorSistema{
             ValidadorCampoVazio.valida(email);
             ValidadorCampoVazio.valida(senha);
 
-            ValidadorNome.validarNome(nome);
+            ValidadorNome.valida(nome);
             ValidadorCpf.validarCpf(cpf);
             ValidadorEmail.valida(email);
             ValidadorSenha.valida(senha);
@@ -55,7 +55,7 @@ public class GerenciadorSistemaGerente extends GerenciadorSistema{
         if(nome != ""){
             try {
                 ValidadorCampoVazio.valida(nome);
-                ValidadorNome.validarNome(nome);
+                ValidadorNome.valida(nome);
             } catch (EntradaException e) {
                 System.out.println("Erro: EntradaException: " + e.getMessage());
                 throw new EntradaException(e.getMessage());
@@ -168,7 +168,7 @@ public class GerenciadorSistemaGerente extends GerenciadorSistema{
             preco = ValidadorBigDecimal.valida(precoSTR, "Preço Inválido");
             quant = ValidadorBigDecimal.valida(quantSTR, "Quantidade Inválida");
 
-            ValidadorNome.validarNome(nome);
+            ValidadorNome.valida(nome);
             ValidadorPrecoPositivo.valida(String.valueOf(preco));
             carac = ValidadorCaracEndereco.validarTexto(carac, "Características");
             ValidadorPrecoPositivo.valida(String.valueOf(quant));
@@ -197,7 +197,7 @@ public class GerenciadorSistemaGerente extends GerenciadorSistema{
         if(nome != ""){
             try {
                 ValidadorCampoVazio.valida(nome);
-                ValidadorNome.validarNome(nome);
+                ValidadorNome.valida(nome);
             } catch (EntradaException e) {
                 System.out.println("Erro: EntradaException: " + e.getMessage());
                 throw new EntradaException(e.getMessage());

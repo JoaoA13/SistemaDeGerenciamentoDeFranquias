@@ -70,7 +70,7 @@ public class GerenciadorSistemaDono extends GerenciadorSistema {
             ValidadorCampoVazio.valida(senha);
             ValidadorCampoVazio.valida(emailGerente);
 
-            ValidadorNome.validarNome(nomeGerente);
+            ValidadorNome.valida(nomeGerente);
             ValidadorCpf.validarCpf(cpfGerente);
             ValidadorSenha.valida(senha);
             ValidadorEmail.valida(emailGerente);
@@ -98,7 +98,7 @@ public class GerenciadorSistemaDono extends GerenciadorSistema {
             ValidadorCampoVazio.valida(senha);
             ValidadorCampoVazio.valida(email);
 
-            ValidadorNome.validarNome(nome);
+            ValidadorNome.valida(nome);
             ValidadorCpf.validarCpf(cpf);
             ValidadorSenha.valida(senha);
             ValidadorEmail.valida(email);
@@ -247,7 +247,7 @@ public class GerenciadorSistemaDono extends GerenciadorSistema {
         if (nome != "") {
             try {
                 ValidadorCampoVazio.valida(nome);
-                ValidadorNome.validarNome(nome);
+                ValidadorNome.valida(nome);
             } catch (EntradaException e) {
                 System.out.println("Erro: EntradaException: " + e.getMessage());
                 throw new EntradaException(e.getMessage());
@@ -324,7 +324,7 @@ public class GerenciadorSistemaDono extends GerenciadorSistema {
         if (nome != "") {
             try {
                 ValidadorCampoVazio.valida(nome);
-                ValidadorNome.validarNome(nome);
+                ValidadorNome.valida(nome);
             } catch (EntradaException e) {
                 System.out.println("Erro: EntradaException: " + e.getMessage());
                 throw new EntradaException(e.getMessage());

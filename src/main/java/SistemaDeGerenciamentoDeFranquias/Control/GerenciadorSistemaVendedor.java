@@ -24,12 +24,12 @@ public class GerenciadorSistemaVendedor extends GerenciadorSistema {
             ValidadorCampoVazio.valida(cpfCliente);
             ValidadorCampoVazio.valida(codigo);
 
-            ValidadorNome.validarNome(nomeCliente);
+            ValidadorNome.valida(nomeCliente);
             ValidadorCpf.validarCpf(cpfCliente);
             ValidadorCodigo.validarCodigo(codigo);
             data = ValidadorData.validarData(dataTexto);
             hora = ValidadorHora.validarHora(horaTexto);
-            taxaEntrega = ValidadorValorNaoNegativo.validarValorNaoNegativo(taxaEntregaTexto);
+            taxaEntrega = ValidadorValorNaoNegativo.valida(taxaEntregaTexto);
 
             ValidadorCodigoPedidoBancoDeDadosFalse.valida(codigo);
         } catch (EntradaException e) {
@@ -95,7 +95,7 @@ public class GerenciadorSistemaVendedor extends GerenciadorSistema {
                     break;
                 }
                 case 5: {
-                    taxaEntrega = ValidadorValorNaoNegativo.validarValorNaoNegativo(texto);
+                    taxaEntrega = ValidadorValorNaoNegativo.valida(texto);
                     break;
                 }
             }

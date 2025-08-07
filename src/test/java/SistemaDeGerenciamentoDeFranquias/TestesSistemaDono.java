@@ -20,8 +20,6 @@ import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 public class TestesSistemaDono extends Testes{
-
-
     private GerenciadorSistemaDono sistemaDono;
     private GerenciadorSistemaGerente sistemaGerente;
     private GerenciadorSistemaVendedor sistemaVendedor;
