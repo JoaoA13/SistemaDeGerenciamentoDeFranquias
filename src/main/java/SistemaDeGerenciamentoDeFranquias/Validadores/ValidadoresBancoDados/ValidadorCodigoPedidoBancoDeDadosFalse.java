@@ -14,7 +14,6 @@ public class ValidadorCodigoPedidoBancoDeDadosFalse implements ValidadorBancoDeD
                 if(vendedor.getPedido(codigo) != null)
                     throw new BancoDeDadosException("Esse codigo de pedido já foi utilizado!");
             }
-
         }
         return true;
     }
